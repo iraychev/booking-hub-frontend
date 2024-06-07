@@ -1,0 +1,7 @@
+<div class="listings-container">
+  <div *ngFor="let listing of listings" class="listing-card" (click) = "viewDetails(listing.id)">
+    <h3>{{ listing.title }}</h3>
+    <p>{{ listing.description }}</p>
+    <p><strong>Price:</strong> {{ listing.price }}</p>
+  </div>
+</div>

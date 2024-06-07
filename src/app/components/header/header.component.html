@@ -1,0 +1,21 @@
+<header class="header">
+  <div class="header-container">
+    <div class="brand">
+      <a routerLink="/">Booking App</a>
+    </div>
+    <nav class="nav">
+      <a routerLink="/listings" class="nav-link">Listings</a>
+      <a routerLink="/about" class="nav-link">About</a>
+      <a routerLink="/contact" class="nav-link">Contact</a>
+    </nav>
+    <div class="user-profile">
+      <ng-container *ngIf="isLoggedIn; else loginTemplate">
+        <a routerLink="/profile" class="profile-link">Profile</a>
+        <a (click)="logout()" class="logout-link">Logout</a>
+      </ng-container>
+      <ng-template #loginTemplate>
+        <a routerLink="/login" class="profile-link">Login</a>
+      </ng-template>
+    </div>
+  </div>
+</header>
