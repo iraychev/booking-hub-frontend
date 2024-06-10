@@ -4,7 +4,6 @@
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  
 }
 
 .form-group {
@@ -41,4 +40,19 @@ button:hover {
 .error {
   color: red;
   margin-top: 10px;
+}
+.register-link {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.register-link a {
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.register-link a:hover {
+  color: #0056b3;
+  cursor: pointer;
 }
