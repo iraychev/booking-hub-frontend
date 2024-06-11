@@ -18,7 +18,6 @@ export class RegisterComponent {
   selectedRoles: string[] = [];
 
   constructor(private apiService: ApiService, private router: Router) {}
-  //TODO: ADD ROLES TO REGISTER AND USER
   register(): void {
     if (this.user.password !== this.confirmPassword) {
       this.error = 'Passwords do not match';

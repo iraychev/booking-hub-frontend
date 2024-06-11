@@ -1,15 +1,17 @@
-<!-- <button (click)="onClick()">Register</button>
-<button routerLink="/login">Login</button>
-<button routerLink="/listings">Listings</button> -->
-
 <div class="home-container">
   <div class="welcome-message">
     <h1>Welcome to my Booking Application</h1>
     <p>Find the best properties and book your stay easily.</p>
   </div>
-  <div class="navigation">
+  <div class="navigation" *ngIf="authService.isLoggedIn$ | async as isLoggedIn; else loggedOutNav">
     <a routerLink="/listings" class="nav-link">Browse Listings</a>
-    <a routerLink="/login" class="nav-link">Login</a>
-    <a routerLink="/register" class="nav-link">Register</a>
+    <a routerLink="/create-listing" class="nav-link">Create Listing</a>
+    <button (click)="logout()" class="nav-link">Logout</button>
   </div>
+  <ng-template #loggedOutNav>
+    <div class="navigation">
+      <a routerLink="/login" class="nav-link">Login</a>
+      <a routerLink="/register" class="nav-link">Register</a>
+    </div>
+  </ng-template>
 </div>

@@ -1,8 +1,11 @@
+<div>
+  <button class="create-listing-btn" routerLink="/listing-creation">Create Listing</button>
+</div>
 <div *ngIf="listing" class="listing-details">
     <h2>{{ listing.title }}</h2>
     <p><strong>Description:</strong> {{ listing.description }}</p>
     <p><strong>Property Address:</strong> {{ listing.propertyAddress }}</p>
-    <p><strong>Price:</strong> {{ listing.price }}</p>
+    <p><strong>Price (night):</strong> {{ listing.price }} €</p>
     <p><strong>Amenities:</strong></p>
     <ul>
       <li *ngFor="let amenity of listing.amenities">{{ amenity }}</li>

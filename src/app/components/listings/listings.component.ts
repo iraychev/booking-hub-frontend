@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ApiService } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-listings',
   templateUrl: './listings.component.html',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   styleUrls: ['./listings.component.css'],
 })
 export class ListingsComponent implements OnInit {

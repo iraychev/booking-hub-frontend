@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { User } from '../../models/user.model';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-profile',
@@ -13,10 +14,9 @@ import { User } from '../../models/user.model';
 export class ProfileComponent implements OnInit {
   user: User = JSON.parse(localStorage.getItem('user') || '{}');
   editMode: boolean = false;
-  password: string = '';
   error: string = '';
   
-  constructor() { }
+  constructor(private apiService: ApiService) { }
 
   ngOnInit(): void {
   }
@@ -26,14 +26,25 @@ export class ProfileComponent implements OnInit {
   }
 
   saveChanges(): void {
-    // Here you can add logic to update user information
-    // For simplicity, let's just log the updated user object
-    console.log('Updated User:', this.user);
-    this.editMode = false;
+    localStorage.setItem('user', JSON.stringify(this.user))
+    this.apiService.updateUserById(this.user).subscribe({
+      next: (updatedUser) => {
+        console.log('Server reponse: ', updatedUser);
+
+        this.editMode = false;
+      },
+      error: (err)=> {
+        console.error('Error updating profile', err);
+        this.error = 'Error updating profile';
+      }
+    })
+    
+
+
+    
   }
 
   cancelEdit(): void {
-    // Reset user object to original values
     this.user = JSON.parse(localStorage.getItem('user') || '{}');
     this.editMode = false;
   }

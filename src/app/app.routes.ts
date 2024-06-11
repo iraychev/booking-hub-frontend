@@ -8,6 +8,7 @@ import { ContactComponent } from './components/contact/contact.component';
 import { ListingDetailsComponent } from './components/listing-details/listing-details.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { authGuard } from './guards/auth.guard';
+import { ListingCreationComponent } from './components/listing-creation/listing-creation.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/home' },
@@ -19,4 +20,6 @@ export const routes: Routes = [
   { path: 'contact', component: ContactComponent },
   { path: 'listing-details/:id', component: ListingDetailsComponent },
   { path: 'profile', component: ProfileComponent },
+  { path: 'listing-creation', component: ListingCreationComponent },
+
 ];

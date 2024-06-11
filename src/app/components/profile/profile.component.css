@@ -12,13 +12,14 @@
   
   label {
     display: block;
-    margin-bottom: 5px;
+    margin-top: 5px;
+    margin-bottom: 7px;
   }
   
   input[type="text"],
   input[type="email"],
   input[type="password"] {
-    width: calc(100% - 12px); /* Adjust for padding */
+    width: calc(100% - 12px);
     padding: 8px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
@@ -44,7 +45,6 @@
     margin-top: 10px;
   }
   
-  /* Additional styles for non-edit mode */
   .profile-container:not(.edit-mode) input {
     display: none;
   }
@@ -54,10 +54,10 @@
   }
   
   .profile-container.edit-mode input {
-    display: block; /* Ensure inputs are displayed in edit mode */
+    display: block;
   }
   
   .profile-container.edit-mode span {
-    display: none; /* Hide spans in edit mode */
+    display: none;
   }
   

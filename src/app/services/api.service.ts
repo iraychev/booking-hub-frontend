@@ -2,11 +2,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from '../models/user.model';
+import { Listing } from '../models/listing.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
+  
   url: string = 'http://localhost:8080/booking-api';
   listings: any[] = [];
   constructor(private http: HttpClient) {}
@@ -16,10 +18,6 @@ export class ApiService {
     return new HttpHeaders({
       Authorization: 'Basic ' + btoa(`${user.username}:${user.password}`),
     });
-  }
-
-  getUsers(): Observable<any> {
-    return this.http.get(`${this.url}/users`);
   }
 
   login(username: string, password: string): Observable<any> {
@@ -37,6 +35,15 @@ export class ApiService {
   fetchListings(): Observable<any> {
     const headers = this.getAuthHeaders();
     return this.http.get(`${this.url}/listings`, { headers });
+  }
+  createListing(listing: Listing) {
+    return this.http.post(`${this.url}/listings`, listing);
+  }
+
+  updateUserById(user: User): Observable<any>{
+    const headers = this.getAuthHeaders();
+    console.log("Inside apiService.updateUser")
+    return this.http.put(`${this.url}/users/${user.id}`, user, {headers});
   }
 
   getListingById(id: string): Observable<any> {

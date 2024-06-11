@@ -1,0 +1,63 @@
+<div class="listing-creation-container">
+  <h2>Create Listing</h2>
+  <form (ngSubmit)="createListing()">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input
+        type="text"
+        id="title"
+        [(ngModel)]="listing.title"
+        name="title"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea
+        id="description"
+        [(ngModel)]="listing.description"
+        name="description"
+        required
+      ></textarea>
+    </div>
+    <div class="form-group">
+      <label for="propertyAddress">Property Address</label>
+      <input
+        type="text"
+        id="propertyAddress"
+        [(ngModel)]="listing.propertyAddress"
+        name="propertyAddress"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="price">Price (night) (€)</label>
+      <input
+        type="number"
+        id="price"
+        [(ngModel)]="listing.price"
+        name="price"
+        required
+      />
+    </div>
+    <label>Amenities:</label>
+    <div class="amenities-container">
+      
+      <div class="amenities-columns">
+        <div class="amenity-column" *ngFor="let column of columns">
+          <div *ngFor="let amenity of column">
+            <input
+              type="checkbox"
+              id="{{ amenity }}"
+              [(ngModel)]="selectedAmenities[amenity]"
+              name="{{ amenity }}"
+            />
+            <label for="{{ amenity }}">{{ amenity }}</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button type="submit">Create Listing</button>
+    <div *ngIf="error" class="error">{{ error }}</div>
+  </form>
+</div>
