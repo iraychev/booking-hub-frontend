@@ -1,14 +1,27 @@
-<div>
-  <button class="create-listing-btn" routerLink="/listing-creation">Create Listing</button>
+<div class="button-container">
+  <button class="create-listing-btn" routerLink="/listing-creation">
+    Create a Listing
+  </button>
 </div>
+
 <div *ngIf="listing" class="listing-details">
-    <h2>{{ listing.title }}</h2>
-    <p><strong>Description:</strong> {{ listing.description }}</p>
-    <p><strong>Property Address:</strong> {{ listing.propertyAddress }}</p>
-    <p><strong>Price (night):</strong> {{ listing.price }} €</p>
-    <p><strong>Amenities:</strong></p>
-    <ul>
-      <li *ngFor="let amenity of listing.amenities">{{ amenity }}</li>
-    </ul>
+  <div class="button-container" *ngIf="listing.user.id === userId">
+    <button class="edit-btn" (click)="editListing()">Edit</button>
+    <button class="delete-btn" (click)="deleteListing(listing.id)">
+      Delete
+    </button>
   </div>
-  
+  <h2>{{ listing.title }}</h2>
+
+  <p><strong>Description:</strong> {{ listing.description }}</p>
+  <p><strong>Property Address:</strong> {{ listing.propertyAddress }}</p>
+  <p><strong>Price (night):</strong> {{ listing.price }} €</p>
+  <p><strong>Amenities:</strong></p>
+  <ul>
+    <li *ngFor="let amenity of listing.amenities">{{ amenity }}</li>
+  </ul>
+  <p>
+    <strong>Posted by: </strong> {{ listing.user.firstName }}
+    {{ listing.user.lastName }}
+  </p>
+</div>

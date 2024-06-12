@@ -7,9 +7,18 @@ import { BehaviorSubject } from 'rxjs';
 export class AuthService {
   isLoggedIn$ = new BehaviorSubject<boolean>(false);
 
-  constructor() {}
+  constructor() {
+    const user = localStorage.getItem('user');
+    if (user) {
+      this.isLoggedIn$.next(true);
+    }
+  }
 
   setLoggedIn(value: boolean): void {
     this.isLoggedIn$.next(value);
+  }
+  logout(): void {
+    localStorage.removeItem('user');
+    this.isLoggedIn$.next(false);
   }
 }

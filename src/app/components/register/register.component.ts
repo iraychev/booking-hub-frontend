@@ -24,6 +24,7 @@ export class RegisterComponent {
       return;
     }
     this.user.roles = this.selectedRoles;
+    console.log(this.user);
     this.apiService.register(this.user).subscribe({
       next: (response) => {
         this.router.navigate(['/login']);

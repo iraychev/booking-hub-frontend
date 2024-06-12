@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ApiService } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-listings',
@@ -13,8 +14,13 @@ import { Router, RouterLink } from '@angular/router';
 })
 export class ListingsComponent implements OnInit {
   listings: any[] = [];
+  errorMessage: string = '';
 
-  constructor(private apiService: ApiService, private router: Router) {}
+  constructor(
+    private apiService: ApiService,
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.getListings();
@@ -31,6 +37,10 @@ export class ListingsComponent implements OnInit {
   }
 
   viewDetails(listingId: string): void {
-    this.router.navigate(['/listing-details', listingId]);
+    if (!this.authService.isLoggedIn$.value) {
+      this.errorMessage = 'You need to be logged in to view listings';
+    } else {
+      this.router.navigate(['/listing-details', listingId]);
+    }
   }
 }

@@ -10,12 +10,13 @@ import { Component } from '@angular/core';
 })
 export class AboutComponent {
   projectName = 'Booking App';
-  description = 'This platform is designed to help users find and book their perfect vacation rentals.';
+  description =
+    'This platform is designed to help users find and book their perfect vacation rentals.';
   features = [
     'User-friendly interface',
     'Secure booking system',
     'Wide range of properties',
     'Detailed property descriptions',
-    'User reviews and ratings'
+    'User reviews and ratings',
   ];
 }

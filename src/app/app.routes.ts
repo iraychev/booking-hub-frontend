@@ -7,19 +7,35 @@ import { AboutComponent } from './components/about/about.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { ListingDetailsComponent } from './components/listing-details/listing-details.component';
 import { ProfileComponent } from './components/profile/profile.component';
-import { authGuard } from './guards/auth.guard';
+import { authenticatedGuard } from './guards/authenticated.guard';
+import { unauthenticatedGuard } from './guards/unauthenticated.guard';
 import { ListingCreationComponent } from './components/listing-creation/listing-creation.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/home' },
   { path: 'home', component: HomeComponent },
-  { path: 'register', canActivate: [authGuard], component: RegisterComponent },
-  { path: 'login', canActivate: [authGuard], component: LoginComponent },
+  {
+    path: 'register',
+    canActivate: [unauthenticatedGuard],
+    component: RegisterComponent,
+  },
+  {
+    path: 'login',
+    canActivate: [unauthenticatedGuard],
+    component: LoginComponent,
+  },
   { path: 'listings', component: ListingsComponent },
   { path: 'about', component: AboutComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'listing-details/:id', component: ListingDetailsComponent },
-  { path: 'profile', component: ProfileComponent },
-  { path: 'listing-creation', component: ListingCreationComponent },
-
+  {
+    path: 'profile',
+    canActivate: [authenticatedGuard],
+    component: ProfileComponent,
+  },
+  {
+    path: 'listing-creation',
+    canActivate: [authenticatedGuard],
+    component: ListingCreationComponent,
+  },
 ];

@@ -1,18 +1,17 @@
 .app-wrapper {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-  
-  .app-content {
-    flex: 1;
-    padding: 45px;
-  }
-  
-  app-footer {
-    background-color: #333;
-    color: white;
-    text-align: center;
-    padding: 10px 0;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-content {
+  flex: 1;
+  padding: 45px;
+}
+
+app-footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+}

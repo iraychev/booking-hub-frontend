@@ -1,8 +1,8 @@
-import { User } from "./user.model";
+import { User } from './user.model';
 
 export class Listing {
-  id: string ='';
-  user: User = JSON.parse(localStorage.getItem('user') || 'null') as User;
+  id!: string;
+  user: User = JSON.parse(localStorage.getItem('user') || 'null')?.id || '';
   title: string = '';
   description: string = '';
   propertyAddress: string = '';

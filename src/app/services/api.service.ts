@@ -8,7 +8,6 @@ import { Listing } from '../models/listing.model';
   providedIn: 'root',
 })
 export class ApiService {
-  
   url: string = 'http://localhost:8080/booking-api';
   listings: any[] = [];
   constructor(private http: HttpClient) {}
@@ -33,17 +32,24 @@ export class ApiService {
   }
 
   fetchListings(): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.get(`${this.url}/listings`, { headers });
-  }
-  createListing(listing: Listing) {
-    return this.http.post(`${this.url}/listings`, listing);
+    // const headers = this.getAuthHeaders();
+    // return this.http.get(`${this.url}/listings`, { headers });
+    return this.http.get(`${this.url}/listings`);
   }
 
-  updateUserById(user: User): Observable<any>{
+  createListing(listing: Listing) {
     const headers = this.getAuthHeaders();
-    console.log("Inside apiService.updateUser")
-    return this.http.put(`${this.url}/users/${user.id}`, user, {headers});
+    return this.http.post(`${this.url}/listings`, listing, { headers });
+  }
+  deleteListingById(listingId: string): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.delete(`${this.url}/listings/${listingId}`, { headers });
+  }
+
+  updateUserById(user: User): Observable<any> {
+    const headers = this.getAuthHeaders();
+    console.log('Inside apiService.updateUser');
+    return this.http.put(`${this.url}/users/${user.id}`, user, { headers });
   }
 
   getListingById(id: string): Observable<any> {

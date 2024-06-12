@@ -36,10 +36,12 @@ export class ListingCreationComponent {
   }
 
   createListing(): void {
+    this.listing.amenities = this.getSelectedAmenities();
+    console.log(this.listing);
     this.apiService.createListing(this.listing).subscribe({
       next: (response) => {
         console.log('Listing created successfully:', response);
-        this.router.navigate(['/']);
+        this.router.navigate(['/listings']);
       },
       error: (err) => {
         console.error('Error creating listing:', err);

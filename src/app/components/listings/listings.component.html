@@ -1,8 +1,15 @@
-<div>
-  <button class="create-listing-btn" routerLink="/listing-creation">Create Listing</button>
+<div class="button-container">
+  <button class="create-listing-btn" routerLink="/listing-creation">
+    Create a Listing
+  </button>
 </div>
+<div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
 <div class="listings-container">
-  <div *ngFor="let listing of listings" class="listing-card" (click) = "viewDetails(listing.id)">
+  <div
+    *ngFor="let listing of listings"
+    class="listing-card"
+    (click)="viewDetails(listing.id)"
+  >
     <h3>{{ listing.title }}</h3>
     <p>{{ listing.description }}</p>
     <p><strong>Price (night):</strong> {{ listing.price }} €</p>

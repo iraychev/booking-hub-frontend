@@ -11,11 +11,10 @@ import { CommonModule } from '@angular/common';
   styleUrl: './home.component.css',
 })
 export class HomeComponent {
-    constructor(public authService: AuthService, private router: Router) {}
+  constructor(public authService: AuthService, private router: Router) {}
 
   logout(): void {
-    localStorage.removeItem('user');
-    this.authService.setLoggedIn(false);
+    this.authService.logout();
     this.router.navigate(['/home']);
   }
 }

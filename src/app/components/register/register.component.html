@@ -1,44 +1,91 @@
 <div class="register-container">
-    <h2>Register</h2>
-    <form (ngSubmit)="register()">
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" id="username" [(ngModel)]="user.username" name="username" required>
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" [(ngModel)]="user.password" name="password" required>
-      </div>
-      <div class="form-group">
-        <label for="confirmPassword">Confirm Password</label>
-        <input type="password" id="confirmPassword" [(ngModel)]="confirmPassword" name="confirmPassword" required>
-      </div>
-      <div class="form-group">
-        <label for="firstName">First Name</label>
-        <input type="text" id="firstName" [(ngModel)]="user.firstName" name="firstName" required>
-      </div>
-      <div class="form-group">
-        <label for="lastName">Last Name</label>
-        <input type="text" id="lastName" [(ngModel)]="user.lastName" name="lastName" required>
-      </div>
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" [(ngModel)]="user.email" name="email" required>
-      </div>
-      <div class="form-group">
-        <label>Roles</label>
-        <div>
-          <input type="checkbox" id="renter" value="RENTER" (change)="onRoleChange($event)"> RENTER
-        </div>
-        <div>
-          <input type="checkbox" id="propertyOwner" value="PROPERTY_OWNER" (change)="onRoleChange($event)"> PROPERTY_OWNER
-        </div>
-      </div>
-      <button type="submit">Register</button>
-      <div *ngIf="error" class="error">{{ error }}</div>
-    </form>
-    <div class="login-link">
-      Already registered? <a routerLink="/login">Login here</a>.
+  <h2>Register</h2>
+  <form (ngSubmit)="register()">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input
+        type="text"
+        id="username"
+        [(ngModel)]="user.username"
+        name="username"
+        required
+      />
     </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input
+        type="password"
+        id="password"
+        [(ngModel)]="user.password"
+        name="password"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="confirmPassword">Confirm Password</label>
+      <input
+        type="password"
+        id="confirmPassword"
+        [(ngModel)]="confirmPassword"
+        name="confirmPassword"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="firstName">First Name</label>
+      <input
+        type="text"
+        id="firstName"
+        [(ngModel)]="user.firstName"
+        name="firstName"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="lastName">Last Name</label>
+      <input
+        type="text"
+        id="lastName"
+        [(ngModel)]="user.lastName"
+        name="lastName"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input
+        type="email"
+        id="email"
+        [(ngModel)]="user.email"
+        name="email"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label>Are you:</label>
+      <div>
+        <input
+          type="checkbox"
+          id="renter"
+          value="RENTER"
+          (change)="onRoleChange($event)"
+        />
+        Looking to rent a property
+      </div>
+      <div>
+        <input
+          type="checkbox"
+          id="propertyOwner"
+          value="PROPERTY_OWNER"
+          (change)="onRoleChange($event)"
+        />
+        Renting out your property
+      </div>
+    </div>
+    <button type="submit">Register</button>
+    <div *ngIf="error" class="error">{{ error }}</div>
+  </form>
+  <div class="login-link">
+    Already registered? <a routerLink="/login">Login here</a>.
   </div>
-  
+</div>

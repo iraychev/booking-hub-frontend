@@ -3,9 +3,12 @@
     <h1>Welcome to my Booking Application</h1>
     <p>Find the best properties and book your stay easily.</p>
   </div>
-  <div class="navigation" *ngIf="authService.isLoggedIn$ | async as isLoggedIn; else loggedOutNav">
+  <div
+    class="navigation"
+    *ngIf="authService.isLoggedIn$ | async as isLoggedIn; else loggedOutNav"
+  >
     <a routerLink="/listings" class="nav-link">Browse Listings</a>
-    <a routerLink="/create-listing" class="nav-link">Create Listing</a>
+    <a routerLink="/listing-creation" class="nav-link">Create a Listing</a>
     <button (click)="logout()" class="nav-link">Logout</button>
   </div>
   <ng-template #loggedOutNav>
