@@ -1,3 +1,5 @@
+import { Image } from "./image";
+
 export class User {
   id: string = '';
   username: string = '';
@@ -5,6 +7,6 @@ export class User {
   firstName: string = '';
   lastName: string = '';
   email: string = '';
+  profileImage: Image | null = null;;
   roles: string[] = [];
-  [key: string]: string | string[];
 }

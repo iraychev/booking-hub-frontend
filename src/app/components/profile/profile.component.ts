@@ -6,6 +6,8 @@ import { ApiService } from '../../services/api.service';
 import { MatTabsModule } from '@angular/material/tabs';
 import { Listing } from '../../models/listing.model';
 import { RouterLink } from '@angular/router';
+import { ImageService } from '../../services/image.service';
+import { Image } from '../../models/image';
 
 @Component({
   selector: 'app-profile',
@@ -20,7 +22,13 @@ export class ProfileComponent implements OnInit {
   error: string = '';
   selectedTabIndex: number = 0;
   personalListings: Listing[] = [];
-  constructor(public apiService: ApiService) {}
+  selectedFile!: File;
+  newProfileImage!: Image;
+
+  constructor(
+    public apiService: ApiService,
+    private imageService: ImageService
+  ) {}
 
   ngOnInit(): void {
     this.fetchUserListings();
@@ -31,6 +39,9 @@ export class ProfileComponent implements OnInit {
   }
 
   saveChanges(): void {
+    
+    this.user.profileImage = this.newProfileImage;
+    console.log(this.user);
     localStorage.setItem('user', JSON.stringify(this.user));
     this.apiService.updateUserById(this.user).subscribe({
       next: (updatedUser) => {
@@ -79,5 +90,29 @@ export class ProfileComponent implements OnInit {
         this.error = 'Error deleting listing: ' + err.message;
       },
     });
+  }
+  onFileSelected(event: any): void {
+    this.selectedFile = event.target.files[0];
+  }
+
+  onUpload() {
+    this.imageService.uploadImage(this.selectedFile).subscribe({
+      next: (response) => {
+        console.log('Upload success', response);
+        this.newProfileImage = response;
+        console.log(this.newProfileImage);
+      },
+      error: (err) => {
+        console.error('Upload error', err);
+      },
+    });
+  }
+
+  getProfileImageUrl(): string {
+    if (this.user && this.user.profileImage) {
+      return 'data:' + this.user.profileImage.type + ';base64,' + this.user.profileImage.data;
+    } else {
+      return '';
+    }
   }
 }

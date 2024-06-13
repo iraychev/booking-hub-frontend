@@ -5,6 +5,7 @@ export class Listing {
   user: User = JSON.parse(localStorage.getItem('user') || 'null')?.id || '';
   title: string = '';
   description: string = '';
+  imageUrl: string = '';
   propertyAddress: string = '';
   price: number | undefined;
   amenities: string[] = [];

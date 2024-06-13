@@ -18,6 +18,9 @@
           <label for="email">Email:</label>
           <span>{{ user.email }}</span>
         </div>
+        <div>
+          <img *ngIf="user.profileImage" [src]="getProfileImageUrl()" alt="Profile Image">
+          <p *ngIf="!user.profileImage">No profile image available</p>        </div>
         <button (click)="toggleEditMode()">Edit</button>
       </div>
       <div *ngIf="editMode">
@@ -60,6 +63,12 @@
             name="email"
             required
           />
+        </div>
+        <div>
+          <label for="newProfileImage">Profile Picture:</label>
+          <input type="file" (change)="onFileSelected($event)" />
+          <button (click)="onUpload()">Upload</button>
+          <img [src]="user.profileImage" alt="Profile Picture">
         </div>
         <button (click)="saveChanges()">Save</button>
         <button (click)="cancelEdit()">Cancel</button>

@@ -18,7 +18,7 @@ export class ApiService {
       Authorization: 'Basic ' + btoa(`${user.username}:${user.password}`),
     });
   }
-
+  
   login(username: string, password: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: 'Basic ' + btoa(`${username}:${password}`),
@@ -32,8 +32,6 @@ export class ApiService {
   }
 
   fetchListings(): Observable<any> {
-    // const headers = this.getAuthHeaders();
-    // return this.http.get(`${this.url}/listings`, { headers });
     return this.http.get(`${this.url}/listings`);
   }
 
