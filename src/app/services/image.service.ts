@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Image } from '../models/image';
 
 @Injectable({
   providedIn: 'root',
@@ -16,11 +17,11 @@ export class ImageService {
       Authorization: 'Basic ' + btoa(`${user.username}:${user.password}`),
     });
   }
-  uploadImage(file: File): Observable<any> {
+  uploadImage(file: File): Observable<Image> {
     const headers = this.getAuthHeaders();
     const formData: FormData = new FormData();
     formData.append('file', file);
-    return this.http.post(`${this.url}/upload`, formData, { headers });
+    return this.http.post<Image>(`${this.url}/upload`, formData, { headers });
   }
 
   getImageById(id: number): Observable<any> {

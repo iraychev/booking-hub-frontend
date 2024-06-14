@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, catchError, tap, throwError } from 'rxjs';
 import { User } from '../models/user.model';
 import { Listing } from '../models/listing.model';
 
@@ -18,7 +18,7 @@ export class ApiService {
       Authorization: 'Basic ' + btoa(`${user.username}:${user.password}`),
     });
   }
-  
+
   login(username: string, password: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: 'Basic ' + btoa(`${username}:${password}`),
@@ -34,7 +34,24 @@ export class ApiService {
   fetchListings(): Observable<any> {
     return this.http.get(`${this.url}/listings`);
   }
+  updateListingById(listing: Listing): Observable<any> {
+    const headers = this.getAuthHeaders();
+    headers.set('Content-Type', 'application/json');
 
+    const listingToUpdate = {
+      title: listing.title,
+      description: listing.description,
+      images: listing.images,
+      propertyAddress: listing.propertyAddress,
+      price: listing.price,
+      amenities: listing.amenities,
+    };
+    return this.http.put(
+      `${this.url}/listings/${listing.id}`,
+      listingToUpdate,
+      { headers }
+    );
+  }
   createListing(listing: Listing) {
     const headers = this.getAuthHeaders();
     return this.http.post(`${this.url}/listings`, listing, { headers });

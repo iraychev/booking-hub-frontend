@@ -3,6 +3,15 @@
     <mat-tab label="Profile">
       <div *ngIf="!editMode">
         <div>
+          <img
+            *ngIf="user.profileImage"
+            [src]="getProfileImageUrl()"
+            alt="Profile Image"
+            id="profile-img"
+          />
+          <p *ngIf="!user.profileImage">No profile image available</p>
+        </div>
+        <div>
           <label for="username">Username:</label>
           <span>{{ user.username }}</span>
         </div>
@@ -18,9 +27,6 @@
           <label for="email">Email:</label>
           <span>{{ user.email }}</span>
         </div>
-        <div>
-          <img *ngIf="user.profileImage" [src]="getProfileImageUrl()" alt="Profile Image">
-          <p *ngIf="!user.profileImage">No profile image available</p>        </div>
         <button (click)="toggleEditMode()">Edit</button>
       </div>
       <div *ngIf="editMode">

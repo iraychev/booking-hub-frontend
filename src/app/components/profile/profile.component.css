@@ -88,3 +88,9 @@ button:hover {
 .delete-button:hover {
   background-color: #e60000;
 }
+
+#profile-img {
+  width: 14em;
+  height: auto;
+  object-fit: cover;
+}

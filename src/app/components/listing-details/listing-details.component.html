@@ -6,22 +6,99 @@
 
 <div *ngIf="listing" class="listing-details">
   <div class="button-container" *ngIf="listing.user.id === userId">
-    <button class="edit-btn" (click)="editListing()">Edit</button>
+    <button class="edit-btn" (click)="toggleEditMode()">Edit</button>
     <button class="delete-btn" (click)="deleteListing(listing.id)">
       Delete
     </button>
   </div>
-  <h2>{{ listing.title }}</h2>
+  <div *ngIf="!editMode">
+    <h2>{{ listing.title }}</h2>
 
-  <p><strong>Description:</strong> {{ listing.description }}</p>
-  <p><strong>Property Address:</strong> {{ listing.propertyAddress }}</p>
-  <p><strong>Price (night):</strong> {{ listing.price }} €</p>
-  <p><strong>Amenities:</strong></p>
-  <ul>
-    <li *ngFor="let amenity of listing.amenities">{{ amenity }}</li>
-  </ul>
-  <p>
-    <strong>Posted by: </strong> {{ listing.user.firstName }}
-    {{ listing.user.lastName }}
-  </p>
+    <p><strong>Description:</strong> {{ listing.description }}</p>
+    <p><strong>Property Address:</strong> {{ listing.propertyAddress }}</p>
+    <p><strong>Price (night):</strong> {{ listing.price }} €</p>
+    <p><strong>Amenities:</strong></p>
+    <ul>
+      <li *ngFor="let amenity of listing.amenities">{{ amenity }}</li>
+    </ul>
+    <p>
+      <strong>Posted by: </strong> {{ listing.user.firstName }}
+      {{ listing.user.lastName }}
+    </p>
+    <div class="image-slider">
+      <div
+        class="slider-container"
+        *ngIf="listing.images && listing.images.length"
+      >
+        <div class="slider" [style.transform]="getSliderTransform()">
+          <img
+            *ngFor="let image of listing.images"
+            [src]="'data:'+image.type+';base64,'+image.data"
+            alt="Listing Image"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="editMode">
+    <div>
+      <label for="title">Title:</label>
+      <input
+        type="text"
+        id="title"
+        [(ngModel)]="listing.title"
+        name="title"
+        required
+      />
+    </div>
+    <div>
+      <label for="description">Description:</label>
+      <input
+        type="text"
+        id="description"
+        [(ngModel)]="listing.description"
+        name="description"
+        required
+      />
+    </div>
+    <div>
+      <label for="propertyAddress">Property Address:</label>
+      <input
+        type="text"
+        id="propertyAddress"
+        [(ngModel)]="listing.propertyAddress"
+        name="propertyAddress"
+        required
+      />
+    </div>
+    <div>
+      <label for="price">Price:</label>
+      <input
+        type="number"
+        id="price"
+        [(ngModel)]="listing.price"
+        name="price"
+        required
+      />
+    </div>
+    <div>
+      <label for="images">Images:</label>
+      <input type="file" (change)="onFileChange($event)" multiple accept="image/*" />
+      <p *ngIf="uploadedFiles.length">Uploaded Images:</p>
+      <div *ngFor="let file of uploadedFiles">{{ file.name }}</div>
+    </div>
+    <div>
+      <label for="amenities">Amenities:</label>
+      <div *ngFor="let amenity of amenities">
+        <input
+          type="checkbox"
+          [value]="amenity"
+          (change)="toggleAmenity(amenity)"
+          [checked]="listing.amenities.includes(amenity)"
+        />
+        {{ amenity }}
+      </div>
+    </div>
+    <button (click)="saveChanges()">Save</button>
+  </div>
 </div>
