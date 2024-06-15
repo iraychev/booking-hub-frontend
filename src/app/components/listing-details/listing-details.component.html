@@ -6,7 +6,7 @@
 
 <div *ngIf="listing" class="listing-details">
   <div class="button-container" *ngIf="listing.user.id === userId">
-    <button class="edit-btn" (click)="toggleEditMode()">Edit</button>
+    <button class="edit-btn" (click)="toggleEditMode()">{{ editMode ? 'Cancel Edit' : 'Edit' }}</button>
     <button class="delete-btn" (click)="deleteListing(listing.id)">
       Delete
     </button>
