@@ -10,7 +10,17 @@
     </nav>
     <div class="user-profile">
       <ng-container *ngIf="isLoggedIn; else loginTemplate">
-        <a routerLink="/profile" class="profile-link">Profile</a>
+        <div class="profile-container">
+          <a routerLink="/profile" class="profile-link">
+            <img
+              class="image-container"
+              [src]="getProfileImageUrl()"
+              alt="Profile Image"
+              id="profile-img"
+            />
+          </a>
+          <a routerLink="/profile" class="profile-link">Profile</a>
+        </div>
         <a (click)="logout()" class="logout-link">Logout</a>
       </ng-container>
       <ng-template #loginTemplate>

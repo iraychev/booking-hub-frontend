@@ -2,7 +2,7 @@
   <mat-tab-group [(selectedIndex)]="selectedTabIndex">
     <mat-tab label="Profile">
       <div *ngIf="!editMode">
-        <div>
+        <div class="image-container">
           <img
             *ngIf="user.profileImage"
             [src]="getProfileImageUrl()"

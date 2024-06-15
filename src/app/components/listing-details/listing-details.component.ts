@@ -6,14 +6,16 @@ import { FormsModule } from '@angular/forms';
 import { ImageService } from '../../services/image.service';
 import { Image } from '../../models/image';
 import { Listing } from '../../models/listing.model';
+import { AmenitiesPipe } from '../../pipes/amenities.pipe';
 @Component({
   selector: 'app-listing-details',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule, AmenitiesPipe],
   templateUrl: './listing-details.component.html',
   styleUrl: './listing-details.component.css',
 })
 export class ListingDetailsComponent implements OnInit {
+  currentImageIndex: number = 0;
   listing!: Listing;
   userId: string = JSON.parse(localStorage.getItem('user') || '{}').id;
   editMode: boolean = false;
@@ -117,6 +119,18 @@ export class ListingDetailsComponent implements OnInit {
     }
   }
   getSliderTransform(): string {
-    return 'translateX(0)';
+    return `translateX(-${this.currentImageIndex * 100}%)`;
+  }
+
+  nextImage(): void {
+    if (this.currentImageIndex < this.listing.images.length - 1) {
+      this.currentImageIndex++;
+    }
+  }
+
+  prevImage(): void {
+    if (this.currentImageIndex > 0) {
+      this.currentImageIndex--;
+    }
   }
 }

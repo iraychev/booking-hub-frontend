@@ -25,4 +25,12 @@ export class HeaderComponent implements OnInit {
     this.authService.logout();
     this.router.navigate(['/home']);
   }
+  getProfileImageUrl(): string {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    if (user && user.profileImage) {
+      return 'data:' + user.profileImage.type + ';base64,' + user.profileImage.data;
+    } else {
+      return '';
+    }
+  }
 }

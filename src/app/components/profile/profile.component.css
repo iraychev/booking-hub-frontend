@@ -90,7 +90,14 @@ button:hover {
 }
 
 #profile-img {
-  width: 14em;
-  height: auto;
+  width: 250px;
+  height: 250px;
   object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #007bff;
+}
+
+.image-container {
+  text-align: center;
+  margin-bottom: 20px;
 }

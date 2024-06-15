@@ -19,7 +19,9 @@
     <p><strong>Price (night):</strong> {{ listing.price }} €</p>
     <p><strong>Amenities:</strong></p>
     <ul>
-      <li *ngFor="let amenity of listing.amenities">{{ amenity }}</li>
+      <li *ngFor="let amenity of listing.amenities">
+        {{ amenity | amenities }}
+      </li>
     </ul>
     <p>
       <strong>Posted by: </strong> {{ listing.user.firstName }}
@@ -30,13 +32,15 @@
         class="slider-container"
         *ngIf="listing.images && listing.images.length"
       >
+        <button class="prev-btn" (click)="prevImage()">&#10094;</button>
         <div class="slider" [style.transform]="getSliderTransform()">
           <img
             *ngFor="let image of listing.images"
-            [src]="'data:'+image.type+';base64,'+image.data"
+            [src]="'data:' + image.type + ';base64,' + image.data"
             alt="Listing Image"
           />
         </div>
+        <button class="next-btn" (click)="nextImage()">&#10095;</button>
       </div>
     </div>
   </div>
@@ -83,7 +87,12 @@
     </div>
     <div>
       <label for="images">Images:</label>
-      <input type="file" (change)="onFileChange($event)" multiple accept="image/*" />
+      <input
+        type="file"
+        (change)="onFileChange($event)"
+        multiple
+        accept="image/*"
+      />
       <p *ngIf="uploadedFiles.length">Uploaded Images:</p>
       <div *ngFor="let file of uploadedFiles">{{ file.name }}</div>
     </div>
