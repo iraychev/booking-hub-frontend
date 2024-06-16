@@ -7,9 +7,14 @@
     class="navigation"
     *ngIf="authService.isLoggedIn$ | async as isLoggedIn; else loggedOutNav"
   >
-    <a routerLink="/listings" class="nav-link">Browse Listings</a>
-    <a routerLink="/listing-creation" class="nav-link">Create a Listing</a>
-    <button (click)="logout()" class="nav-link">Logout</button>
+    <app-button text="Browse Listings" routerLink="/listings" />
+    <app-button text="Create a Listings" routerLink="/listing-creation" />
+    <app-button
+      text="Logout"
+      routerLink="/listing-creation"
+      (click)="logout()"
+      [isGhost]="true"
+    />
   </div>
   <ng-template #loggedOutNav>
     <div class="navigation">

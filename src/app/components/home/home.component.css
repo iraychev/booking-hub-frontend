@@ -4,43 +4,22 @@
   align-items: center;
   justify-content: center;
   min-height: 70vh;
-  padding: 20px;
   text-align: center;
 }
 
-.welcome-message {
-  margin-bottom: 30px;
-}
-
 .welcome-message h1 {
-  font-size: 2.5em;
-  color: #333;
+  margin-bottom: 0.5rem;
 }
 
 .welcome-message p {
   font-size: 1.2em;
-  color: #575555;
+  color: gray;
+  margin-bottom: 1.5em;
 }
 
 .navigation {
   display: flex;
   gap: 20px;
-}
-
-.nav-link {
-  display: inline-block;
-  padding: 10px 20px;
-  font-size: 1em;
-  color: white;
-  background-color: #007bff;
-  border-radius: 5px;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-  cursor: pointer;
-}
-
-.nav-link:hover {
-  background-color: #0056b3;
 }
 
 @media (max-width: 600px) {
@@ -54,10 +33,5 @@
 
   .welcome-message p {
     font-size: 1em;
-  }
-
-  .nav-link {
-    font-size: 0.9em;
-    padding: 8px 16px;
   }
 }

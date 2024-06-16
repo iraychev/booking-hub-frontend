@@ -1,46 +1,49 @@
 /* You can add global styles to this file, and also import other style files */
-@import "@angular/material/prebuilt-themes/azure-blue.css";
-* {
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
+
+body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  list-style: none;
   text-decoration: none;
-  font-family: "Lato", sans-serif;
+  font: 16px "Lato", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  box-sizing: inherit;
+  list-style: none;
+}
+
+button,
+label {
+  font: inherit;
 }
 
 app-root {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  font-size: 16px;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+/* Typography */
 
-a:hover {
-  text-decoration: underline;
+h1 {
+  font-size: 2.5em;
 }
-
-html,
-body {
-  height: 100%;
+h2 {
+  font-size: 1.8em;
 }
-
-body {
-  margin: 0;
-  font-family: "Arial", sans-serif;
-  background-color: #f0f8ff;
+h3 {
+  font-size: 1.6em;
 }
-
-html,
-body {
-  height: 100%;
+h4 {
+  font-size: 1.4em;
 }
-body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+h5 {
+  font-size: 1.2em;
 }

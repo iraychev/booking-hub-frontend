@@ -8,11 +8,18 @@ import { Listing } from '../../models/listing.model';
 import { RouterLink } from '@angular/router';
 import { ImageService } from '../../services/image.service';
 import { Image } from '../../models/image';
+import { ButtonComponent } from '../../shared/button/button.component';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatTabsModule, RouterLink],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatTabsModule,
+    RouterLink,
+    ButtonComponent,
+  ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
@@ -39,7 +46,6 @@ export class ProfileComponent implements OnInit {
   }
 
   saveChanges(): void {
-    
     this.user.profileImage = this.newProfileImage;
     console.log(this.user);
     localStorage.setItem('user', JSON.stringify(this.user));
@@ -110,7 +116,12 @@ export class ProfileComponent implements OnInit {
 
   getProfileImageUrl(): string {
     if (this.user && this.user.profileImage) {
-      return 'data:' + this.user.profileImage.type + ';base64,' + this.user.profileImage.data;
+      return (
+        'data:' +
+        this.user.profileImage.type +
+        ';base64,' +
+        this.user.profileImage.data
+      );
     } else {
       return '';
     }

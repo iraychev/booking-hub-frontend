@@ -4,12 +4,13 @@ import { ApiService } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { ButtonComponent } from '../../shared/button/button.component';
 
 @Component({
   selector: 'app-listings',
   templateUrl: './listings.component.html',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, ButtonComponent],
   styleUrls: ['./listings.component.css'],
 })
 export class ListingsComponent implements OnInit {

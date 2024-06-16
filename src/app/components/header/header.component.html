@@ -1,4 +1,4 @@
-<header class="header">
+<header>
   <div class="header-container">
     <div class="brand">
       <a routerLink="/">Booking App</a>
@@ -11,14 +11,14 @@
     <div class="user-profile">
       <ng-container *ngIf="isLoggedIn; else loginTemplate">
         <div class="profile-container">
-          <a routerLink="/profile" class="profile-link">
-            <img
-              class="image-container"
-              [src]="getProfileImageUrl()"
-              alt="Profile Image"
-              id="profile-img"
-            />
-          </a>
+          <img
+            class="image-container"
+            [src]="getProfileImageUrl()"
+            alt="Profile Image"
+            id="profile-img"
+            class="profile-link"
+            routerLink="/profile"
+          />
           <a routerLink="/profile" class="profile-link">Profile</a>
         </div>
         <a (click)="logout()" class="logout-link">Logout</a>

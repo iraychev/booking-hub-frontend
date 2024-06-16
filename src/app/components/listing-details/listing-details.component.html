@@ -1,15 +1,22 @@
-<div class="button-container">
-  <button class="create-listing-btn" routerLink="/listing-creation">
-    Create a Listing
-  </button>
+<div id="create-btn-wrapper">
+  <app-button
+    text="Create a Listing"
+    routerLink="/listing-creation"
+    id="create-btn"
+  />
 </div>
 
 <div *ngIf="listing" class="listing-details">
   <div class="button-container" *ngIf="listing.user.id === userId">
-    <button class="edit-btn" (click)="toggleEditMode()">{{ editMode ? 'Cancel Edit' : 'Edit' }}</button>
-    <button class="delete-btn" (click)="deleteListing(listing.id)">
-      Delete
-    </button>
+    <app-button
+      (click)="toggleEditMode()"
+      [text]="editMode ? 'Cancel Edit' : 'Edit'"
+    />
+    <app-button
+      (click)="deleteListing(listing.id)"
+      text="Delete"
+      [isRed]="true"
+    />
   </div>
   <div *ngIf="!editMode">
     <h2>{{ listing.title }}</h2>

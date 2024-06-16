@@ -1,0 +1,30 @@
+button {
+  color: white;
+  background-color: #007bff;
+  text-decoration: none;
+  transition: filter 0.3s ease-in-out;
+  cursor: pointer;
+  padding: 0.4em 0.7em;
+  border-radius: 0.3em;
+  border: none;
+}
+
+button:hover {
+  filter: brightness(0.9);
+}
+
+.ghost {
+  outline: 1px solid #007bff;
+  color: black;
+  background-color: #fff;
+}
+
+.ghost:hover {
+  color: white;
+  background-color: #007bff;
+  border: none;
+}
+
+.red {
+  background-color: red;
+}

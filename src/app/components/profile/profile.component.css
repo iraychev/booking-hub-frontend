@@ -12,9 +12,8 @@ h2 {
 }
 
 label {
-  display: block;
-  margin-top: 5px;
-  margin-bottom: 7px;
+  font-size: 0.9em;
+  color: gray;
 }
 
 input[type="text"],
@@ -27,20 +26,6 @@ input[type="password"] {
   border-radius: 3px;
 }
 
-button {
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  margin-right: 10px;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
 .error {
   color: red;
   margin-top: 10px;
@@ -50,17 +35,10 @@ button:hover {
   display: none;
 }
 
-.profile-container:not(.edit-mode) label {
-  font-weight: bold;
-}
-
 .profile-container.edit-mode input {
   display: block;
 }
 
-.profile-container.edit-mode span {
-  display: none;
-}
 .listing-container {
   display: flex;
   justify-content: space-between;
@@ -76,19 +54,6 @@ button:hover {
   flex-grow: 1;
 }
 
-.delete-button {
-  padding: 5px 10px;
-  background-color: #ff4d4d;
-  color: white;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-.delete-button:hover {
-  background-color: #e60000;
-}
-
 #profile-img {
   width: 250px;
   height: 250px;
@@ -99,5 +64,23 @@ button:hover {
 
 .image-container {
   text-align: center;
-  margin-bottom: 20px;
+  margin: 20px 0;
+}
+
+.profile-view-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2em;
+  padding: 1em;
+}
+
+.profile-view-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+#edit-btn {
+  margin-top: 0.5em;
 }

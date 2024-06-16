@@ -1,8 +1,9 @@
-.header {
+header {
   width: 100%;
   background-color: #007bff;
   padding: 10px 20px;
   color: white;
+  margin-bottom: 2em;
 }
 
 .header-container {
@@ -15,6 +16,7 @@
 
 .brand a {
   font-size: 1.8em;
+  letter-spacing: 1px;
   font-weight: bold;
   color: white;
   text-decoration: none;
@@ -40,11 +42,13 @@
   display: flex;
   gap: 15px;
   align-items: center;
+  justify-content: center;
 }
 
 .profile-container {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
 }
 
@@ -71,11 +75,6 @@
   .nav {
     margin: auto;
     justify-content: center;
-  }
-
-  .user-profile {
-    margin-top: 10px;
-    justify-content: flex-end;
   }
 }
 

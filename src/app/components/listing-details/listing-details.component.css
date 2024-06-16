@@ -27,51 +27,23 @@
   padding: 8px;
   border-radius: 4px;
 }
-.create-listing-btn {
-  padding: 20px 30px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  text-decoration: none;
-  font-size: large;
+#create-btn-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
 }
 
-.create-listing-btn:hover {
-  background-color: #0056b3;
+#create-btn {
+  margin-right: 2em;
 }
+
 .button-container {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
   margin-bottom: 20px;
 }
-.edit-btn,
-.create-listing-btn,
-.delete-btn {
-  padding: 10px 20px;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
 
-.edit-btn {
-  background-color: #007bff;
-}
-
-.edit-btn:hover {
-  background-color: #0056b3;
-}
-
-.delete-btn {
-  background-color: #ff4d4d;
-}
-
-.delete-btn:hover {
-  background-color: #cc0000;
-}
 input[type="file"] {
   display: block;
   margin-top: 1rem;
@@ -91,17 +63,11 @@ input[type="number"] {
   border-radius: 0.25rem;
 }
 
-button {
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-}
 .image-slider {
   position: relative;
   width: 85%;
-  margin: 0 auto; 
+  margin: 0 auto;
   overflow: hidden;
-  
 }
 
 .slider-container {

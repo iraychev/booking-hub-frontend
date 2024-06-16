@@ -1,7 +1,7 @@
 <div class="profile-container" [class.edit-mode]="editMode">
   <mat-tab-group [(selectedIndex)]="selectedTabIndex">
     <mat-tab label="Profile">
-      <div *ngIf="!editMode">
+      <div *ngIf="!editMode" class="profile-view-wrapper">
         <div class="image-container">
           <img
             *ngIf="user.profileImage"
@@ -11,23 +11,25 @@
           />
           <p *ngIf="!user.profileImage">No profile image available</p>
         </div>
-        <div>
-          <label for="username">Username:</label>
-          <span>{{ user.username }}</span>
+        <div class="profile-view-info">
+          <div>
+            <label for="username">Username:</label>
+            <p name="username">{{ user.username }}</p>
+          </div>
+          <div>
+            <label for="firstName">First Name:</label>
+            <p name="firstName">{{ user.firstName }}</p>
+          </div>
+          <div>
+            <label for="lastName">Last Name:</label>
+            <p name="lastName">{{ user.lastName }}</p>
+          </div>
+          <div>
+            <label for="email">Email:</label>
+            <p name="email">{{ user.email }}</p>
+          </div>
+          <app-button (click)="toggleEditMode()" text="Edit" id="edit-btn" />
         </div>
-        <div>
-          <label for="firstName">First Name:</label>
-          <span>{{ user.firstName }}</span>
-        </div>
-        <div>
-          <label for="lastName">Last Name:</label>
-          <span>{{ user.lastName }}</span>
-        </div>
-        <div>
-          <label for="email">Email:</label>
-          <span>{{ user.email }}</span>
-        </div>
-        <button (click)="toggleEditMode()">Edit</button>
       </div>
       <div *ngIf="editMode">
         <div>
@@ -74,7 +76,7 @@
           <label for="newProfileImage">Profile Picture:</label>
           <input type="file" (change)="onFileSelected($event)" />
           <button (click)="onUpload()">Upload</button>
-          <img [src]="user.profileImage" alt="Profile Picture">
+          <img [src]="user.profileImage" alt="Profile Picture" />
         </div>
         <button (click)="saveChanges()">Save</button>
         <button (click)="cancelEdit()">Cancel</button>
@@ -88,9 +90,11 @@
             listing.title
           }}</a>
         </div>
-        <button class="delete-button" (click)="deleteListing(listing.id)">
-          Delete
-        </button>
+        <app-button
+          text="Delete"
+          (click)="deleteListing(listing.id)"
+          [isRed]="true"
+        />
       </div>
     </mat-tab>
     <mat-tab label="Your Bookings"> </mat-tab>

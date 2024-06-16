@@ -15,7 +15,6 @@
   transition: box-shadow 0.3s ease-in-out;
   cursor: pointer;
   margin-bottom: 16px;
-  background-color: #f9f9f9;
 }
 
 .listing-card:hover {
@@ -29,24 +28,16 @@
 .listing-card p {
   margin: 8px 0;
 }
-.create-listing-btn {
-  padding: 20px 30px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  text-decoration: none;
-  font-size: large;
-}
 
-.create-listing-btn:hover {
-  background-color: #0056b3;
-}
 .button-container {
   display: flex;
   justify-content: flex-end;
 }
+
+#create-btn {
+  margin-right: 2em;
+}
+
 .error-message {
   color: red;
   margin-bottom: 20px;

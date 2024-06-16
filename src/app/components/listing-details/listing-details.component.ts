@@ -7,10 +7,17 @@ import { ImageService } from '../../services/image.service';
 import { Image } from '../../models/image';
 import { Listing } from '../../models/listing.model';
 import { AmenitiesPipe } from '../../pipes/amenities.pipe';
+import { ButtonComponent } from '../../shared/button/button.component';
 @Component({
   selector: 'app-listing-details',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule, AmenitiesPipe],
+  imports: [
+    CommonModule,
+    RouterLink,
+    FormsModule,
+    AmenitiesPipe,
+    ButtonComponent,
+  ],
   templateUrl: './listing-details.component.html',
   styleUrl: './listing-details.component.css',
 })

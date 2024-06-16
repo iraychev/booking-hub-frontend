@@ -1,7 +1,9 @@
 <div class="button-container">
-  <button class="create-listing-btn" routerLink="/listing-creation">
-    Create a Listing
-  </button>
+  <app-button
+    routerLink="/listing-creation"
+    text="Create a Listing"
+    id="create-btn"
+  />
 </div>
 <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
 <div class="listings-container">
