@@ -2,31 +2,38 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 20px;
+  padding-top: 2em;
 }
 
 .listing-card {
   border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 16px;
-  width: 80%;
-  max-width: 800px;
+  border-radius: 0.5em;
+  padding: 1em;
+  width: 50%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease-in-out;
   cursor: pointer;
-  margin-bottom: 16px;
+  margin-bottom: 1em;
+  background-color: #f9f9f9;
+
 }
 
 .listing-card:hover {
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.listing-card h3 {
-  margin-top: 0;
+  box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.2);
 }
 
 .listing-card p {
-  margin: 8px 0;
+  margin: 0.5em 0;
+}
+.description-price-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#price {
+  margin-left: 1.3em;
+  font-weight: bold;
+  white-space: nowrap;
 }
 
 .button-container {

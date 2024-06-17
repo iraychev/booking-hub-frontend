@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'amenities',
+  name: 'amenitiespipe',
   standalone: true,
 })
 export class AmenitiesPipe implements PipeTransform {

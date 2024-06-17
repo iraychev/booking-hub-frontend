@@ -54,6 +54,7 @@ export class ApiService {
   }
   createListing(listing: Listing) {
     const headers = this.getAuthHeaders();
+
     return this.http.post(`${this.url}/listings`, listing, { headers });
   }
   deleteListingById(listingId: string): Observable<any> {
@@ -63,7 +64,6 @@ export class ApiService {
 
   updateUserById(user: User): Observable<any> {
     const headers = this.getAuthHeaders();
-    console.log('Inside apiService.updateUser');
     return this.http.put(`${this.url}/users/${user.id}`, user, { headers });
   }
 

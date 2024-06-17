@@ -78,7 +78,7 @@ export class ListingDetailsComponent implements OnInit {
     if (event.target.files.length + this.listing.images.length <= 5) {
       this.uploadedFiles = Array.from(event.target.files);
     } else {
-      alert('You can upload a maximum of 5 images.');
+      alert('A listing can have a maximum of 5 images.');
     }
   }
 
@@ -124,6 +124,7 @@ export class ListingDetailsComponent implements OnInit {
     } catch (error) {
       console.error('Error during file upload', error);
     }
+    console.log(this.listing);
   }
   getSliderTransform(): string {
     return `translateX(-${this.currentImageIndex * 100}%)`;

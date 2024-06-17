@@ -9,6 +9,7 @@ import { RouterLink } from '@angular/router';
 import { ImageService } from '../../services/image.service';
 import { Image } from '../../models/image';
 import { ButtonComponent } from '../../shared/button/button.component';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -30,7 +31,6 @@ export class ProfileComponent implements OnInit {
   selectedTabIndex: number = 0;
   personalListings: Listing[] = [];
   selectedFile!: File;
-  newProfileImage!: Image;
 
   constructor(
     public apiService: ApiService,
@@ -45,21 +45,18 @@ export class ProfileComponent implements OnInit {
     this.editMode = !this.editMode;
   }
 
-  saveChanges(): void {
-    this.user.profileImage = this.newProfileImage;
+  async saveChanges(): Promise<void> {
+    await this.assignImage();
     console.log(this.user);
     localStorage.setItem('user', JSON.stringify(this.user));
-    this.apiService.updateUserById(this.user).subscribe({
-      next: (updatedUser) => {
-        console.log('Server reponse: ', updatedUser);
-
-        this.editMode = false;
-      },
-      error: (err) => {
-        console.error('Error updating profile', err);
-        this.error = 'Error updating profile';
-      },
-    });
+    try {
+      const updatedUser = await lastValueFrom(this.apiService.updateUserById(this.user));
+      console.log('Server response: ', updatedUser);
+      this.editMode = false;
+    } catch (err) {
+      console.error('Error updating profile', err);
+      this.error = 'Error updating profile';
+    }
   }
 
   cancelEdit(): void {
@@ -71,9 +68,12 @@ export class ProfileComponent implements OnInit {
     this.apiService.fetchListings().subscribe({
       next: (listings: any[]) => {
         this.personalListings = listings.filter(
-          (listing) => listing.user.id === this.user.id
+          (listing) => listing.user.id === this.user!.id
         );
-        this.personalListings.sort((a, b) => (a.user.id > b.user.id ? 1 : -1));
+        this.personalListings.sort((a, b) => {
+          if (!a.user || !b.user) return 0;
+          return a.user.id > b.user.id ? 1 : -1;
+        });
       },
       error: (err) => {
         console.error('Error fetching listings:', err);
@@ -97,33 +97,12 @@ export class ProfileComponent implements OnInit {
       },
     });
   }
-  onFileSelected(event: any): void {
+  onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
   }
 
-  onUpload() {
-    this.imageService.uploadImage(this.selectedFile).subscribe({
-      next: (response) => {
-        console.log('Upload success', response);
-        this.newProfileImage = response;
-        console.log(this.newProfileImage);
-      },
-      error: (err) => {
-        console.error('Upload error', err);
-      },
-    });
-  }
 
-  getProfileImageUrl(): string {
-    if (this.user && this.user.profileImage) {
-      return (
-        'data:' +
-        this.user.profileImage.type +
-        ';base64,' +
-        this.user.profileImage.data
-      );
-    } else {
-      return '';
-    }
+  async assignImage(){
+    this.user.profileImage = await this.imageService.mapFileToImage(this.selectedFile);
   }
 }

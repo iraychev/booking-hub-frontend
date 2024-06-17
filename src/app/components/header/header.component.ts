@@ -23,9 +23,9 @@ export class HeaderComponent implements OnInit {
 
   logout(): void {
     this.authService.logout();
-    this.router.navigate(['/home']);
+    this.router.navigate(['/']);
   }
-  getProfileImageUrl(): string {
+  getProfileImageData(): string {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     if (user && user.profileImage) {
       return 'data:' + user.profileImage.type + ';base64,' + user.profileImage.data;

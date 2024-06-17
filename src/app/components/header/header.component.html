@@ -1,27 +1,23 @@
 <header>
   <div class="header-container">
-    <div class="brand">
-      <a routerLink="/">Booking App</a>
-    </div>
+    <a routerLink="/" id="logo">Booking App </a>
     <nav class="nav">
       <a routerLink="/listings" class="nav-link">Listings</a>
       <a routerLink="/about" class="nav-link">About</a>
       <a routerLink="/contact" class="nav-link">Contact</a>
     </nav>
     <div class="user-profile">
-      <ng-container *ngIf="isLoggedIn; else loginTemplate">
-        <div class="profile-container">
-          <img
-            class="image-container"
-            [src]="getProfileImageUrl()"
-            alt="Profile Image"
-            id="profile-img"
-            class="profile-link"
-            routerLink="/profile"
-          />
-          <a routerLink="/profile" class="profile-link">Profile</a>
-        </div>
-        <a (click)="logout()" class="logout-link">Logout</a>
+      <ng-container class="user-profile" *ngIf="isLoggedIn; else loginTemplate">
+        <img
+          class="image-container"
+          [src]="getProfileImageData()"
+          alt="Profile Image"
+          id="profile-img"
+          class="profile-link"
+          routerLink="/profile"
+        />
+        <a routerLink="/profile" class="profile-link">Profile</a>
+        <a (click)="logout()" class="profile-link">Logout</a>
       </ng-container>
       <ng-template #loginTemplate>
         <a routerLink="/register" class="profile-link">Register</a>

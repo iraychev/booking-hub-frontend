@@ -8,7 +8,7 @@
     *ngIf="authService.isLoggedIn$ | async as isLoggedIn; else loggedOutNav"
   >
     <app-button text="Browse Listings" routerLink="/listings" />
-    <app-button text="Create a Listings" routerLink="/listing-creation" />
+    <app-button text="Create a Listing" routerLink="/listing-creation" />
     <app-button
       text="Logout"
       routerLink="/listing-creation"
@@ -18,8 +18,8 @@
   </div>
   <ng-template #loggedOutNav>
     <div class="navigation">
-      <a routerLink="/login" class="nav-link">Login</a>
-      <a routerLink="/register" class="nav-link">Register</a>
+      <app-button text="Login" routerLink="/login" />
+      <app-button text="Register" routerLink="/register" [isGhost]="true" />
     </div>
   </ng-template>
 </div>

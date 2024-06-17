@@ -1,11 +1,16 @@
 <div class="profile-container" [class.edit-mode]="editMode">
-  <mat-tab-group [(selectedIndex)]="selectedTabIndex">
+  <mat-tab-group fitInkBarToContent="true" [(selectedIndex)]="selectedTabIndex">
     <mat-tab label="Profile">
       <div *ngIf="!editMode" class="profile-view-wrapper">
         <div class="image-container">
           <img
             *ngIf="user.profileImage"
-            [src]="getProfileImageUrl()"
+            [src]="
+              'data:' +
+              this.user.profileImage.type +
+              ';base64,' +
+              this.user.profileImage.data
+            "
             alt="Profile Image"
             id="profile-img"
           />
@@ -72,14 +77,15 @@
             required
           />
         </div>
-        <div>
+        <div id="profile-img-upload">
           <label for="newProfileImage">Profile Picture:</label>
           <input type="file" (change)="onFileSelected($event)" />
-          <button (click)="onUpload()">Upload</button>
-          <img [src]="user.profileImage" alt="Profile Picture" />
         </div>
-        <button (click)="saveChanges()">Save</button>
-        <button (click)="cancelEdit()">Cancel</button>
+        <div class="editmode-buttons">
+          <app-button text="Save" (click)="saveChanges()"></app-button>
+          <app-button text="Cancel" [isGhost]="true" (click)="cancelEdit()"></app-button>
+        </div>
+        
       </div>
     </mat-tab>
     <mat-tab label="Your Listings">

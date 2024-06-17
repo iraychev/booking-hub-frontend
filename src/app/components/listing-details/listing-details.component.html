@@ -1,39 +1,19 @@
-<div id="create-btn-wrapper">
-  <app-button
-    text="Create a Listing"
-    routerLink="/listing-creation"
-    id="create-btn"
-  />
-</div>
-
 <div *ngIf="listing" class="listing-details">
-  <div class="button-container" *ngIf="listing.user.id === userId">
-    <app-button
-      (click)="toggleEditMode()"
-      [text]="editMode ? 'Cancel Edit' : 'Edit'"
-    />
-    <app-button
-      (click)="deleteListing(listing.id)"
-      text="Delete"
-      [isRed]="true"
-    />
-  </div>
   <div *ngIf="!editMode">
-    <h2>{{ listing.title }}</h2>
-
-    <p><strong>Description:</strong> {{ listing.description }}</p>
-    <p><strong>Property Address:</strong> {{ listing.propertyAddress }}</p>
-    <p><strong>Price (night):</strong> {{ listing.price }} €</p>
-    <p><strong>Amenities:</strong></p>
-    <ul>
-      <li *ngFor="let amenity of listing.amenities">
-        {{ amenity | amenities }}
-      </li>
-    </ul>
-    <p>
-      <strong>Posted by: </strong> {{ listing.user.firstName }}
-      {{ listing.user.lastName }}
-    </p>
+    <div class="button-container" *ngIf="listing.user.id === userId">
+      <h1>{{ listing.title }}</h1>
+      <div>
+        <app-button
+          (click)="toggleEditMode()"
+          [text]="editMode ? 'Cancel Edit' : 'Edit'"
+        />
+        <app-button
+          (click)="deleteListing(listing.id)"
+          text="Delete"
+          [isRed]="true"
+        />
+      </div>
+    </div>
     <div class="image-slider">
       <div
         class="slider-container"
@@ -50,6 +30,19 @@
         <button class="next-btn" (click)="nextImage()">&#10095;</button>
       </div>
     </div>
+    <p>📍 {{ listing.propertyAddress }}</p>
+    <p>{{ listing.description }}</p>
+    <p>Price/night: {{ listing.price }} €</p>
+    <p>Extras:</p>
+    <ul>
+      <li *ngFor="let amenity of listing.amenities">
+        <span>{{ amenity | amenitiespipe }}</span>
+      </li>
+    </ul>
+    <p>
+      <strong>Posted by: </strong> {{ listing.user.firstName }}
+      {{ listing.user.lastName }}
+    </p>
   </div>
   <div *ngIf="editMode">
     <div>

@@ -1,14 +1,10 @@
 .profile-container {
-  max-width: 500px;
-  margin: auto;
-  padding: 20px;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1.1em;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 0.4em;
   background-color: #f9f9f9;
-}
-
-h2 {
-  margin-bottom: 20px;
 }
 
 label {
@@ -19,9 +15,9 @@ label {
 input[type="text"],
 input[type="email"],
 input[type="password"] {
-  width: calc(100% - 12px);
-  padding: 8px;
-  margin-bottom: 10px;
+  width: calc(100% - 0.8em);
+  padding: 0.5em;
+  margin-bottom: 1em;
   border: 1px solid #ccc;
   border-radius: 3px;
 }
@@ -41,9 +37,9 @@ input[type="password"] {
 
 .listing-container {
   display: flex;
-  justify-content: space-between;
+  justify-content:stretch;
   align-items: center;
-  padding: 10px;
+  padding: 0.7em;
   border: 1px solid #ccc;
   border-radius: 5px;
   margin-bottom: 10px;
@@ -58,19 +54,17 @@ input[type="password"] {
   width: 250px;
   height: 250px;
   object-fit: cover;
-  border-radius: 50%;
+  border-radius: 20%;
   border: 2px solid #007bff;
+  margin: 1em 0;
 }
 
-.image-container {
-  text-align: center;
-  margin: 20px 0;
-}
+
 
 .profile-view-wrapper {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
   gap: 2em;
   padding: 1em;
 }
@@ -83,4 +77,13 @@ input[type="password"] {
 
 #edit-btn {
   margin-top: 0.5em;
+}
+#profile-img-upload {
+  margin: 1em 0;
+}
+.editmode-buttons {
+  display: flex;
+}
+.editmode-buttons app-button {
+  padding: 0.35em;
 }

@@ -4,12 +4,13 @@ import { ApiService } from '../../services/api.service';
 import { User } from '../../models/user.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ButtonComponent } from "../../shared/button/button.component";
 @Component({
-  selector: 'app-register',
-  standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
-  templateUrl: './register.component.html',
-  styleUrl: './register.component.css',
+    selector: 'app-register',
+    standalone: true,
+    templateUrl: './register.component.html',
+    styleUrl: './register.component.css',
+    imports: [CommonModule, FormsModule, RouterLink, ButtonComponent]
 })
 export class RegisterComponent {
   user: User = new User();

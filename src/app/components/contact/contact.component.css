@@ -8,27 +8,5 @@
 }
 
 .contact-container h1 {
-  font-size: 2.5em;
   margin-bottom: 20px;
-}
-
-.contact-container h2 {
-  font-size: 1.75em;
-  margin-top: 20px;
-  margin-bottom: 10px;
-}
-
-.contact-container p {
-  font-size: 1.2em;
-  line-height: 1.6;
-  margin-bottom: 20px;
-}
-
-.contact-container a {
-  color: #007bff;
-  text-decoration: none;
-}
-
-.contact-container a:hover {
-  text-decoration: underline;
 }

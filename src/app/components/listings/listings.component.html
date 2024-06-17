@@ -12,8 +12,11 @@
     class="listing-card"
     (click)="viewDetails(listing.id)"
   >
-    <h3>{{ listing.title }}</h3>
-    <p>{{ listing.description }}</p>
-    <p><strong>Price (night):</strong> {{ listing.price }} €</p>
+    <h2>{{ listing.title }}</h2>
+    <div class="description-price-container">
+      <p>{{ listing.description.length > 100 ? (listing.description | slice:0:100) + "...":listing.description}}</p>
+      <h5 id="price">Price (night): {{ listing.price }} €</h5>
+    </div>
+    
   </div>
 </div>

@@ -1,10 +1,10 @@
 .register-container {
-  max-width: 400px;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 1.2em;
   background-color: #f9f9f9;
+  border-radius: 0.5em;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .form-group {
@@ -21,44 +21,21 @@ input[type="text"],
 input[type="password"],
 input[type="email"] {
   width: 100%;
-  padding: 8px;
+  padding: 0.5em;
   border: 1px solid #ccc;
-  border-radius: 3px;
+  border-radius: 0.3em;
+  margin: 0 0 1em;
 }
 input[type="checkbox"] {
-  margin-right: 5px;
-  margin-bottom: 10px;
-}
-button {
-  width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #0056b3;
+  margin-right: 0.4em;
+  margin-bottom: 0.8em;
 }
 
 .error {
   color: red;
-  margin-top: 10px;
+  margin-top: 0.7em;
 }
 .login-link {
-  margin-top: 15px;
+  margin-top: 1em;
   text-align: center;
-}
-
-.login-link a {
-  color: #007bff;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.login-link a:hover {
-  color: #0056b3;
-  cursor: pointer;
 }
