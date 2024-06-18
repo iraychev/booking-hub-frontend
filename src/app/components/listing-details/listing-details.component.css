@@ -128,3 +128,7 @@ input[type="number"] {
 #address {
   font-style: italic;
 }
+#amenity-list {
+  display: flex;
+  gap: 0 1em;
+}

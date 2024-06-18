@@ -34,7 +34,7 @@
     <p>{{ listing.description }}</p>
     <p>Price/night: {{ listing.price }} €</p>
     <p>Extras:</p>
-    <ul>
+    <ul id="amenity-list">
       <li *ngFor="let amenity of listing.amenities">
         <span>{{ amenity | amenitiespipe }}</span>
       </li>

@@ -46,7 +46,9 @@ export class ProfileComponent implements OnInit {
   }
 
   async saveChanges(): Promise<void> {
-    await this.assignImage();
+    if (this.selectedFile) {
+      await this.assignImage();
+    }
     console.log(this.user);
     localStorage.setItem('user', JSON.stringify(this.user));
     try {
