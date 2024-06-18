@@ -7,7 +7,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { Listing } from '../../models/listing.model';
 import { RouterLink } from '@angular/router';
 import { ImageService } from '../../services/image.service';
-import { Image } from '../../models/image';
+import { Image } from '../../models/image.model';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { lastValueFrom } from 'rxjs';
 
@@ -50,7 +50,9 @@ export class ProfileComponent implements OnInit {
     console.log(this.user);
     localStorage.setItem('user', JSON.stringify(this.user));
     try {
-      const updatedUser = await lastValueFrom(this.apiService.updateUserById(this.user));
+      const updatedUser = await lastValueFrom(
+        this.apiService.updateUserById(this.user)
+      );
       console.log('Server response: ', updatedUser);
       this.editMode = false;
     } catch (err) {
@@ -101,8 +103,9 @@ export class ProfileComponent implements OnInit {
     this.selectedFile = event.target.files[0];
   }
 
-
-  async assignImage(){
-    this.user.profileImage = await this.imageService.mapFileToImage(this.selectedFile);
+  async assignImage() {
+    this.user.profileImage = await this.imageService.mapFileToImage(
+      this.selectedFile
+    );
   }
 }

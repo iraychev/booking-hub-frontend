@@ -13,6 +13,7 @@
     (click)="viewDetails(listing.id)"
   >
     <h2>{{ listing.title }}</h2>
+    <p id="address">📍 {{listing.propertyAddress}}</p>
     <div class="description-price-container">
       <p>{{ listing.description.length > 100 ? (listing.description | slice:0:100) + "...":listing.description}}</p>
       <h5 id="price">Price (night): {{ listing.price }} €</h5>

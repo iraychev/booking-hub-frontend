@@ -5,16 +5,22 @@ import { CommonModule } from '@angular/common';
 import { Listing } from '../../models/listing.model';
 import { FormsModule } from '@angular/forms';
 import { ButtonComponent } from '../../shared/button/button.component';
-import { Image } from '../../models/image';
+import { Image } from '../../models/image.model';
 import { ImageService } from '../../services/image.service';
-import { AmenitiesPipe } from "../../pipes/amenities.pipe";
+import { AmenitiesPipe } from '../../pipes/amenities.pipe';
 
 @Component({
-    selector: 'app-listing-creation',
-    standalone: true,
-    templateUrl: './listing-creation.component.html',
-    styleUrl: './listing-creation.component.css',
-    imports: [RouterLink, CommonModule, FormsModule, ButtonComponent, AmenitiesPipe]
+  selector: 'app-listing-creation',
+  standalone: true,
+  templateUrl: './listing-creation.component.html',
+  styleUrl: './listing-creation.component.css',
+  imports: [
+    RouterLink,
+    CommonModule,
+    FormsModule,
+    ButtonComponent,
+    AmenitiesPipe,
+  ],
 })
 export class ListingCreationComponent {
   listing: Listing = new Listing();

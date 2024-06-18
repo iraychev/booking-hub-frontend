@@ -1,5 +1,5 @@
 import { User } from './user.model';
-import { Image } from './image';
+import { Image } from './image.model';
 
 export class Listing {
   id!: string;

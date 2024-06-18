@@ -1,8 +1,8 @@
 <div *ngIf="listing" class="listing-details">
   <div *ngIf="!editMode">
-    <div class="button-container" *ngIf="listing.user.id === userId">
+    <div class="heading" *ngIf="listing.user.id === userId">
       <h1>{{ listing.title }}</h1>
-      <div>
+      <div class="button-container">
         <app-button
           (click)="toggleEditMode()"
           [text]="editMode ? 'Cancel Edit' : 'Edit'"
@@ -43,8 +43,22 @@
       <strong>Posted by: </strong> {{ listing.user.firstName }}
       {{ listing.user.lastName }}
     </p>
+    <div class="calendar">
+      <app-calendar [bookedDates]="bookedDates"></app-calendar>
+    </div>
   </div>
   <div *ngIf="editMode">
+    <div class="button-container">
+      <app-button
+        (click)="toggleEditMode()"
+        [text]="editMode ? 'Cancel Edit' : 'Edit'"
+      />
+      <app-button
+        (click)="deleteListing(listing.id)"
+        text="Delete"
+        [isRed]="true"
+      />
+    </div>
     <div>
       <label for="title">Title:</label>
       <input
@@ -104,10 +118,18 @@
           [value]="amenity"
           (change)="toggleAmenity(amenity)"
           [checked]="listing.amenities.includes(amenity)"
+          id="amenity"
         />
         {{ amenity }}
       </div>
     </div>
-    <button (click)="saveChanges()">Save</button>
+    <div class="save-button-container">
+      <app-button text="Save" (click)="saveChanges()"></app-button>
+      <app-button
+        (click)="toggleEditMode()"
+        [text]="editMode ? 'Cancel Edit' : 'Edit'"
+        [isGhost]="true"
+      />
+    </div>
   </div>
 </div>

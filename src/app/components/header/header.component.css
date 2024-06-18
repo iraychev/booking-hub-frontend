@@ -4,14 +4,14 @@
   justify-content:space-between;
   margin: auto;
   background-color: #007bff;
-  padding: 10px 20px;
+  padding: 0.6rem 1.1rem;
   color: white;
   margin-bottom: 2em;
   font-size: 1.4em;
 }
 
 #logo{
-  font-size: 1.4em;
+  font-size: 1.3em;
   letter-spacing: 1px;
   font-weight: bold;
   color: inherit;
@@ -20,7 +20,7 @@
 
 .nav {
   display: flex;
-  gap: 20px;
+  gap: 0.9em;
 }
 
 .nav-link {
@@ -31,7 +31,7 @@
 
 .user-profile {
   display: flex;
-  gap: 15px;
+  gap: 0.9em;
   align-items: center;
   justify-content: center;
 }

@@ -4,28 +4,34 @@ import { ApiService } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ImageService } from '../../services/image.service';
-import { Image } from '../../models/image';
 import { Listing } from '../../models/listing.model';
 import { AmenitiesPipe } from '../../pipes/amenities.pipe';
 import { ButtonComponent } from '../../shared/button/button.component';
+import { Booking } from '../../models/booking.model';
+import { CalendarComponent } from "../../shared/calendar/calendar.component";
+import { BookingService } from '../../services/booking.service';
+
 @Component({
-  selector: 'app-listing-details',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink,
-    FormsModule,
-    AmenitiesPipe,
-    ButtonComponent,
-  ],
-  templateUrl: './listing-details.component.html',
-  styleUrl: './listing-details.component.css',
+    selector: 'app-listing-details',
+    standalone: true,
+    templateUrl: './listing-details.component.html',
+    styleUrl: './listing-details.component.css',
+    imports: [
+        CommonModule,
+        RouterLink,
+        FormsModule,
+        AmenitiesPipe,
+        ButtonComponent,
+        CalendarComponent
+    ]
 })
 export class ListingDetailsComponent implements OnInit {
   currentImageIndex: number = 0;
   listing!: Listing;
+  bookings: Booking[] = [];
   userId: string = JSON.parse(localStorage.getItem('user') || '{}').id;
   editMode: boolean = false;
+  bookedDates: Date[] = [];
   amenities: string[] = [
     'WIFI',
     'PARKING',
@@ -44,12 +50,33 @@ export class ListingDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private apiService: ApiService,
     private router: Router,
-    private imageService: ImageService
+    private imageService: ImageService,
+    private bookingService: BookingService
   ) {}
 
   ngOnInit(): void {
     const listingId = this.route.snapshot.paramMap.get('id');
     this.fetchListingDetails(listingId);
+    this.fetchBookings(listingId);
+    this.fetchBookedDates(listingId);
+
+  }
+  async fetchBookedDates(id: string | null): Promise<void> {
+    try {
+      this.bookedDates = await this.bookingService.calculateBookedDates(id!);
+      console.log('Booked Dates:', this.bookedDates);
+    } catch (error) {
+      console.error('Error fetching booked dates:', error);
+      // Handle error as needed
+    }
+  }
+
+  fetchBookings(id: string | null): void {
+    this.apiService
+      .getBookingsForListing(id!)
+      .subscribe((data: Booking[]) => {
+        this.bookings = data;
+      });
   }
 
   fetchListingDetails(id: string | null): void {
@@ -62,6 +89,7 @@ export class ListingDetailsComponent implements OnInit {
       });
     }
   }
+
   deleteListing(listingId: string): void {
     this.apiService.deleteListingById(listingId).subscribe({
       next: () => {
@@ -91,41 +119,28 @@ export class ListingDetailsComponent implements OnInit {
     }
   }
 
-  async saveChanges() {
-    var uploadedImages: Image[] = [];
+  saveChanges() {
+    this.imageService
+      .mapFilesToImages(this.uploadedFiles)
+      .then((images) => {
+        this.listing.images = images;
+        console.log(this.listing);
 
-    try {
-      for (const file of this.uploadedFiles) {
-        var image: Image = new Image();
-
-        try {
-          const response = await this.imageService
-            .uploadImage(file)
-            .toPromise();
-          uploadedImages.push(response!);
-        } catch (err) {
-          console.log('Error: ', err);
-        }
-      }
-
-      this.listing.images = uploadedImages.map((image) =>
-        JSON.parse(JSON.stringify(image))
-      );
-
-      try {
-        const updatedListing = await this.apiService
-          .updateListingById(this.listing)
-          .toPromise();
-        this.listing = updatedListing;
-        this.toggleEditMode();
-      } catch (err) {
-        console.error('Error updating listing', err);
-      }
-    } catch (error) {
-      console.error('Error during file upload', error);
-    }
-    console.log(this.listing);
+        this.apiService.updateListingById(this.listing).subscribe({
+          next: (response) => {
+            console.log('Listing created successfully:', response);
+            this.router.navigate(['/listings']);
+          },
+          error: (err) => {
+            console.error('Error creating listing:', err);
+          },
+        });
+      })
+      .catch((err) => {
+        console.error('Error mapping files to images:', err);
+      });
   }
+
   getSliderTransform(): string {
     return `translateX(-${this.currentImageIndex * 100}%)`;
   }

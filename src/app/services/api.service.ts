@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, tap, throwError } from 'rxjs';
 import { User } from '../models/user.model';
 import { Listing } from '../models/listing.model';
+import { Booking } from '../models/booking.model';
 
 @Injectable({
   providedIn: 'root',
@@ -70,5 +71,10 @@ export class ApiService {
   getListingById(id: string): Observable<any> {
     const headers = this.getAuthHeaders();
     return this.http.get(`${this.url}/listings/${id}`, { headers });
+  }
+
+  getBookingsForListing(listingId: string): Observable<Booking[]> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<Booking[]>(`${this.url}/bookings/listing/${listingId}`, {headers});
   }
 }

@@ -1,0 +1,16 @@
+<div class="calendar">
+    <div class="calendar-header">
+      <button (click)="previousMonth()">Previous</button>
+      <span>{{ currentMonthName }} {{ currentYear }}</span>
+      <button (click)="nextMonth()">Next</button>
+    </div>
+    <div class="calendar-days">
+      <div *ngFor="let day of weekDays" class="day">{{ day }}</div>
+    </div>
+    <div class="calendar-grid">
+      <div *ngFor="let date of calendarDates" class="calendar-day" [class.other-month]="date.month !== currentMonth" [class.booked]="date.booked">
+        <span class="date">{{ date.day }}</span>
+      </div>
+    </div>
+  </div>
+  
