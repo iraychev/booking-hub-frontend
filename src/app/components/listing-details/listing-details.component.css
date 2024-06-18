@@ -104,6 +104,27 @@ input[type="number"] {
   right: 0.6em;
 }
 
-#amenity {
-margin: 0.5em 0 1em;
+.host {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.3em;
+  
+}
+.host p {
+  margin: 0 0.3em ;
+}
+#profile-img {
+  margin: 1em 1em;
+  width: 70px;
+  height: 70px;
+  border-radius: 55%;
+  transition: transform 0.2s ease-in-out;
+}
+#profile-img:hover {
+  border-radius: 35%;
+  transform: scale(1.5);
+
+}
+#address {
+  font-style: italic;
 }

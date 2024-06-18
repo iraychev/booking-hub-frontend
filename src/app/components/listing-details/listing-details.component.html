@@ -30,7 +30,7 @@
         <button class="next-btn" (click)="nextImage()">&#10095;</button>
       </div>
     </div>
-    <p>📍 {{ listing.propertyAddress }}</p>
+    <p id="address">📍 {{ listing.propertyAddress }}</p>
     <p>{{ listing.description }}</p>
     <p>Price/night: {{ listing.price }} €</p>
     <p>Extras:</p>
@@ -39,11 +39,25 @@
         <span>{{ amenity | amenitiespipe }}</span>
       </li>
     </ul>
-    <p>
-      <strong>Posted by: </strong> {{ listing.user.firstName }}
-      {{ listing.user.lastName }}
-    </p>
-    <div class="calendar">
+    <div class="host">
+      <img
+        class="image-container"
+        [src]="getProfileImageData()"
+        alt="Profile Image"
+        id="profile-img"
+      />
+      <p>
+        Hosted By {{ listing.user.firstName }} {{ listing.user.lastName }}
+        <br />
+        Joined {{ listing.user.joinedDate | date: 'longDate'}}
+      </p>
+    </div>
+
+    <app-button
+      (click)="toggleCalendar()"
+      text="Check Available Dates"
+    ></app-button>
+    <div *ngIf="showCalendar">
       <app-calendar [bookedDates]="bookedDates"></app-calendar>
     </div>
   </div>

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { BookingService } from '../../services/booking.service';
+import { ButtonComponent } from "../button/button.component";
 
 interface CalendarDate {
   day: number;
@@ -9,11 +10,11 @@ interface CalendarDate {
   booked: boolean;
 }
 @Component({
-  selector: 'app-calendar',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './calendar.component.html',
-  styleUrl: './calendar.component.css',
+    selector: 'app-calendar',
+    standalone: true,
+    templateUrl: './calendar.component.html',
+    styleUrl: './calendar.component.css',
+    imports: [CommonModule, ButtonComponent]
 })
 export class CalendarComponent implements OnInit {
 

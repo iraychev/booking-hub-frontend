@@ -45,6 +45,7 @@ export class ListingDetailsComponent implements OnInit {
     'DRYER',
   ];
   uploadedFiles: File[] = [];
+  showCalendar: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -70,7 +71,19 @@ export class ListingDetailsComponent implements OnInit {
       // Handle error as needed
     }
   }
-
+  toggleCalendar(): void {
+    console.log("showing calendar");
+    
+    this.showCalendar = !this.showCalendar;
+  }
+  getProfileImageData(): string {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    if (user && user.profileImage) {
+      return 'data:' + user.profileImage.type + ';base64,' + user.profileImage.data;
+    } else {
+      return '';
+    }
+  }
   fetchBookings(id: string | null): void {
     this.apiService
       .getBookingsForListing(id!)

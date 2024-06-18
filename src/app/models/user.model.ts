@@ -9,4 +9,5 @@ export class User {
   email: string = '';
   profileImage: Image | null = null;
   roles: string[] = [];
+  joinedDate?: Date;
 }
