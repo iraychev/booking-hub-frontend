@@ -8,24 +8,27 @@ import { Listing } from '../../models/listing.model';
 import { AmenitiesPipe } from '../../pipes/amenities.pipe';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { Booking } from '../../models/booking.model';
-import { CalendarComponent } from "../../shared/calendar/calendar.component";
+import { CalendarComponent } from '../../shared/calendar/calendar.component';
 import { BookingService } from '../../services/booking.service';
+import { BookingCreationComponent } from "../booking-creation/booking-creation.component";
 
 @Component({
-    selector: 'app-listing-details',
+    selector: 'app-listing',
     standalone: true,
-    templateUrl: './listing-details.component.html',
-    styleUrl: './listing-details.component.css',
+    templateUrl: './listing.component.html',
+    styleUrl: './listing.component.css',
     imports: [
         CommonModule,
         RouterLink,
         FormsModule,
         AmenitiesPipe,
         ButtonComponent,
-        CalendarComponent
+        CalendarComponent,
+        BookingCreationComponent
     ]
 })
-export class ListingDetailsComponent implements OnInit {
+export class ListingComponent implements OnInit {
+
   currentImageIndex: number = 0;
   listing!: Listing;
   bookings: Booking[] = [];
@@ -46,61 +49,76 @@ export class ListingDetailsComponent implements OnInit {
   ];
   uploadedFiles: File[] = [];
   showCalendar: boolean = false;
-
+  listingId!: string;
+  showModal: boolean = false;
   constructor(
-    private route: ActivatedRoute,
     private apiService: ApiService,
     private router: Router,
     private imageService: ImageService,
     private bookingService: BookingService
-  ) {}
+  ) {
+    const navigation = this.router.getCurrentNavigation();
+    this.listingId = navigation?.extras.state?.['listingId'];
+  }
 
   ngOnInit(): void {
-    const listingId = this.route.snapshot.paramMap.get('id');
-    this.fetchListingDetails(listingId);
-    this.fetchBookings(listingId);
-    this.fetchBookedDates(listingId);
-
+    this.fetchListingDetails(this.listingId);
+    this.fetchBookings(this.listingId);
+    this.fetchBookedDates(this.listingId);
   }
   async fetchBookedDates(id: string | null): Promise<void> {
+    if (!id) {
+      console.log('Invalid listing ID.');
+      return;
+    }
     try {
-      this.bookedDates = await this.bookingService.calculateBookedDates(id!);
+      this.bookedDates = await this.bookingService.calculateBookedDates(id);
+      if (this.bookedDates.length === 0) {
+        console.log('No booked dates found for this listing.');
+        return;
+      }
+
       console.log('Booked Dates:', this.bookedDates);
     } catch (error) {
       console.error('Error fetching booked dates:', error);
-      // Handle error as needed
     }
   }
+  openBookingCreation(){
+    this.showModal = true;
+  }
+  closeBookingCreation(){
+    this.showModal = false;
+  }
   toggleCalendar(): void {
-    console.log("showing calendar");
-    
+    console.log('showing calendar');
+
     this.showCalendar = !this.showCalendar;
   }
   getProfileImageData(): string {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const user = this.listing.user;
     if (user && user.profileImage) {
-      return 'data:' + user.profileImage.type + ';base64,' + user.profileImage.data;
-    } else {
-      return '';
+      return (
+        'data:' + user.profileImage.type + ';base64,' + user.profileImage.data
+      );
     }
+    return '';
   }
   fetchBookings(id: string | null): void {
-    this.apiService
-      .getBookingsForListing(id!)
-      .subscribe((data: Booking[]) => {
-        this.bookings = data;
-      });
+    this.apiService.getBookingsForListing(id!).subscribe((data: Booking[]) => {
+      this.bookings = data;
+    });
   }
 
   fetchListingDetails(id: string | null): void {
-    if (id) {
-      this.apiService.getListingById(id).subscribe({
-        next: (data) => {
-          this.listing = data;
-        },
-        error: (err) => console.error('Error fetching listing details', err),
-      });
+    if (!id) {
+      return;
     }
+    this.apiService.getListingById(id).subscribe({
+      next: (data) => {
+        this.listing = data;
+      },
+      error: (err) => console.error('Error fetching listing details', err),
+    });
   }
 
   deleteListing(listingId: string): void {
@@ -127,9 +145,9 @@ export class ListingDetailsComponent implements OnInit {
     const index = this.listing.amenities.indexOf(amenity);
     if (index > -1) {
       this.listing.amenities.splice(index, 1);
-    } else {
-      this.listing.amenities.push(amenity);
+      return;
     }
+    this.listing.amenities.push(amenity);
   }
 
   saveChanges() {
@@ -169,4 +187,8 @@ export class ListingDetailsComponent implements OnInit {
       this.currentImageIndex--;
     }
   }
+
+  onBookNow() {
+    throw new Error('Method not implemented.');
+    }
 }

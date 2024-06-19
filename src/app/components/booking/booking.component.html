@@ -1,0 +1,23 @@
+<div *ngIf="booking" class="booking">
+  <h3>You have booked {{ this.booking.listing.title }}</h3>
+  <div class="host">
+    <img
+      class="image-container"
+      [src]="getProfileImageData()"
+      alt="Profile Image"
+      id="profile-img"
+    />
+    <p>
+      Hosted By {{ this.booking.listing.user.firstName }}
+      {{ this.booking.listing.user.lastName }}
+      <br />
+      Joined {{ this.booking.listing.user.joinedDate | date : "longDate" }}
+    </p>
+  </div>
+  <div class="bookedDates">
+    <p>You will be staying for these {{ this.booking.nightsToStay }} days:</p>
+    <app-calendar [bookedDates]="bookedDates"></app-calendar>
+  </div>
+  <p>Checkout will be on {{this.bookedDates.at(-1) | date}}</p>
+  <p>Price paid - {{this.totalPrice}} €</p>
+</div>

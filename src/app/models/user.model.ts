@@ -7,7 +7,7 @@ export class User {
   firstName: string = '';
   lastName: string = '';
   email: string = '';
-  profileImage: Image | null = null;
+  profileImage: Image = new Image();
   roles: string[] = [];
   joinedDate?: Date;
 }

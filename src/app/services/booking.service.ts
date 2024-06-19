@@ -11,8 +11,10 @@ export class BookingService {
 
 
   async calculateBookedDates(listingId: string): Promise<Date[]> {
-    
     const bookings: Booking[] = await lastValueFrom(this.apiService.getBookingsForListing(listingId));
+    if(!bookings || bookings.length===0){
+      return [];
+    }
     const bookedDates: Date[] = [];
     bookings.forEach(booking => {
       const startDate = new Date(booking.startDate);

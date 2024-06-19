@@ -1,16 +1,27 @@
 <div class="calendar">
-    <div class="calendar-header">
-      <app-button text="Previous" (click)="previousMonth()"></app-button>
-      <span>{{ currentMonthName }} {{ currentYear }}</span>
-      <app-button text="Next" (click)="nextMonth()"></app-button>
-    </div>
-    <div class="calendar-days">
-      <div *ngFor="let day of weekDays" class="day">{{ day }}</div>
-    </div>
-    <div class="calendar-grid">
-      <div *ngFor="let date of calendarDates" class="calendar-day" [class.other-month]="date.month !== currentMonth" [class.booked]="date.booked">
-        <span class="date">{{ date.day }}</span>
-      </div>
+  <div class="calendar-header">
+    <app-button
+      [isGhost]="true"
+      text="Previous"
+      (click)="previousMonth()"
+    ></app-button>
+    <span>{{ currentMonthName }} {{ currentYear }}</span>
+    <app-button [isGhost]="true" text="Next" (click)="nextMonth()"></app-button>
+  </div>
+  <div class="calendar-days">
+    <div *ngFor="let day of weekDays" class="day">{{ day }}</div>
+  </div>
+  <div class="calendar-grid">
+    <div
+      *ngFor="let date of calendarDates"
+      class="calendar-day"
+      [class.other-month]="date.month !== currentMonth"
+      [class.selected]="date.selected"
+      [class.booked]="date.booked"
+      [class.past]="isDatePast(date)"
+      (click)="onDateClick(date)"
+    >
+      <span class="date">{{ date.day }}</span>
     </div>
   </div>
-  
+</div>

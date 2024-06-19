@@ -1,17 +1,18 @@
-.listing-details {
-  border-radius: 8px;
-  padding: 16px;
+.listing {
+  border-radius: 0.5em;
+  padding: 1em;
   max-width: 75%;
-  margin: 20px auto;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 1.2em auto;
+  box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.1);
   background: #eeeded;
+  position: relative;
 }
 
-.listing-details p {
+.listing p {
   margin: 1em;
 }
 
-.listing-details li span {
+.listing li span {
   background-color: white;
   border-radius: 12%;
   padding: 0.2em;
@@ -108,10 +109,9 @@ input[type="number"] {
   display: flex;
   align-items: center;
   margin-bottom: 1.3em;
-  
 }
 .host p {
-  margin: 0 0.3em ;
+  margin: 0 0.3em;
 }
 #profile-img {
   margin: 1em 1em;
@@ -123,7 +123,6 @@ input[type="number"] {
 #profile-img:hover {
   border-radius: 35%;
   transform: scale(1.5);
-
 }
 #address {
   font-style: italic;
@@ -131,4 +130,11 @@ input[type="number"] {
 #amenity-list {
   display: flex;
   gap: 0 1em;
+}
+
+#book-button {
+  scale: 1.5;
+  position: absolute;
+  right: 2em;
+  bottom: 1em;
 }

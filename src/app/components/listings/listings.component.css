@@ -10,7 +10,7 @@
   border-radius: 0.5em;
   padding: 1em;
   width: 50%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease-in-out;
   cursor: pointer;
   margin-bottom: 1em;
@@ -47,7 +47,7 @@
 
 .error-message {
   color: red;
-  margin-bottom: 20px;
+  margin-bottom: 1.2em;
 }
 #address{
   font-style:italic;

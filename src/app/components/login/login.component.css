@@ -4,7 +4,7 @@
   padding: 1.2em;
   background-color: #f9f9f9;
   border-radius: 0.5em;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.1);
 }
 
 label {
@@ -16,7 +16,7 @@ input[type="text"],
 input[type="password"] {
   width: 100%;
   padding: 0.5em;
-  border: 1px solid #ccc;
+  border: 0.1em solid #ccc;
   border-radius: 0.3em;
   margin: 0 0 1em;
 }

@@ -20,7 +20,8 @@ button:hover {
 }
 
 .ghost:hover {
-  color: white;
+  color: rgb(253, 237, 237);
+  outline-color: #000000;
   background-color: #007bff;
   border: none;
 }

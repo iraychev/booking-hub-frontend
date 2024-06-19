@@ -41,7 +41,7 @@ export class ListingsComponent implements OnInit {
     if (!this.authService.isLoggedIn$.value) {
       this.errorMessage = 'You need to be logged in to view listings';
     } else {
-      this.router.navigate(['/listing-details', listingId]);
+      this.router.navigate(['/listing'], { state: { listingId } });
     }
   }
 }

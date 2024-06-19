@@ -10,6 +10,7 @@ import { ImageService } from '../../services/image.service';
 import { Image } from '../../models/image.model';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { lastValueFrom } from 'rxjs';
+import { Booking } from '../../models/booking.model';
 
 @Component({
   selector: 'app-profile',
@@ -30,6 +31,7 @@ export class ProfileComponent implements OnInit {
   error: string = '';
   selectedTabIndex: number = 0;
   personalListings: Listing[] = [];
+  personalBookings: Booking[] = [];
   selectedFile!: File;
 
   constructor(
@@ -39,12 +41,18 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchUserListings();
+    this.fetchUserBookings();
   }
 
   toggleEditMode(): void {
     this.editMode = !this.editMode;
   }
 
+  getBookingEndDate(booking: Booking): Date {
+    const endDate = new Date(booking.startDate);
+    endDate.setDate(endDate.getDate()+ booking.nightsToStay);
+    return endDate;
+  }
   async saveChanges(): Promise<void> {
     if (this.selectedFile) {
       await this.assignImage();
@@ -86,6 +94,23 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  fetchUserBookings(): void {
+    this.apiService.fetchBookings().subscribe({
+      next: (bookings: any[]) => {
+        this.personalBookings = bookings.filter(
+          (booking) => booking.renter.id === this.user!.id
+        );
+        this.personalBookings.sort((a, b) => {
+          if (!a.renter || !b.renter) return 0;
+          return a.renter.id > b.renter.id ? 1 : -1;
+        });
+      },
+      error: (err) => {
+        console.error('Error fetching listings:', err);
+        this.error = 'Error fetching listings';
+      },
+    });
+  }
   deleteListing(listingId: string): void {
     console.log('Deleting listing with id ' + listingId);
     this.apiService.deleteListingById(listingId).subscribe({
@@ -100,6 +125,22 @@ export class ProfileComponent implements OnInit {
         this.error = 'Error deleting listing: ' + err.message;
       },
     });
+  }
+  deleteBooking(bookingId: string): void {
+    console.log("Deleting booking with id"+ bookingId);
+    this.apiService.deleteBookingById(bookingId).subscribe({
+      next: (response) => {
+        console.log('Listing deleted successfully', response);
+        this.personalBookings = this.personalBookings.filter(
+          (booking) => booking.id !== bookingId
+        );
+      },
+      error: (err) => {
+        console.error('Error deleting booking', err);
+        this.error = 'Error deleting booking: ' + err.message;
+      },
+    });
+    
   }
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];

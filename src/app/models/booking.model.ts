@@ -6,11 +6,6 @@ export class Booking {
     listing!: Listing;
     startDate!: Date;
     nightsToStay!: number;
-    price: number = 0;
+    price: number = this.listing ? this.listing.price! * this.nightsToStay : 0;
 
-    constructor(listing: Listing, nightsToStay: number) {
-        this.listing = listing;
-        this.nightsToStay = nightsToStay;
-        this.price = listing.price! * nightsToStay;
-      }
 }

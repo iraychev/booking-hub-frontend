@@ -2,7 +2,7 @@
   max-width: 700px;
   margin: 0 auto;
   padding: 1.1em;
-  border: 1px solid #ccc;
+  border: 0.1em solid #ccc;
   border-radius: 0.4em;
   background-color: #f9f9f9;
 }
@@ -35,7 +35,7 @@ input[type="password"] {
   display: block;
 }
 
-.listing-container {
+.listing-booking-container {
   display: flex;
   justify-content:stretch;
   align-items: center;
@@ -46,7 +46,7 @@ input[type="password"] {
   background-color: #f9f9f9;
 }
 
-.listing-title {
+.listing-booking-title {
   flex-grow: 1;
 }
 

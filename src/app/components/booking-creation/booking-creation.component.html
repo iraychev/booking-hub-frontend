@@ -1,0 +1,19 @@
+<div class="modal" *ngIf="isVisible">
+  <div class="modal-content">
+    <span class="close" (click)="closeModal()">&times;</span>
+    <ng-content>
+      <app-calendar
+        [bookedDates]="bookedDates"
+        [isRangeSelectionMode]="true"
+        (selectedDatesChange)="receiveSelectedDates($event)"
+      ></app-calendar>
+      <div class="selectedDates" *ngIf="selectedDates.length != 0">
+        <p>
+          Selected Dates: {{ selectedDates.at(0) | date : "dd-MM-yyyy" }} to
+          {{ selectedDates.at(-1) | date : "dd-MM-yyyy" }}
+        </p>
+        <app-button text="Book" (click)="createBooking()"></app-button>
+      </div>
+    </ng-content>
+  </div>
+</div>

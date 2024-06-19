@@ -5,11 +5,13 @@ import { LoginComponent } from './components/login/login.component';
 import { ListingsComponent } from './components/listings/listings.component';
 import { AboutComponent } from './components/about/about.component';
 import { ContactComponent } from './components/contact/contact.component';
-import { ListingDetailsComponent } from './components/listing-details/listing-details.component';
+import { ListingComponent } from './components/listing/listing.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { authenticatedGuard } from './guards/authenticated.guard';
 import { unauthenticatedGuard } from './guards/unauthenticated.guard';
 import { ListingCreationComponent } from './components/listing-creation/listing-creation.component';
+import { BookingComponent } from './components/booking/booking.component';
+import { BookingCreationComponent } from './components/booking-creation/booking-creation.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/home' },
@@ -27,7 +29,9 @@ export const routes: Routes = [
   { path: 'listings', component: ListingsComponent },
   { path: 'about', component: AboutComponent },
   { path: 'contact', component: ContactComponent },
-  { path: 'listing-details/:id', component: ListingDetailsComponent },
+  { path: 'listing', component: ListingComponent },
+  { path: 'booking', component: BookingComponent },
+  { path: 'booking-creation', component: BookingCreationComponent },
   {
     path: 'profile',
     canActivate: [authenticatedGuard],
