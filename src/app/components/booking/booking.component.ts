@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Booking } from '../../models/booking.model';
 import { ApiService } from '../../services/api.service';
 import { DatePipe, NgIf } from '@angular/common';
@@ -10,7 +10,7 @@ import { CalendarComponent } from '../../shared/calendar/calendar.component';
   standalone: true,
   templateUrl: './booking.component.html',
   styleUrl: './booking.component.css',
-  imports: [NgIf, DatePipe, CalendarComponent],
+  imports: [NgIf, DatePipe, CalendarComponent, RouterLink],
 })
 export class BookingComponent implements OnInit {
   bookingId: string;
@@ -27,7 +27,7 @@ export class BookingComponent implements OnInit {
     await this.fetchBookingDetails(this.bookingId);
     console.log(this.booking);
     this.setBookedDates();
-    this.totalPrice = this.booking.listing.price! * this.booking.nightsToStay;
+    this.totalPrice = this.booking.listing.price! * this.booking.nightsToStay - 1;
   }
 
   setBookedDates() {
@@ -56,7 +56,7 @@ export class BookingComponent implements OnInit {
   }
 
   getProfileImageData(): string {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const user = this.booking.listing.user;
     if (user && user.profileImage) {
       return (
         'data:' + user.profileImage.type + ';base64,' + user.profileImage.data

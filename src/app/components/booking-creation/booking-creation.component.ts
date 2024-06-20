@@ -50,7 +50,7 @@ export class BookingCreationComponent {
     renter.id = JSON.parse(localStorage.getItem('user') || '{}').id;
     this.booking.renter = renter;
 
-    this.booking.nightsToStay = this.selectedDates.length - 1;
+    this.booking.nightsToStay = this.selectedDates.length;
     this.booking.price = this.listing.price! * this.booking.nightsToStay;
     this.booking.startDate = this.selectedDates[0];
     

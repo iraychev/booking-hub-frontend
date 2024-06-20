@@ -1,5 +1,6 @@
 <div *ngIf="booking" class="booking">
-  <h3>You have booked {{ this.booking.listing.title }}</h3>
+  <p>You have booked </p>
+  <a [routerLink]="['/listing']" [state]="{listingId: this.booking.listing.id}" >{{ this.booking.listing.title }} </a>
   <div class="host">
     <img
       class="image-container"
