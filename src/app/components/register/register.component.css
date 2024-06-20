@@ -1,41 +1,53 @@
-.register-container {
+form {
   max-width: 500px;
   margin: 0 auto;
   padding: 1.2em;
   background-color: #f9f9f9;
   border-radius: 0.5em;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.form-group {
-  margin-top: 10px;
-  margin-bottom: 10px;
+  box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
 }
 
 label {
   display: block;
-  margin-bottom: 5px;
+  margin: 0.4em 0;
+  font-weight: bold;
 }
 
 input[type="text"],
-input[type="password"],
-input[type="email"] {
+input[type="email"],
+input[type="password"] {
   width: 100%;
   padding: 0.5em;
-  border: 1px solid #ccc;
+  border: 0.1em solid #ccc;
   border-radius: 0.3em;
   margin: 0 0 1em;
 }
+
 input[type="checkbox"] {
-  margin-right: 0.4em;
-  margin-bottom: 0.8em;
+  margin-right: 0.7em;
 }
 
 .error {
   color: red;
-  margin-top: 0.7em;
 }
-.login-link {
+
+.names {
+  color: inherit;
+  display: flex;
+  gap: 10px;
+}
+
+.names > div {
+  color: inherit;
+  flex: 1;
+}
+
+#roles {
+  color: inherit;
+}
+
+app-button {
   margin-top: 1em;
-  text-align: center;
 }

@@ -1,75 +1,82 @@
-<div class="register-container">
-  <h2>Register</h2>
-  <form class="form-group" (ngSubmit)="register()">
-    <label for="username">Username</label>
-    <input
-      type="text"
-      id="username"
-      [(ngModel)]="user.username"
-      name="username"
-      required
-    />
-    <label for="password">Password</label>
-    <input
-      type="password"
-      id="password"
-      [(ngModel)]="user.password"
-      name="password"
-      required
-    />
-    <label for="confirmPassword">Confirm Password</label>
-    <input
-      type="password"
-      id="confirmPassword"
-      [(ngModel)]="confirmPassword"
-      name="confirmPassword"
-      required
-    />
-    <label for="firstName">First Name</label>
-    <input
-      type="text"
-      id="firstName"
-      [(ngModel)]="user.firstName"
-      name="firstName"
-      required
-    />
-    <label for="lastName">Last Name</label>
-    <input
-      type="text"
-      id="lastName"
-      [(ngModel)]="user.lastName"
-      name="lastName"
-      required
-    />
-    <label for="email">Email</label>
-    <input
-      type="email"
-      id="email"
-      [(ngModel)]="user.email"
-      name="email"
-      required
-    />
-    <label>Are you:</label>
-    <input
-      type="checkbox"
-      id="renter"
-      value="RENTER"
-      (change)="onRoleChange($event)"
-    />
-    Looking to rent a property
-    <div>
-      <input
-        type="checkbox"
-        id="propertyOwner"
-        value="PROPERTY_OWNER"
-        (change)="onRoleChange($event)"
-      />
-      Renting out your property
-    </div>
-    <app-button text="Register" type="submit"></app-button>
-    <div *ngIf="error" class="error">{{ error }}</div>
-  </form>
-  <div class="login-link">
-    Already registered? <a routerLink="/login">Login here</a>.
-  </div>
+<form [formGroup]="registerForm" (ngSubmit)="register()">
+  <label for="username">Username:</label>
+  <input id="username" formControlName="username" type="text" />
+  <div
+    class="error"
+    *ngIf="
+      registerForm.get('username')?.invalid &&
+      registerForm.get('username')?.touched
+    "
+  >
+  Please enter a username with at least 3 characters.
 </div>
+  <div class="names">
+    <div>
+      <label for="firstName">First Name:</label>
+      <input id="firstName" formControlName="firstName" type="text" />
+      <div class="error" *ngIf="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched">
+        First name is required and must contain only letters (at least 3 characters).
+      </div>
+    </div>
+    <div>
+      <label for="lastName">Last Name:</label>
+      <input id="lastName" formControlName="lastName" type="text" />
+      <div class="error" *ngIf="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched">
+        Last name is required and must contain only letters (at least 3 characters).
+      </div>
+    </div>
+  </div>
+
+  <label for="email">Email:</label>
+  <input id="email" formControlName="email" type="email" />
+  <div
+    class="error"
+    *ngIf="
+      registerForm.get('email')?.invalid && registerForm.get('email')?.touched
+    "
+  >
+  Please enter a valid email address.
+</div>
+
+  <label for="password">Password:</label>
+  <input id="password" formControlName="password" type="password" />
+  <div
+    class="error"
+    *ngIf="
+      registerForm.get('password')?.invalid &&
+      registerForm.get('password')?.touched
+    "
+  >
+  Password must be at least 8 characters long and include at least one letter, one number, and one special character.
+</div>
+
+  <label for="confirmPassword">Confirm Password:</label>
+  <input
+    id="confirmPassword"
+    formControlName="confirmPassword"
+    type="password"
+  />
+  <div
+    class="error"
+    *ngIf="
+      registerForm.errors &&
+      registerForm.errors['mismatch'] &&
+      registerForm.get('confirmPassword')?.touched
+    "
+  >
+    Passwords do not match.
+  </div>
+
+  <label for="roles">Roles:</label>
+  <div id="roles" *ngFor="let role of rolesList">
+    <input type="checkbox" [value]="role" (change)="onRoleChange($event)" />
+    {{ role }}
+  </div>
+
+  <app-button
+    text="Register"
+    type="submit"
+    [disabled]="registerForm.invalid"
+  ></app-button>
+  <div class="error" *ngIf="error">{{ error }}</div>
+</form>

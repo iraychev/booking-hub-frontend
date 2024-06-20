@@ -26,6 +26,10 @@ button:hover {
   border: none;
 }
 
+.disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
 .red {
   background-color: red;
 }
