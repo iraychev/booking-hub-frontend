@@ -1,0 +1,10 @@
+<div class="confirmation-dialog-overlay">
+    <div class="confirmation-dialog">
+      <p>{{ message }}</p>
+      <div class="confirmation-dialog-buttons">
+        <app-button text="Yes" (click)="onConfirm()"></app-button>
+        <app-button text="No" (click)="onCancel()" [isGhost]="true"></app-button>
+      </div>
+    </div>
+  </div>
+  

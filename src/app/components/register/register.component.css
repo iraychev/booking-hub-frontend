@@ -51,3 +51,6 @@ input[type="checkbox"] {
 app-button {
   margin-top: 1em;
 }
+.login-link {
+  text-align: center;
+}

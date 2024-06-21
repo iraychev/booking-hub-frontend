@@ -14,9 +14,12 @@ export class AboutComponent {
     'This platform is designed to help users find and book their perfect vacation rentals.';
   features = [
     'User-friendly interface',
-    'Secure booking system',
-    'Wide range of properties',
+    'Secure backend booking system',
     'Detailed property descriptions',
-    'User reviews and ratings',
   ];
+  technologies = [
+    'Angular',
+    'Spring Boot',
+    'PostgreSQL'
+  ]
 }

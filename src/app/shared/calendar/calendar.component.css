@@ -2,10 +2,10 @@
     font-family: Arial, sans-serif;
     max-width: 300px;
     margin: 0 auto;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border: 0.1em solid #ccc;
+    border-radius: 0.5em;
     background-color: #ffffff;
-    padding: 10px;
+    padding: 0.6em;
   }
   
   .calendar-header {
@@ -18,9 +18,9 @@
   .calendar-days {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 5px;
-    margin-bottom: 5px;
+    border-bottom: 0.1em solid #ccc;
+    padding-bottom: 0.3em;
+    margin-bottom: 0.3em;
   }
   
   .day {
@@ -34,8 +34,8 @@
   }
   
   .calendar-day {
-    border: 1px solid #ccc;
-    padding: 5px;
+    border: 0.1em solid #ccc;
+    padding: 0.3em;
     text-align: center;
     cursor: pointer;
   }

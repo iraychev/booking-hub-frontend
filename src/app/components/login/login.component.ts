@@ -4,13 +4,13 @@ import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { ButtonComponent } from "../../shared/button/button.component";
+import { ButtonComponent } from '../../shared/button/button.component';
 @Component({
-    selector: 'app-login',
-    standalone: true,
-    templateUrl: './login.component.html',
-    styleUrl: './login.component.css',
-    imports: [FormsModule, CommonModule, RouterLink, ButtonComponent]
+  selector: 'app-login',
+  standalone: true,
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.css',
+  imports: [FormsModule, CommonModule, RouterLink, ButtonComponent],
 })
 export class LoginComponent {
   username: string = '';

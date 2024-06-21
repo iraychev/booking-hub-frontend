@@ -46,8 +46,11 @@
 }
 
 .error-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: red;
-  margin-bottom: 1.2em;
+  margin-bottom: 1em;
 }
 #address{
   font-style:italic;

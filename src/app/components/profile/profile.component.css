@@ -87,3 +87,12 @@ input[type="password"] {
 .editmode-buttons app-button {
   padding: 0.35em;
 }
+.dialog-active {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.dialog-active app-confirmation-dialog {
+  pointer-events: auto;
+  opacity: 1;
+}

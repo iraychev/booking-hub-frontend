@@ -11,6 +11,7 @@ import { Image } from '../../models/image.model';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { lastValueFrom } from 'rxjs';
 import { Booking } from '../../models/booking.model';
+import { ConfirmationDialogComponent } from '../../shared/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-profile',
@@ -21,6 +22,7 @@ import { Booking } from '../../models/booking.model';
     MatTabsModule,
     RouterLink,
     ButtonComponent,
+    ConfirmationDialogComponent,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
@@ -33,6 +35,10 @@ export class ProfileComponent implements OnInit {
   personalListings: Listing[] = [];
   personalBookings: Booking[] = [];
   selectedFile!: File;
+
+  showConfirmationDialog: boolean = false;
+  confirmationMessage: string = '';
+  confirmCallback: any = () => {};
 
   constructor(
     public apiService: ApiService,
@@ -50,9 +56,10 @@ export class ProfileComponent implements OnInit {
 
   getBookingEndDate(booking: Booking): Date {
     const endDate = new Date(booking.startDate);
-    endDate.setDate(endDate.getDate()+ booking.nightsToStay);
+    endDate.setDate(endDate.getDate() + booking.nightsToStay);
     return endDate;
   }
+
   async saveChanges(): Promise<void> {
     if (this.selectedFile) {
       await this.assignImage();
@@ -112,38 +119,56 @@ export class ProfileComponent implements OnInit {
     });
   }
   deleteListing(listingId: string): void {
-    console.log('Deleting listing with id ' + listingId);
-    this.apiService.deleteListingById(listingId).subscribe({
-      next: (response) => {
-        console.log('Listing deleted successfully', response);
-        this.personalListings = this.personalListings.filter(
-          (listing) => listing.id !== listingId
-        );
-      },
-      error: (err) => {
-        console.error('Error deleting listing', err);
-        this.error = 'Error deleting listing: ' + err.message;
-      },
+    this.confirmAction('Are you sure you want to delete this listing?', () => {
+      console.log('Deleting listing with id ' + listingId);
+      this.apiService.deleteListingById(listingId).subscribe({
+        next: (response) => {
+          console.log('Listing deleted successfully', response);
+          this.personalListings = this.personalListings.filter(
+            (listing) => listing.id !== listingId
+          );
+        },
+        error: (err) => {
+          console.error('Error deleting listing', err);
+          this.error = 'Error deleting listing: ' + err.message;
+        },
+      });
     });
   }
+
   deleteBooking(bookingId: string): void {
-    console.log("Deleting booking with id"+ bookingId);
-    this.apiService.deleteBookingById(bookingId).subscribe({
-      next: (response) => {
-        console.log('Listing deleted successfully', response);
-        this.personalBookings = this.personalBookings.filter(
-          (booking) => booking.id !== bookingId
-        );
-      },
-      error: (err) => {
-        console.error('Error deleting booking', err);
-        this.error = 'Error deleting booking: ' + err.message;
-      },
+    this.confirmAction('Are you sure you want to delete this booking?', () => {
+      console.log('Deleting booking with id' + bookingId);
+      this.apiService.deleteBookingById(bookingId).subscribe({
+        next: (response) => {
+          console.log('Listing deleted successfully', response);
+          this.personalBookings = this.personalBookings.filter(
+            (booking) => booking.id !== bookingId
+          );
+        },
+        error: (err) => {
+          console.error('Error deleting booking', err);
+          this.error = 'Error deleting booking: ' + err.message;
+        },
+      });
     });
-    
   }
+
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
+  }
+
+  confirmAction(message: string, callback: () => void): void {
+    this.confirmationMessage = message;
+    this.confirmCallback = callback;
+    this.showConfirmationDialog = true;
+  }
+
+  onConfirmed(confirmed: boolean): void {
+    this.showConfirmationDialog = false;
+    if (confirmed) {
+      this.confirmCallback();
+    }
   }
 
   async assignImage() {
