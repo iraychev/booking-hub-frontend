@@ -1,12 +1,12 @@
 .contact-container {
   max-width: 800px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 1.2em;
   background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5em;
+  box-shadow: 0 0.15 0.25 rgba(0, 0, 0, 0.1);
 }
 
 .contact-container h1 {
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
 }

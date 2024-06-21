@@ -1,4 +1,4 @@
-<div class="calendar">
+<div class="calendar" [ngClass]="{ 'is-range-selection-mode': !isRangeSelectionMode }">
   <div class="calendar-header">
     <app-button
       [isGhost]="true"

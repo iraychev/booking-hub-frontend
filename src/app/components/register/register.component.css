@@ -36,7 +36,7 @@ input[type="checkbox"] {
 .names {
   color: inherit;
   display: flex;
-  gap: 10px;
+  gap: 0.6em;
 }
 
 .names > div {

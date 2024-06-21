@@ -57,9 +57,12 @@
     background-color: rgba(0, 255, 123, 0.5);
     border-color: #007bff;
   }
+  .is-range-selection-mode .calendar-day {
+    cursor: initial;
+  }
   .date {
     display: block;
-    font-size: 14px;
-    margin-bottom: 5px;
+    font-size: 0.8em;
+    margin-bottom: 0.3em;
   }
   

@@ -27,7 +27,7 @@ export class BookingComponent implements OnInit {
     await this.fetchBookingDetails(this.bookingId);
     console.log(this.booking);
     this.setBookedDates();
-    this.totalPrice = this.booking.listing.price! * this.booking.nightsToStay - 1;
+    this.totalPrice = this.booking.listing.price! * this.booking.nightsToStay;
   }
 
   setBookedDates() {
@@ -44,7 +44,6 @@ export class BookingComponent implements OnInit {
       this.apiService.getBookingById(id).subscribe({
         next: (data) => {
           this.booking = data;
-          this.booking.nightsToStay += 1;
           resolve();
         },
         error: (err) => {
@@ -55,6 +54,16 @@ export class BookingComponent implements OnInit {
     });
   }
 
+  getCheckoutDate(): Date | null {
+    if (this.bookedDates.length === 0) {
+      return null;
+    }
+    const lastBookedDate = this.bookedDates[this.bookedDates.length - 1];
+    const checkoutDate = new Date(lastBookedDate);
+    checkoutDate.setDate(checkoutDate.getDate() + 1);
+    return checkoutDate;
+  }
+  
   getProfileImageData(): string {
     const user = this.booking.listing.user;
     if (user && user.profileImage) {

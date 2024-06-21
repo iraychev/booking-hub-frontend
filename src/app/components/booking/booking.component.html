@@ -19,6 +19,6 @@
     <p>You will be staying for these {{ this.booking.nightsToStay }} days:</p>
     <app-calendar [bookedDates]="bookedDates"></app-calendar>
   </div>
-  <p>Checkout will be on {{this.bookedDates.at(-1) | date}}</p>
+  <p>Checkout will be on {{ getCheckoutDate() | date }} by 15:00</p>
   <p>Price paid - {{this.totalPrice}} €</p>
 </div>

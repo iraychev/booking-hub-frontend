@@ -18,13 +18,13 @@ input[type="password"] {
   width: calc(100% - 0.8em);
   padding: 0.5em;
   margin-bottom: 1em;
-  border: 1px solid #ccc;
-  border-radius: 3px;
+  border: 0.1em solid #ccc;
+  border-radius: 0.5em;
 }
 
 .error {
   color: red;
-  margin-top: 10px;
+  margin-top: 0.6em;
 }
 
 .profile-container:not(.edit-mode) input {
@@ -40,7 +40,7 @@ input[type="password"] {
   justify-content:stretch;
   align-items: center;
   padding: 0.7em;
-  border: 1px solid #ccc;
+  border: 0.1em solid #ccc;
   border-radius: 0.4em;
   margin: 1em;
   background-color: #f9f9f9;
@@ -55,7 +55,7 @@ input[type="password"] {
   height: 250px;
   object-fit: cover;
   border-radius: 20%;
-  border: 2px solid #007bff;
+  border: 0.15em solid #007bff;
   margin: 1em 0;
 }
 

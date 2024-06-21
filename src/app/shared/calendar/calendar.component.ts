@@ -22,7 +22,7 @@ export class CalendarComponent implements OnInit {
   currentYear!: number;
   currentMonthName!: string;
   calendarDates: CalendarDate[] = [];
-  weekDays: string[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  weekDays: string[] = [ 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   @Input() bookedDates: Date[] = [];
   selectedDates: Date[] = [];
   isSelectingRange: boolean = false;
@@ -45,12 +45,8 @@ export class CalendarComponent implements OnInit {
     this.calendarDates = [];
     const firstDayOfMonth = new Date(this.currentYear, this.currentMonth, 1);
     const lastDayOfMonth = new Date(this.currentYear, this.currentMonth + 1, 0);
-    const startDayOfWeek = firstDayOfMonth.getDay();
-    const prevMonthDays = new Date(
-      this.currentYear,
-      this.currentMonth,
-      0
-    ).getDate();
+    const startDayOfWeek = (firstDayOfMonth.getDay() + 6) % 7; // Adjust to make Monday the first day of the week
+    const prevMonthDays = new Date(this.currentYear, this.currentMonth, 0).getDate();
 
     for (let i = startDayOfWeek; i > 0; i--) {
       const date = {
@@ -67,9 +63,7 @@ export class CalendarComponent implements OnInit {
         day: i,
         month: this.currentMonth,
         year: this.currentYear,
-        booked: this.isDateBooked(
-          new Date(this.currentYear, this.currentMonth, i)
-        ),
+        booked: this.isDateBooked(new Date(this.currentYear, this.currentMonth, i)),
       };
       this.calendarDates.push(date);
     }
