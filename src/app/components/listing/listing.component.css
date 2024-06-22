@@ -9,19 +9,20 @@
 }
 
 .listing p {
-  margin: 1em;
+  margin: 0.5em 0;
 }
 
 .listing li span {
   background-color: white;
-  border-radius: 12%;
-  padding: 0.2em;
+  border-radius: 0.5em;
+  padding: 0.2em 0.4em;
 }
+
 .heading {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.8em;
+  margin-bottom: 1em;
 }
 .button-container {
   display: flex;
@@ -32,10 +33,6 @@
   display: flex;
   gap: 0.6em;
   justify-content: flex-start;
-}
-.booked-date {
-  background-color: red;
-  color: white;
 }
 
 input[type="file"] {
@@ -95,6 +92,7 @@ input[type="number"] {
   cursor: pointer;
   padding: 0.6em;
   z-index: 1;
+  transition: background-color 0.3s;
 }
 
 .prev-btn {
@@ -117,16 +115,20 @@ input[type="number"] {
   margin: 1em 1em;
   width: 70px;
   height: 70px;
-  border-radius: 55%;
-  transition: transform 0.2s ease-in-out;
+  border-radius: 50%;
+  transition: transform 0.2s ease-in-out, border-radius 0.2s ease-in-out;
 }
+
 #profile-img:hover {
   border-radius: 35%;
   transform: scale(1.5);
 }
+
 #address {
   font-style: italic;
+  margin: 0.5em 0;
 }
+
 #amenity-list {
   display: flex;
   gap: 0 1rem;

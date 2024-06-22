@@ -7,6 +7,7 @@ import { Image } from '../../models/image.model';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ButtonComponent } from '../../shared/button/button.component';
+import { ImageService } from '../../services/image.service';
 
 @Component({
   selector: 'app-register',
@@ -20,11 +21,13 @@ export class RegisterComponent implements OnInit {
   error: string = '';
   selectedRoles: string[] = [];
   rolesList: string[] = ['RENTER', 'PROPERTY_OWNER'];
+  selectedFile!: File;
 
   constructor(
     private fb: FormBuilder,
     private apiService: ApiService,
-    private router: Router
+    private router: Router,
+    private imageService: ImageService
   ) {}
 
   rolesMapping: { [key: string]: string } = {
@@ -71,12 +74,14 @@ export class RegisterComponent implements OnInit {
       : { mismatch: true };
   }
 
-  register(): void {
+  async register(): Promise<void> {
     if (this.registerForm.invalid) {
       this.error = 'Form is invalid';
       console.log(this.registerForm.errors);
       return;
     }
+
+    
 
     const user: User = {
       id: '',
@@ -89,6 +94,9 @@ export class RegisterComponent implements OnInit {
       roles: this.selectedRoles,
     };
 
+    if (this.selectedFile) {
+      await this.assignImage(user);
+    }
     this.apiService.register(user).subscribe({
       next: (response) => {
         this.router.navigate(['/login']);
@@ -98,7 +106,16 @@ export class RegisterComponent implements OnInit {
       },
     });
   }
-  
+
+  async assignImage(user: User) {
+    user.profileImage = await this.imageService.mapFileToImage(
+      this.selectedFile
+    );
+  }
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0];
+  }
+
   onRoleChange(event: any): void {
     const role = event.target.value;
     if (event.target.checked) {

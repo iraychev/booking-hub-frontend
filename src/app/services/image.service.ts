@@ -17,6 +17,7 @@ export class ImageService {
       Authorization: 'Basic ' + btoa(`${user.username}:${user.password}`),
     });
   }
+  
   uploadImage(file: File): Observable<Image> {
     const headers = this.getAuthHeaders();
     const formData: FormData = new FormData();
@@ -47,6 +48,7 @@ export class ImageService {
 
     return Promise.all(promises);
   }
+
   async mapFileToImage(file: File): Promise<Image> {
     try {
       const base64Content = await this.readFileAsDataURL(file);
@@ -61,6 +63,7 @@ export class ImageService {
       throw error;
     }
   }
+
   readFileAsDataURL(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();

@@ -1,8 +1,8 @@
 <div *ngIf="listing" class="listing">
   <div *ngIf="!editMode">
-    <div class="heading" *ngIf="listing.user.id === userId">
+    <div class="heading" >
       <h1>{{ listing.title }}</h1>
-      <div class="button-container">
+      <div class="button-container" *ngIf="listing.user.id === userId">
         <app-button
           [isGhost]="true"
           (click)="toggleEditMode()"
