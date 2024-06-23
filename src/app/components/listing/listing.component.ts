@@ -54,7 +54,7 @@ export class ListingComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private router: Router,
-    private imageService: ImageService,
+    public imageService: ImageService,
     private bookingService: BookingService
   ) {
     const navigation = this.router.getCurrentNavigation();
@@ -93,15 +93,6 @@ export class ListingComponent implements OnInit {
     console.log('showing calendar');
 
     this.showCalendar = !this.showCalendar;
-  }
-  getProfileImageData(): string {
-    const user = this.listing.user;
-    if (user && user.profileImage) {
-      return (
-        'data:' + user.profileImage.type + ';base64,' + user.profileImage.data
-      );
-    }
-    return '';
   }
   fetchBookings(id: string | null): void {
     this.apiService.getBookingsForListing(id!).subscribe((data: Booking[]) => {

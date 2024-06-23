@@ -2,34 +2,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Image } from '../models/image.model';
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ImageService {
-  private url = 'http://localhost:8080/booking-api/images';
-
-  constructor(private http: HttpClient) {}
-
-  private getAuthHeaders(): HttpHeaders {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    return new HttpHeaders({
-      Authorization: 'Basic ' + btoa(`${user.username}:${user.password}`),
-    });
-  }
-  
-  uploadImage(file: File): Observable<Image> {
-    const headers = this.getAuthHeaders();
-    const formData: FormData = new FormData();
-    formData.append('file', file);
-    return this.http.post<Image>(`${this.url}/upload`, formData, { headers });
-  }
-
-  getImageById(id: number): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.get(`${this.url}/${id}`, { headers });
-  }
-
   mapFilesToImages(files: File[]): Promise<Image[]> {
     const promises: Promise<Image>[] = [];
 
@@ -45,7 +23,6 @@ export class ImageService {
         })
       );
     }
-
     return Promise.all(promises);
   }
 
@@ -75,5 +52,14 @@ export class ImageService {
       reader.onerror = (error) => reject(error);
       reader.readAsDataURL(file);
     });
+  }
+
+  getImageDataFromUser(user: User): string {
+    if (user && user.profileImage) {
+      return (
+        'data:' + user.profileImage.type + ';base64,' + user.profileImage.data
+      );
+    }
+    return '';
   }
 }

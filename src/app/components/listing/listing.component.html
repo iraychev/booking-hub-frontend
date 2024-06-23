@@ -43,7 +43,7 @@
     <div class="host">
       <img
         class="image-container"
-        [src]="getProfileImageData()"
+        [src]="this.imageService.getImageDataFromUser(this.listing.user)"
         alt="Profile Image"
         id="profile-img"
       />

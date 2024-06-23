@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { ImageService } from '../../services/image.service';
 
 @Component({
   selector: 'app-header',
@@ -13,7 +14,7 @@ import { AuthService } from '../../services/auth.service';
 export class HeaderComponent implements OnInit {
   isLoggedIn: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, public imageService: ImageService) {}
 
   ngOnInit(): void {
     this.authService.isLoggedIn$.subscribe((isLoggedIn) => {
@@ -26,11 +27,6 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/']);
   }
   getProfileImageData(): string {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    if (user && user.profileImage) {
-      return 'data:' + user.profileImage.type + ';base64,' + user.profileImage.data;
-    } else {
-      return '';
-    }
+    return this.imageService.getImageDataFromUser(JSON.parse(localStorage.getItem('user') || '{}'));
   }
 }

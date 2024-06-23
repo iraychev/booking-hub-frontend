@@ -4,6 +4,7 @@ import { Booking } from '../../models/booking.model';
 import { ApiService } from '../../services/api.service';
 import { DatePipe, NgIf } from '@angular/common';
 import { CalendarComponent } from '../../shared/calendar/calendar.component';
+import { ImageService } from '../../services/image.service';
 
 @Component({
   selector: 'app-booking',
@@ -18,7 +19,7 @@ export class BookingComponent implements OnInit {
   bookedDates: Date[] = [];
   totalPrice: number = 0.0;
 
-  constructor(private router: Router, private apiService: ApiService) {
+  constructor(private router: Router, private apiService: ApiService, public imageService: ImageService) {
     const navigation = this.router.getCurrentNavigation();
     this.bookingId = navigation?.extras.state?.['bookingId'];
   }
@@ -62,15 +63,5 @@ export class BookingComponent implements OnInit {
     const checkoutDate = new Date(lastBookedDate);
     checkoutDate.setDate(checkoutDate.getDate() + 1);
     return checkoutDate;
-  }
-  
-  getProfileImageData(): string {
-    const user = this.booking.listing.user;
-    if (user && user.profileImage) {
-      return (
-        'data:' + user.profileImage.type + ';base64,' + user.profileImage.data
-      );
-    }
-    return '';
   }
 }
