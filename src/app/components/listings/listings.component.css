@@ -36,15 +36,6 @@
   white-space: nowrap;
 }
 
-.button-container {
-  display: flex;
-  justify-content: flex-end;
-}
-
-#create-btn {
-  margin-right: 2em;
-}
-
 .error-message {
   display: flex;
   align-items: center;
@@ -52,6 +43,32 @@
   color: red;
   margin-bottom: 1em;
 }
+.search-create-btn-container{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 3em;
+  margin-top: -2.5em;
+  margin-right: 1.2em;
+}
+
+.search-container {
+  max-width: 400px;
+  width: 100%;
+}
+
+.search-container input[type="text"] {
+  width: 100%;
+  margin: 1em;
+  padding: 0.5em;
+  border: 0.1em solid #ccc;
+  border-radius: 0.25em;
+}
+
+.search-container input[type="text"]::placeholder {
+  color: #999;
+}
+
 #address{
   font-style:italic;
 }
