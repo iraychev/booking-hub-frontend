@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { ApiService } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
@@ -18,8 +18,13 @@ import { Listing } from '../../models/listing.model';
 export class ListingsComponent implements OnInit {
   listings: Listing[] = [];
   filteredListings: Listing[] = [];
+  paginatedListings: Listing[] = [];
   searchTerm: string = ''; 
   errorMessage: string = '';
+  
+  currentPage: number = 1;
+  listingsPerPage: number = 6;
+  totalPages: number = 0;
 
   constructor(
     private apiService: ApiService,
@@ -37,6 +42,7 @@ export class ListingsComponent implements OnInit {
       next: (data) => {
         this.listings = data;
         this.filteredListings = [...this.listings];
+        this.updatePagination();
       },
       error: (err) => console.error('Error fetching listings', err),
     });
@@ -53,6 +59,7 @@ export class ListingsComponent implements OnInit {
         listing.propertyAddress.toLowerCase().includes(lowerCaseSearchTerm)
       );
     }
+    this.updatePagination();
   }
 
   viewDetails(listingId: string): void {
@@ -60,6 +67,31 @@ export class ListingsComponent implements OnInit {
       this.errorMessage = 'You need to be logged in to view listings';
     } else {
       this.router.navigate(['/listing'], { state: { listingId } });
+    }
+  }
+
+  updatePagination(): void {
+    this.totalPages = Math.ceil(this.filteredListings.length / this.listingsPerPage);
+    this.paginateListings();
+  }
+
+  paginateListings(): void {
+    const startIndex = (this.currentPage - 1) * this.listingsPerPage;
+    const endIndex = startIndex + this.listingsPerPage;
+    this.paginatedListings = this.filteredListings.slice(startIndex, endIndex);
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.paginateListings();
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.paginateListings();
     }
   }
 }

@@ -1,39 +1,39 @@
 .listings-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 2em;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+  gap: 1em;
+  padding: 2em;
 }
 
 .listing-card {
   border: 0.1em solid #ccc;
   border-radius: 0.5em;
   padding: 1em;
-  width: 50%;
   box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease-in-out;
   cursor: pointer;
-  margin-bottom: 1em;
   background-color: white;
+  position: relative;
+}
 
+.listing-card img.listing-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 0.5em;
 }
 
 .listing-card:hover {
   box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.2);
 }
 
-.listing-card p {
-  margin: 0.5em 0;
-}
-.description-price-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
 #price {
-  margin-left: 1.3em;
-  font-weight: bold;
-  white-space: nowrap;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 0.5em;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-top-left-radius: 0.5em;
 }
 
 .error-message {
@@ -43,7 +43,8 @@
   color: red;
   margin-bottom: 1em;
 }
-.search-create-btn-container{
+
+.search-create-btn-container {
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -69,6 +70,36 @@
   color: #999;
 }
 
-#address{
-  font-style:italic;
+#address {
+  font-style: italic;
+}
+#description {
+  margin-top: 0.4em;
+  color: rgb(109, 107, 107);
+}
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1em;
+}
+
+.pagination-controls button {
+  margin: 0 1em;
+  padding: 0.5em 1em;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  border-radius: 0.25em;
+  transition: background-color 0.3s;
+}
+
+.pagination-controls button[disabled] {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination-controls span {
+  margin: 0 1em;
 }

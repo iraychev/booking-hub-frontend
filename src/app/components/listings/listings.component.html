@@ -13,24 +13,42 @@
     id="create-btn"
   />
 </div>
+
 <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
 <div class="listings-container">
   <div
-    *ngFor="let listing of filteredListings"
+    *ngFor="let listing of paginatedListings"
     class="listing-card"
     (click)="viewDetails(listing.id)"
   >
+    <img
+      *ngIf="listing.images && listing.images.length"
+      [src]="
+        'data:' + listing.images[0].type + ';base64,' + listing.images[0].data
+      "
+      alt="Listing Image"
+      class="listing-image"
+    />
     <h2>{{ listing.title }}</h2>
     <p id="address">📍 {{ listing.propertyAddress }}</p>
-    <div class="description-price-container">
-      <p>
+    <div>
+      <p id="description">
         {{
           listing.description.length > 100
             ? (listing.description | slice : 0 : 100) + "..."
             : listing.description
         }}
       </p>
-      <h5 id="price">Price (night): {{ listing.price }} €</h5>
+      <h5 id="price">{{ listing.price }} € / night</h5>
     </div>
   </div>
+</div>
+
+<div class="pagination-controls">
+  <button (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
+  <span>Page {{ currentPage }} of {{ totalPages }}</span>
+  <button (click)="nextPage()" [disabled]="currentPage === totalPages">
+    Next
+  </button>
 </div>
