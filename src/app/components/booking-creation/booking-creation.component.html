@@ -13,6 +13,7 @@
           {{ selectedDates.at(-1) | date : "dd-MM-yyyy" }}
         </p>
         <app-button text="Book" (click)="createBooking()"></app-button>
+        <p>Full cost: {{ getPrice() }} €</p>
       </div>
     </ng-content>
   </div>

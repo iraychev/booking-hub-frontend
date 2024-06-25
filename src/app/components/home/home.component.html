@@ -1,13 +1,13 @@
 <div class="home-container">
   <div class="welcome-message">
-    <h1>Welcome to my Booking Application</h1>
-    <p>Find the best properties and book your stay easily.</p>
+    <h1>Find Your Perfect Stay</h1>
+    <p>Discover and book unique accommodations around the world.</p>
   </div>
   <div
     class="navigation"
     *ngIf="authService.isLoggedIn$ | async as isLoggedIn; else loggedOutNav"
   >
-    <app-button text="Browse Listings" routerLink="/listings" />
+    <app-button text="Explore Listings" routerLink="/listings" />
     <app-button text="Create a Listing" routerLink="/listing-creation" />
     <app-button
       text="Logout"

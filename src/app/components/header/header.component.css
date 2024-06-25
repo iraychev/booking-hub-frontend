@@ -3,13 +3,16 @@
   align-items: center;
   justify-content:space-between;
   margin: auto;
-  background-color: #007bff;
+  background-color: #2C3E50;
   padding: 0.6rem 1.1rem;
   color: white;
   margin-bottom: 2em;
-  font-size: 1.4em;
+  font-size: 1.3em;
 }
+.header-container a:hover {
+  filter: brightness(0.59);
 
+}
 #logo{
   font-size: 1.3em;
   letter-spacing: 0.05em;

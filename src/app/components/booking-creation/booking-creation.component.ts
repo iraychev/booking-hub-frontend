@@ -32,18 +32,23 @@ export class BookingCreationComponent {
     this.selectedDates = selectedDates;
     console.log('Selected Dates:', this.selectedDates);
   }
+
   closeModal() {
     this.close.emit();
   }
 
+  getPrice() {
+    return this.selectedDates.length * this.listing.price!;
+  }
+
   createBooking() {
     this.selectedDates.sort((a, b) => a.getTime() - b.getTime());
-    console.log("sorted dates:");
+    console.log('sorted dates:');
     console.log(this.selectedDates);
-    
+
     const listing: Listing = new Listing();
     listing.id = this.listing.id;
-    
+
     this.booking.listing = listing;
 
     const renter: User = new User();
@@ -53,15 +58,16 @@ export class BookingCreationComponent {
     this.booking.nightsToStay = this.selectedDates.length;
     this.booking.price = this.listing.price! * this.booking.nightsToStay;
     this.booking.startDate = this.selectedDates[0];
-    
+
     console.log(this.listing);
     console.log(this.booking);
 
     this.apiService.createBooking(this.booking).subscribe({
       next: (response) => {
         console.log('Booking created successfully:', response);
-        this.router.navigate(['/booking'], { state: { bookingId : response.id } });
-
+        this.router.navigate(['/booking'], {
+          state: { bookingId: response.id },
+        });
       },
       error: (err) => {
         console.error('Error creating booking:', err);

@@ -1,6 +1,6 @@
 button {
   color: white;
-  background-color: #007bff;
+  background-color: #3498DB;
   text-decoration: none;
   transition: filter 0.3s ease-in-out;
   cursor: pointer;
@@ -14,7 +14,7 @@ button:hover {
 }
 
 .ghost {
-  outline: 0.1em solid #007bff;
+  outline: 0.1em solid #2980B9;
   color: black;
   background-color: #fff;
 }
@@ -22,7 +22,7 @@ button:hover {
 .ghost:hover {
   color: rgb(253, 237, 237);
   outline-color: #000000;
-  background-color: #007bff;
+  background-color: #2980B9;
   border: none;
 }
 
