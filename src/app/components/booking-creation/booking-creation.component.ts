@@ -16,21 +16,21 @@ import { Router } from '@angular/router';
   styleUrl: './booking-creation.component.css',
   imports: [FormsModule, CalendarComponent, CommonModule, ButtonComponent],
 })
+
 export class BookingCreationComponent {
   booking: Booking = new Booking();
   error: string = '';
-
-  constructor(private apiService: ApiService, private router: Router) {}
+  selectedDates: Date[] = [];
 
   @Input() bookedDates: Date[] = [];
   @Input() isVisible = false;
   @Input() listing!: Listing;
   @Output() close = new EventEmitter<void>();
-  selectedDates: Date[] = [];
+
+  constructor(private apiService: ApiService, private router: Router) {}
 
   receiveSelectedDates(selectedDates: Date[]): void {
-    this.selectedDates = selectedDates;
-    console.log('Selected Dates:', this.selectedDates);
+    this.selectedDates = selectedDates.sort((a, b) => a.getTime() - b.getTime());;
   }
 
   closeModal() {
@@ -42,13 +42,8 @@ export class BookingCreationComponent {
   }
 
   createBooking() {
-    this.selectedDates.sort((a, b) => a.getTime() - b.getTime());
-    console.log('sorted dates:');
-    console.log(this.selectedDates);
-
     const listing: Listing = new Listing();
     listing.id = this.listing.id;
-
     this.booking.listing = listing;
 
     const renter: User = new User();
@@ -58,9 +53,6 @@ export class BookingCreationComponent {
     this.booking.nightsToStay = this.selectedDates.length;
     this.booking.price = this.listing.price! * this.booking.nightsToStay;
     this.booking.startDate = this.selectedDates[0];
-
-    console.log(this.listing);
-    console.log(this.booking);
 
     this.apiService.createBooking(this.booking).subscribe({
       next: (response) => {
