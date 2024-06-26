@@ -10,25 +10,26 @@ import { ButtonComponent } from '../../shared/button/button.component';
 import { Booking } from '../../models/booking.model';
 import { CalendarComponent } from '../../shared/calendar/calendar.component';
 import { BookingService } from '../../services/booking.service';
-import { BookingCreationComponent } from "../booking-creation/booking-creation.component";
+import { BookingCreationComponent } from '../booking-creation/booking-creation.component';
+import { ConfirmationDialogComponent } from '../../shared/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
-    selector: 'app-listing',
-    standalone: true,
-    templateUrl: './listing.component.html',
-    styleUrl: './listing.component.css',
-    imports: [
-        CommonModule,
-        RouterLink,
-        FormsModule,
-        AmenitiesPipe,
-        ButtonComponent,
-        CalendarComponent,
-        BookingCreationComponent
-    ]
+  selector: 'app-listing',
+  standalone: true,
+  templateUrl: './listing.component.html',
+  styleUrl: './listing.component.css',
+  imports: [
+    CommonModule,
+    RouterLink,
+    FormsModule,
+    AmenitiesPipe,
+    ButtonComponent,
+    CalendarComponent,
+    BookingCreationComponent,
+    ConfirmationDialogComponent,
+  ],
 })
 export class ListingComponent implements OnInit {
-
   currentImageIndex: number = 0;
   listing!: Listing;
   bookings: Booking[] = [];
@@ -51,6 +52,11 @@ export class ListingComponent implements OnInit {
   showCalendar: boolean = false;
   listingId!: string;
   showModal: boolean = false;
+
+  showConfirmationDialog: boolean = false;
+  confirmationMessage: string = '';
+  confirmCallback: any = () => {};
+
   constructor(
     private apiService: ApiService,
     private router: Router,
@@ -83,10 +89,10 @@ export class ListingComponent implements OnInit {
       console.error('Error fetching booked dates:', error);
     }
   }
-  openBookingCreation(){
+  openBookingCreation() {
     this.showModal = true;
   }
-  closeBookingCreation(){
+  closeBookingCreation() {
     this.showModal = false;
   }
   toggleCalendar(): void {
@@ -113,12 +119,14 @@ export class ListingComponent implements OnInit {
   }
 
   deleteListing(listingId: string): void {
-    this.apiService.deleteListingById(listingId).subscribe({
-      next: () => {
-        console.log(`Listing with id ${listingId} deleted successfully.`);
-        this.router.navigate(['/listings']);
-      },
-      error: (err) => console.error('Error deleting listing', err),
+    this.confirmAction('Are you sure you want to delete this listing?', () => {
+      this.apiService.deleteListingById(listingId).subscribe({
+        next: () => {
+          console.log(`Listing with id ${listingId} deleted successfully.`);
+          this.router.navigate(['/listings']);
+        },
+        error: (err) => console.error('Error deleting listing', err),
+      });
     });
   }
   toggleEditMode(): void {
@@ -163,6 +171,19 @@ export class ListingComponent implements OnInit {
       });
   }
 
+  confirmAction(message: string, callback: () => void): void {
+    this.confirmationMessage = message;
+    this.confirmCallback = callback;
+    this.showConfirmationDialog = true;
+  }
+
+  onConfirmed(confirmed: boolean): void {
+    this.showConfirmationDialog = false;
+    if (confirmed) {
+      this.confirmCallback();
+    }
+  }
+
   getSliderTransform(): string {
     return `translateX(-${this.currentImageIndex * 100}%)`;
   }
@@ -181,5 +202,5 @@ export class ListingComponent implements OnInit {
 
   onBookNow() {
     throw new Error('Method not implemented.');
-    }
+  }
 }

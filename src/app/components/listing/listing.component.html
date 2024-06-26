@@ -160,4 +160,10 @@
       />
     </div>
   </div>
+  <app-confirmation-dialog
+    *ngIf="showConfirmationDialog"
+    [message]="confirmationMessage"
+    (confirmed)="onConfirmed($event)"
+  >
+  </app-confirmation-dialog>
 </div>

@@ -123,11 +123,6 @@ export class CalendarComponent implements OnInit {
     return months[monthIndex];
   }
 
-  // toggleRangeSelection(): void {
-  //   this.isRangeSelectionMode = !this.isRangeSelectionMode;
-  //   this.selectedDates = [];
-  // }
-
   resetSelectedDates(): void {
     console.log('Clearing selection');
     this.selectedDates = [];
@@ -139,7 +134,7 @@ export class CalendarComponent implements OnInit {
     return calendarDate < new Date(today.getFullYear(), today.getMonth(), today.getDate());
   }
   onDateClick(date: CalendarDate): void {
-    if (date.booked || !this.isRangeSelectionMode) {
+    if (date.booked || this.isDatePast(date) || !this.isRangeSelectionMode) {
       return;
     }
 

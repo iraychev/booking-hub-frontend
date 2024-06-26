@@ -4,13 +4,13 @@ import { Observable, catchError, tap, throwError } from 'rxjs';
 import { User } from '../models/user.model';
 import { Listing } from '../models/listing.model';
 import { Booking } from '../models/booking.model';
+import { environment } from '../../environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  url: string = 'http://localhost:8080/booking-api';
-  listings: any[] = [];
+  url: string = environment.apiUrl;
   constructor(private http: HttpClient) {}
 
   private getAuthHeaders(): HttpHeaders {
