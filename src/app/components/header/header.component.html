@@ -17,7 +17,7 @@
           routerLink="/profile"
         />
         <a routerLink="/profile" class="profile-link">Profile</a>
-        <a (click)="logout()" class="profile-link">Logout</a>
+        <a (click)="this.authService.logout();" class="profile-link">Logout</a>
       </ng-container>
       <ng-template #loginTemplate>
         <a routerLink="/register" class="profile-link">Register</a>

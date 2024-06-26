@@ -13,9 +13,4 @@ import { ButtonComponent } from '../../shared/button/button.component';
 })
 export class HomeComponent {
   constructor(public authService: AuthService, private router: Router) {}
-
-  logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/home']);
-  }
 }

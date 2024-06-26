@@ -81,8 +81,6 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    
-
     const user: User = {
       id: '',
       firstName: this.registerForm.get('firstName')?.value,
@@ -112,6 +110,7 @@ export class RegisterComponent implements OnInit {
       this.selectedFile
     );
   }
+  
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
   }
