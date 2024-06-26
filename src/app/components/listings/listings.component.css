@@ -103,3 +103,74 @@
 .pagination-controls span {
   margin: 0 1em;
 }
+@media only screen and (max-width: 768px) {
+  .listings-container {
+    flex-direction: column;
+    padding-top: 1em;
+  }
+
+  .listing-card {
+    width: 90%;
+    padding: 0.5em;
+  }
+
+  .description-price-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #price {
+    margin: 0;
+    position: static;
+  }
+
+  .search-create-btn-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1em;
+    margin: 0;
+  }
+
+  .search-container {
+    width: 100%;
+  }
+
+  .search-container input[type="text"] {
+    width: 100%;
+    margin: 0.5em 0;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .listing-card {
+    width: 70%;
+    padding: 0.5em;
+  }
+
+  .description-price-container {
+    align-items: flex-start;
+  }
+
+  .search-create-btn-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1em;
+    margin: 0;
+  }
+
+  .search-container input[type="text"] {
+    width: 100%;
+    margin: 0.5em 0;
+  }
+
+  .listing-card img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+  }
+
+  #price {
+    position: static;
+    margin: 0;
+  }
+}

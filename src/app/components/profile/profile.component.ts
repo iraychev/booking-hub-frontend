@@ -85,7 +85,7 @@ export class ProfileComponent implements OnInit {
 
   fetchUserListings(): void {
     this.apiService.fetchListings().subscribe({
-      next: (listings: any[]) => {
+      next: (listings: Listing[]) => {
         this.personalListings = listings.filter(
           (listing) => listing.user.id === this.user!.id
         );
@@ -103,7 +103,7 @@ export class ProfileComponent implements OnInit {
 
   fetchUserBookings(): void {
     this.apiService.fetchBookings().subscribe({
-      next: (bookings: any[]) => {
+      next: (bookings: Booking[]) => {
         this.personalBookings = bookings.filter(
           (booking) => booking.renter.id === this.user!.id
         );

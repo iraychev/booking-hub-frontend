@@ -23,7 +23,7 @@ export class ListingsComponent implements OnInit {
   errorMessage: string = '';
   
   currentPage: number = 1;
-  listingsPerPage: number = 6;
+  listingsPerPage: number = 4;
   totalPages: number = 0;
 
   constructor(

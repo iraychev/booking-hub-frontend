@@ -43,7 +43,7 @@ input[type="password"] {
   border: 0.1em solid #ccc;
   border-radius: 0.4em;
   margin: 1em;
-  background-color: #f9f9f9;
+  background-color: #f5f5f5;
 }
 
 .listing-booking-title {
@@ -95,4 +95,77 @@ input[type="password"] {
 .dialog-active app-confirmation-dialog {
   pointer-events: auto;
   opacity: 1;
+}
+@media only screen and (max-width: 768px) {
+  .profile-container {
+    padding: 0.8em;
+  }
+
+  .profile-view-wrapper {
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+  }
+
+  #profile-img {
+    width: 200px;
+    height: 200px;
+  }
+
+  .profile-view-info {
+    align-items: center;
+    text-align: center;
+  }
+
+  #edit-btn {
+    margin-top: 1em;
+  }
+
+  .listing-booking-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .editmode-buttons {
+    flex-direction: column;
+    gap: 0.5em;
+  }
+}
+
+/* Media queries for very small phones */
+@media only screen and (max-width: 480px) {
+  .profile-container {
+    padding: 0.5em;
+  }
+
+  .profile-view-wrapper {
+    gap: 0.5em;
+  }
+
+  #profile-img {
+    width: 150px;
+    height: 150px;
+  }
+
+  .profile-view-info {
+    gap: 0.5em;
+  }
+
+  #edit-btn {
+    margin-top: 0.5em;
+  }
+
+  .listing-booking-container {
+    padding: 0.5em;
+    margin: 0.5em 0;
+  }
+
+  .listing-booking-title {
+    margin-bottom: 0.5em;
+  }
+
+  .editmode-buttons {
+    flex-direction: column;
+    gap: 0.5em;
+  }
 }
