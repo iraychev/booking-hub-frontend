@@ -118,11 +118,9 @@ export class RegisterComponent implements OnInit {
   onRoleChange(event: any): void {
     const role = event.target.value;
     if (event.target.checked) {
-      if (!this.selectedRoles.includes(role)) {
-        this.selectedRoles.push(role);
-      }
+      this.selectedRoles = [...new Set([...this.selectedRoles, role])];
     } else {
-      this.selectedRoles = this.selectedRoles.filter((r) => r !== role);
+      this.selectedRoles = this.selectedRoles.filter(r => r !== role);
     }
   }
 }

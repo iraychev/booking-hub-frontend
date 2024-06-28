@@ -27,6 +27,7 @@ import { ConfirmationDialogComponent } from '../../shared/confirmation-dialog/co
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
+
 export class ProfileComponent implements OnInit {
   user: User = JSON.parse(localStorage.getItem('user') || '{}');
   editMode: boolean = false;

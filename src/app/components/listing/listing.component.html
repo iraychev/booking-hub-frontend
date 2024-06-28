@@ -57,7 +57,7 @@
     <app-button
     [isGhost]="true"
       (click)="toggleCalendar()"
-      text="Check Available Dates"
+      text="Check Availability"
     ></app-button>
     <div *ngIf="showCalendar">
       <app-calendar [bookedDates]="bookedDates"></app-calendar>
@@ -99,13 +99,13 @@
     </div>
     <div>
       <label for="description">Description:</label>
-      <input
+      <textarea
         type="text"
         id="description"
         [(ngModel)]="listing.description"
         name="description"
         required
-      />
+      ></textarea>
     </div>
     <div>
       <label for="propertyAddress">Property Address:</label>

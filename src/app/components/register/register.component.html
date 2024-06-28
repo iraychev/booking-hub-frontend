@@ -71,10 +71,6 @@
     formControlName="confirmPassword"
     type="password"
   />
-<div id="profile-img-upload">
-          <label for="newProfileImage">Profile Picture:</label>
-          <input type="file" (change)="onFileSelected($event)" />
-        </div>
   <div
     class="error"
     *ngIf="
@@ -84,6 +80,10 @@
     "
   >
     Passwords do not match.
+  </div>
+  <div id="profile-img-upload">
+    <label for="newProfileImage">Profile Picture:</label>
+    <input type="file" (change)="onFileSelected($event)" />
   </div>
 
   <label for="roles">Are you looking to:</label>

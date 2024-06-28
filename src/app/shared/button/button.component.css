@@ -21,7 +21,6 @@ button:hover {
 
 .ghost:hover {
   color: rgb(253, 237, 237);
-  outline-color: #000000;
   background-color: #2980B9;
   border: none;
 }
