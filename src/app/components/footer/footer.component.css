@@ -5,3 +5,9 @@ footer {
   text-align: center;
   margin-top: 2em;
 }
+.footer-content{
+  display: flex ;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.5em;
+}
