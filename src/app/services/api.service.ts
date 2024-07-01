@@ -4,7 +4,7 @@ import { Observable, catchError, tap, throwError } from 'rxjs';
 import { User } from '../models/user.model';
 import { Listing } from '../models/listing.model';
 import { Booking } from '../models/booking.model';
-import { environment } from '../../environment';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
