@@ -1,3 +1,3 @@
 export const environment = {
-    apiUrl: 'http://192.168.11.110:8080/booking-api'
+    apiUrl: 'https://booking-latest.onrender.com/booking-api'
 };
