@@ -13,19 +13,8 @@ export class ApiService {
   url: string = environment.apiUrl;
   constructor(private http: HttpClient) {}
 
-  private getAuthHeaders(): HttpHeaders {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    return new HttpHeaders({
-      Authorization: 'Basic ' + btoa(`${user.username}:${user.password}`),
-    });
-  }
-
-  login(username: string, password: string): Observable<any> {
-    const headers = new HttpHeaders({
-      Authorization: 'Basic ' + btoa(`${username}:${password}`),
-    });
-
-    return this.http.get(`${this.url}/users/username/${username}`, { headers });
+  getUserByUsername(username: string): Observable<User> {
+    return this.http.get<User>(`${this.url}/users/username/${username}`);
   }
 
   register(user: User): Observable<any> {
@@ -33,16 +22,23 @@ export class ApiService {
   }
 
   updateUserById(user: User): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.put(`${this.url}/users/${user.id}`, user, { headers });
+    return this.http.put(`${this.url}/users/${user.id}`, user);
   }
 
-  fetchListings(): Observable<any> {
+  getAllListings(): Observable<any> {
     return this.http.get(`${this.url}/listings`);
   }
 
+  getListingById(id: string): Observable<any> {
+    return this.http.get(`${this.url}/listings/${id}`);
+  }
+
+  createListing(listing: Listing) {
+    return this.http.post(`${this.url}/listings`, listing);
+  }
+
   updateListingById(listing: Listing): Observable<any> {
-    const headers = this.getAuthHeaders();
+    const headers = new HttpHeaders();
     headers.set('Content-Type', 'application/json');
 
     const listingToUpdate = {
@@ -60,47 +56,31 @@ export class ApiService {
     );
   }
 
-  createListing(listing: Listing) {
-    const headers = this.getAuthHeaders();
-
-    return this.http.post(`${this.url}/listings`, listing, { headers });
-  }
-
   deleteListingById(listingId: string): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.delete(`${this.url}/listings/${listingId}`, { headers });
-  }
-
-  getListingById(id: string): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.get(`${this.url}/listings/${id}`, { headers });
+    return this.http.delete(`${this.url}/listings/${listingId}`);
   }
 
   getBookingById(id: string): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.get(`${this.url}/bookings/${id}`, { headers });
+    return this.http.get(`${this.url}/bookings/${id}`);
   }
 
-  fetchBookings(): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.get(`${this.url}/bookings`, { headers });
+  getAllBookings(): Observable<any> {
+    return this.http.get(`${this.url}/bookings`);
   }
 
   getBookingsForListing(listingId: string): Observable<Booking[]> {
-    const headers = this.getAuthHeaders();
     return this.http.get<Booking[]>(
-      `${this.url}/bookings/listing/${listingId}`,
-      { headers }
+      `${this.url}/bookings/listing/${listingId}`
     );
   }
 
   createBooking(booking: Booking) {
-    const headers = this.getAuthHeaders();
-    booking.startDate = new Date(booking.startDate.getTime() + 3 * 60 * 60 * 1000);
-    return this.http.post<Booking>(`${this.url}/bookings`, booking, { headers });
+    booking.startDate = new Date(
+      booking.startDate.getTime() + 3 * 60 * 60 * 1000
+    );
+    return this.http.post<Booking>(`${this.url}/bookings`, booking);
   }
   deleteBookingById(bookingId: string): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.delete(`${this.url}/bookings/${bookingId}`, { headers });
+    return this.http.delete(`${this.url}/bookings/${bookingId}`);
   }
 }

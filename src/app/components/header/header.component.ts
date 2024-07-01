@@ -11,16 +11,9 @@ import { ImageService } from '../../services/image.service';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
-export class HeaderComponent implements OnInit {
-  isLoggedIn: boolean = false;
-
+export class HeaderComponent{
   constructor(public authService: AuthService, private router: Router, public imageService: ImageService) {}
 
-  ngOnInit(): void {
-    this.authService.isLoggedIn$.subscribe((isLoggedIn) => {
-      this.isLoggedIn = isLoggedIn;
-    });
-  }
   getProfileImageData(): string {
     return this.imageService.getImageDataFromUser(JSON.parse(localStorage.getItem('user') || '{}'));
   }

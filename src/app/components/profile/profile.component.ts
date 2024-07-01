@@ -27,7 +27,6 @@ import { ConfirmationDialogComponent } from '../../shared/confirmation-dialog/co
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
-
 export class ProfileComponent implements OnInit {
   user: User = JSON.parse(localStorage.getItem('user') || '{}');
   editMode: boolean = false;
@@ -85,7 +84,7 @@ export class ProfileComponent implements OnInit {
   }
 
   fetchUserListings(): void {
-    this.apiService.fetchListings().subscribe({
+    this.apiService.getAllListings().subscribe({
       next: (listings: Listing[]) => {
         this.personalListings = listings.filter(
           (listing) => listing.user.id === this.user!.id
@@ -103,7 +102,7 @@ export class ProfileComponent implements OnInit {
   }
 
   fetchUserBookings(): void {
-    this.apiService.fetchBookings().subscribe({
+    this.apiService.getAllBookings().subscribe({
       next: (bookings: Booking[]) => {
         this.personalBookings = bookings.filter(
           (booking) => booking.renter.id === this.user!.id

@@ -18,26 +18,21 @@ export class LoginComponent {
   error: string = '';
 
   constructor(
-    private apiService: ApiService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private apiService: ApiService
   ) {}
 
-  login(): void {
-    this.apiService.login(this.username, this.password).subscribe({
-      next: (response) => {
-        console.log('Login response:', response);
-        localStorage.setItem('user', JSON.stringify(response));
-        const user = JSON.parse(localStorage.getItem('user') || '{}');
-        user.password = this.password;
-        console.log(`User: ${user}`);
+  async login() {
+    this.authService.login(this.username, this.password).subscribe(
+      async () => {
+        const user = await this.apiService.getUserByUsername(this.username).toPromise();
         localStorage.setItem('user', JSON.stringify(user));
-        this.authService.setLoggedIn(true);
         this.router.navigate(['/']);
       },
-      error: (err) => {
-        this.error = 'Invalid credentials';
-      },
-    });
+      error => {
+        this.error = 'Invalid username or password';
+      }
+    );
   }
 }

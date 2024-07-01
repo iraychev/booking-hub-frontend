@@ -7,8 +7,7 @@ import { AboutComponent } from './components/about/about.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { ListingComponent } from './components/listing/listing.component';
 import { ProfileComponent } from './components/profile/profile.component';
-import { authenticatedGuard } from './guards/authenticated.guard';
-import { unauthenticatedGuard } from './guards/unauthenticated.guard';
+import { AuthGuard } from './guards/auth.guard';
 import { ListingCreationComponent } from './components/listing-creation/listing-creation.component';
 import { BookingComponent } from './components/booking/booking.component';
 import { BookingCreationComponent } from './components/booking-creation/booking-creation.component';
@@ -18,12 +17,12 @@ export const routes: Routes = [
   { path: 'home', component: HomeComponent },
   {
     path: 'register',
-    canActivate: [unauthenticatedGuard],
+    
     component: RegisterComponent,
   },
   {
     path: 'login',
-    canActivate: [unauthenticatedGuard],
+    
     component: LoginComponent,
   },
   { path: 'listings', component: ListingsComponent },
@@ -34,12 +33,12 @@ export const routes: Routes = [
   { path: 'booking-creation', component: BookingCreationComponent },
   {
     path: 'profile',
-    canActivate: [authenticatedGuard],
+    canActivate: [AuthGuard],
     component: ProfileComponent,
   },
   {
     path: 'listing-creation',
-    canActivate: [authenticatedGuard],
+    canActivate: [AuthGuard],
     component: ListingCreationComponent,
   },
 ];

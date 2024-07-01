@@ -5,7 +5,7 @@
   </div>
   <div
     class="navigation"
-    *ngIf="authService.isLoggedIn$ | async as isLoggedIn; else loggedOutNav"
+    *ngIf="authService.isAuthenticated(); else loggedOutNav"
   >
     <app-button text="Explore Listings" routerLink="/listings" />
     <app-button text="Create a Listing" routerLink="/listing-creation" />

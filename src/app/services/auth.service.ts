@@ -1,26 +1,47 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { Observable, tap } from 'rxjs';
+import { environment } from '../../environment';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  isLoggedIn$ = new BehaviorSubject<boolean>(false);
+  private token = 'authToken';
+  url: string = environment.apiUrl;
 
-  constructor(private router: Router) {
-    const user = localStorage.getItem('user');
-    if (user) {
-      this.isLoggedIn$.next(true);
-    }
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private cookieService: CookieService
+  ) {}
+
+  login(username: string, password: string): Observable<any> {
+    return this.http
+      .post<any>(`${this.url}/login`, { username, password })
+      .pipe(
+        tap((response) => {
+          this.cookieService.set(this.token, response.accessToken, {
+            path: '/',
+            secure: true,
+            sameSite: 'Lax',
+          });
+        })
+      );
   }
 
-  setLoggedIn(value: boolean): void {
-    this.isLoggedIn$.next(value);
+  getToken() {
+    return this.cookieService.get(this.token);
   }
-  logout(): void {
-    localStorage.removeItem('user');
-    this.isLoggedIn$.next(false);
-    this.router.navigate(['/']);
+
+  logout() {
+    this.cookieService.delete(this.token, '/');
+    this.router.navigate(['/login']);
+  }
+
+  isAuthenticated() {
+    return !!this.getToken();
   }
 }

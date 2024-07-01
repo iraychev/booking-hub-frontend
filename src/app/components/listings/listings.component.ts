@@ -19,9 +19,9 @@ export class ListingsComponent implements OnInit {
   listings: Listing[] = [];
   filteredListings: Listing[] = [];
   paginatedListings: Listing[] = [];
-  searchTerm: string = ''; 
+  searchTerm: string = '';
   errorMessage: string = '';
-  
+
   currentPage: number = 1;
   listingsPerPage: number = 4;
   totalPages: number = 0;
@@ -38,7 +38,7 @@ export class ListingsComponent implements OnInit {
 
   getListings(): void {
     console.log('Getting listings');
-    this.apiService.fetchListings().subscribe({
+    this.apiService.getAllListings().subscribe({
       next: (data) => {
         this.listings = data;
         this.filteredListings = [...this.listings];
@@ -54,16 +54,17 @@ export class ListingsComponent implements OnInit {
     } else {
       const lowerCaseSearchTerm = this.searchTerm.trim().toLowerCase();
 
-      this.filteredListings = this.listings.filter(listing =>
-        listing.title.toLowerCase().includes(lowerCaseSearchTerm) ||
-        listing.propertyAddress.toLowerCase().includes(lowerCaseSearchTerm)
+      this.filteredListings = this.listings.filter(
+        (listing) =>
+          listing.title.toLowerCase().includes(lowerCaseSearchTerm) ||
+          listing.propertyAddress.toLowerCase().includes(lowerCaseSearchTerm)
       );
     }
     this.updatePagination();
   }
 
   viewDetails(listingId: string): void {
-    if (!this.authService.isLoggedIn$.value) {
+    if (!this.authService.isAuthenticated) {
       this.errorMessage = 'You need to be logged in to view listings';
     } else {
       this.router.navigate(['/listing'], { state: { listingId } });
@@ -71,7 +72,9 @@ export class ListingsComponent implements OnInit {
   }
 
   updatePagination(): void {
-    this.totalPages = Math.ceil(this.filteredListings.length / this.listingsPerPage);
+    this.totalPages = Math.ceil(
+      this.filteredListings.length / this.listingsPerPage
+    );
     this.paginateListings();
   }
 

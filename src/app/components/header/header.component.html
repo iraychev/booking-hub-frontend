@@ -7,7 +7,7 @@
       <a routerLink="/contact" class="nav-link">Contact</a>
     </nav>
     <div class="user-profile">
-      <ng-container class="user-profile" *ngIf="isLoggedIn; else loginTemplate">
+      <ng-container class="user-profile" *ngIf="authService.isAuthenticated(); else loginTemplate">
         <img
           class="image-container"
           [src]="getProfileImageData()"
