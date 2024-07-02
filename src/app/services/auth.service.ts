@@ -39,6 +39,7 @@ export class AuthService {
   logout() {
     this.cookieService.delete(this.token, '/');
     this.router.navigate(['/login']);
+    localStorage.removeItem('user');
   }
 
   isAuthenticated() {
