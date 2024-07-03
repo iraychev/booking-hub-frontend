@@ -7,20 +7,22 @@ import {
   HttpErrorResponse,
   HTTP_INTERCEPTORS,
 } from '@angular/common/http';
-import { EMPTY, Observable, catchError } from 'rxjs';
+import { EMPTY, Observable, catchError, finalize } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { LoadingService } from '../../services.loading-service.service';
 
 @Injectable()
 export class RequestInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private loadingService: LoadingService) {}
 
   intercept(
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    let clonedRequest = request.clone();
+    this.loadingService.setLoading(true);
 
+    let clonedRequest = request.clone();
     const jwt = this.authService.getToken();
     if (jwt) {
       clonedRequest = request.clone({
@@ -35,6 +37,9 @@ export class RequestInterceptor implements HttpInterceptor {
           return EMPTY;
         }
         throw errorRes;
+      }),
+      finalize(() => {
+        this.loadingService.setLoading(false);
       })
     );
   }
