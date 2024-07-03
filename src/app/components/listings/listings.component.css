@@ -104,21 +104,22 @@
   margin: 0 1em;
 }
 @media only screen and (max-width: 768px) {
-  .search-container{
+  .search-container {
     margin-left: 0.5em;
   }
-  
+
   #create-btn {
     margin-left: 1em;
   }
 
   .listings-container {
+    display: flex;
     flex-direction: column;
     padding-top: 1em;
   }
 
   .listing-card {
-    width: 80%;
+    width: 100%;
     padding: 0.5em;
     justify-self: auto;
   }
