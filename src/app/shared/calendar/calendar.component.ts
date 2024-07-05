@@ -124,7 +124,6 @@ export class CalendarComponent implements OnInit {
   }
 
   resetSelectedDates(): void {
-    console.log('Clearing selection');
     this.selectedDates = [];
     this.calendarDates.forEach((date) => (date.selected = false));
   }
@@ -152,7 +151,6 @@ export class CalendarComponent implements OnInit {
       this.selectedDates = [new Date(date.year, date.month, date.day)];
       this.calendarDates.forEach((d) => (d.selected = false));
       date.selected = true;
-      console.log('test');
     }
     this.selectedDates = this.selectedDates.filter(
       (date, index, self) =>
@@ -163,7 +161,6 @@ export class CalendarComponent implements OnInit {
 
   markRangeDates(): void {
     if (this.selectedDates.length !== 2) {
-      console.log('Warning: Selected dates length is not 2');
       return;
     }
     const startDate = this.selectedDates[0];

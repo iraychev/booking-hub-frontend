@@ -8,9 +8,10 @@
     />
   </div>
   <app-button
-    routerLink="/listing-creation"
+  [routerLink]="checkIfUserCantCreateListings() ? null : '/listing-creation'"
     text="Create a Listing"
     id="create-btn"
+    [disabled]="checkIfUserCantCreateListings()"
   />
 </div>
 

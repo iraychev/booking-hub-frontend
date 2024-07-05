@@ -64,16 +64,13 @@ export class ProfileComponent implements OnInit {
     if (this.selectedFile) {
       await this.assignImage();
     }
-    console.log(this.user);
     localStorage.setItem('user', JSON.stringify(this.user));
     try {
       const updatedUser = await lastValueFrom(
         this.apiService.updateUserById(this.user)
       );
-      console.log('Server response: ', updatedUser);
       this.editMode = false;
     } catch (err) {
-      console.error('Error updating profile', err);
       this.error = 'Error updating profile';
     }
   }
@@ -95,7 +92,6 @@ export class ProfileComponent implements OnInit {
         });
       },
       error: (err) => {
-        console.error('Error fetching listings:', err);
         this.error = 'Error fetching listings';
       },
     });
@@ -113,23 +109,19 @@ export class ProfileComponent implements OnInit {
         });
       },
       error: (err) => {
-        console.error('Error fetching listings:', err);
         this.error = 'Error fetching listings';
       },
     });
   }
   deleteListing(listingId: string): void {
     this.confirmAction('Are you sure you want to delete this listing?', () => {
-      console.log('Deleting listing with id ' + listingId);
       this.apiService.deleteListingById(listingId).subscribe({
         next: (response) => {
-          console.log('Listing deleted successfully', response);
           this.personalListings = this.personalListings.filter(
             (listing) => listing.id !== listingId
           );
         },
         error: (err) => {
-          console.error('Error deleting listing', err);
           this.error = 'Error deleting listing: ' + err.message;
         },
       });
@@ -138,16 +130,13 @@ export class ProfileComponent implements OnInit {
 
   deleteBooking(bookingId: string): void {
     this.confirmAction('Are you sure you want to delete this booking?', () => {
-      console.log('Deleting booking with id' + bookingId);
       this.apiService.deleteBookingById(bookingId).subscribe({
         next: (response) => {
-          console.log('Listing deleted successfully', response);
           this.personalBookings = this.personalBookings.filter(
             (booking) => booking.id !== bookingId
           );
         },
         error: (err) => {
-          console.error('Error deleting booking', err);
           this.error = 'Error deleting booking: ' + err.message;
         },
       });

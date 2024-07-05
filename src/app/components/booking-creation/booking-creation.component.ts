@@ -56,13 +56,11 @@ export class BookingCreationComponent {
 
     this.apiService.createBooking(this.booking).subscribe({
       next: (response) => {
-        console.log('Booking created successfully:', response);
         this.router.navigate(['/booking'], {
           state: { bookingId: response.id },
         });
       },
       error: (err) => {
-        console.error('Error creating booking:', err);
         this.error = err;
       },
     });

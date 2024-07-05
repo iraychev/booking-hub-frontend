@@ -67,6 +67,7 @@
       id="book-button"
       text="Book Now"
       (click)="openBookingCreation()"
+      [disabled]="checkIfUserCantCreateBookings()"
     ></app-button>
     <app-booking-creation
     [bookedDates]="bookedDates"

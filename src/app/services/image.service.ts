@@ -36,7 +36,6 @@ export class ImageService {
       image.data = base64Content;
       return image;
     } catch (error) {
-      console.error('Error reading file', error);
       throw error;
     }
   }

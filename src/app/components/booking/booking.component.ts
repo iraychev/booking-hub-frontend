@@ -26,7 +26,6 @@ export class BookingComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.fetchBookingDetails(this.bookingId);
-    console.log(this.booking);
     this.setBookedDates();
     this.totalPrice = this.booking.listing.price! * this.booking.nightsToStay;
   }
@@ -48,7 +47,6 @@ export class BookingComponent implements OnInit {
           resolve();
         },
         error: (err) => {
-          console.error('Error fetching booking details', err);
           reject(err);
         },
       });

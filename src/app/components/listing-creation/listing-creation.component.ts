@@ -55,21 +55,17 @@ export class ListingCreationComponent {
       .then((images) => {
         this.listing.images = images;
         this.listing.amenities = this.getSelectedAmenities();
-        console.log(this.listing);
 
         this.apiService.createListing(this.listing).subscribe({
           next: (response) => {
-            console.log('Listing created successfully:', response);
             this.router.navigate(['/listings']);
           },
           error: (err) => {
-            console.error('Error creating listing:', err);
             this.error = err;
           },
         });
       })
       .catch((err) => {
-        console.error('Error mapping files to images:', err);
         this.error = err;
       });
   }

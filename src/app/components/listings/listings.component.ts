@@ -7,6 +7,7 @@ import { AuthService } from '../../services/auth.service';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { FormsModule } from '@angular/forms';
 import { Listing } from '../../models/listing.model';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-listings',
@@ -21,7 +22,6 @@ export class ListingsComponent implements OnInit {
   paginatedListings: Listing[] = [];
   searchTerm: string = '';
   errorMessage: string = '';
-
   currentPage: number = 1;
   listingsPerPage: number = 4;
   totalPages: number = 0;
@@ -36,15 +36,21 @@ export class ListingsComponent implements OnInit {
     this.getListings();
   }
 
+  checkIfUserCantCreateListings(): boolean {
+    const user: User = JSON.parse(localStorage.getItem('user')!)
+    if(!user){
+      return true;
+    }
+    return !(user.roles.includes('PROPERTY_OWNER') || user.roles.includes('ADMIN'));
+  }
+  
   getListings(): void {
-    console.log('Getting listings');
     this.apiService.getAllListings().subscribe({
       next: (data) => {
         this.listings = data;
         this.filteredListings = [...this.listings];
         this.updatePagination();
-      },
-      error: (err) => console.error('Error fetching listings', err),
+      }
     });
   }
 

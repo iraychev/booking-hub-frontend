@@ -12,6 +12,7 @@ import { CalendarComponent } from '../../shared/calendar/calendar.component';
 import { BookingService } from '../../services/booking.service';
 import { BookingCreationComponent } from '../booking-creation/booking-creation.component';
 import { ConfirmationDialogComponent } from '../../shared/confirmation-dialog/confirmation-dialog.component';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-listing',
@@ -74,29 +75,23 @@ export class ListingComponent implements OnInit {
   }
   async fetchBookedDates(id: string | null): Promise<void> {
     if (!id) {
-      console.log('Invalid listing ID.');
       return;
     }
-    try {
-      this.bookedDates = await this.bookingService.calculateBookedDates(id);
-      if (this.bookedDates.length === 0) {
-        console.log('No booked dates found for this listing.');
-        return;
-      }
-
-      console.log('Booked Dates:', this.bookedDates);
-    } catch (error) {
-      console.error('Error fetching booked dates:', error);
+    this.bookedDates = await this.bookingService.calculateBookedDates(id);
+    if (this.bookedDates.length === 0) {
+      return;
     }
   }
   openBookingCreation() {
+    if (this.checkIfUserCantCreateBookings()){
+      return;
+    }
     this.showModal = true;
   }
   closeBookingCreation() {
     this.showModal = false;
   }
   toggleCalendar(): void {
-    console.log('showing calendar');
 
     this.showCalendar = !this.showCalendar;
   }
@@ -113,8 +108,7 @@ export class ListingComponent implements OnInit {
     this.apiService.getListingById(id).subscribe({
       next: (data) => {
         this.listing = data;
-      },
-      error: (err) => console.error('Error fetching listing details', err),
+      }
     });
   }
 
@@ -122,10 +116,8 @@ export class ListingComponent implements OnInit {
     this.confirmAction('Are you sure you want to delete this listing?', () => {
       this.apiService.deleteListingById(listingId).subscribe({
         next: () => {
-          console.log(`Listing with id ${listingId} deleted successfully.`);
           this.router.navigate(['/listings']);
-        },
-        error: (err) => console.error('Error deleting listing', err),
+        }
       });
     });
   }
@@ -154,23 +146,20 @@ export class ListingComponent implements OnInit {
       .mapFilesToImages(this.uploadedFiles)
       .then((images) => {
         this.listing.images = images;
-        console.log(this.listing);
 
         this.apiService.updateListingById(this.listing).subscribe({
           next: (response) => {
-            console.log('Listing created successfully:', response);
             this.router.navigate(['/listings']);
-          },
-          error: (err) => {
-            console.error('Error creating listing:', err);
-          },
+          }
         });
       })
-      .catch((err) => {
-        console.error('Error mapping files to images:', err);
-      });
   }
-
+  checkIfUserCantCreateBookings(): boolean {
+    const user: User = JSON.parse(localStorage.getItem('user')!)
+    console.log(user);
+    return !(user.roles.includes('RENTER') || user.roles.includes('ADMIN'));
+  }
+  
   confirmAction(message: string, callback: () => void): void {
     this.confirmationMessage = message;
     this.confirmCallback = callback;
