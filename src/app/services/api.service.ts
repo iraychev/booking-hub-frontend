@@ -1,17 +1,18 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, tap, throwError } from 'rxjs';
+import { Observable, catchError, of, tap, throwError } from 'rxjs';
 import { User } from '../models/user.model';
 import { Listing } from '../models/listing.model';
 import { Booking } from '../models/booking.model';
 import { environment } from '../../environments/environment';
+import { CacheService } from './cache.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
   url: string = environment.apiUrl;
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private cacheService: CacheService) {}
 
   getUserByUsername(username: string): Observable<User> {
     return this.http.get<User>(`${this.url}/users/username/${username}`);
@@ -26,7 +27,16 @@ export class ApiService {
   }
 
   getAllListings(): Observable<any> {
-    return this.http.get(`${this.url}/listings`);
+    const cachedListings = this.cacheService.get('listings');
+    if (cachedListings) {
+      return of(cachedListings)
+    }
+
+    return this.http.get(`${this.url}/listings`).pipe(
+      tap((data) => {
+        this.cacheService.set('listings', data);
+      })
+    );
   }
 
   getListingById(id: string): Observable<any> {
