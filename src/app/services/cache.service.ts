@@ -13,7 +13,18 @@ export class CacheService {
   }
 
   get(key: string): any | null {
-    return this.cache.get(key) || null;
+    const cachedItem = this.cache.get(key);
+
+    if (!cachedItem) {
+      return null;
+    }
+
+    if (Date.now() > cachedItem.expiry) {
+      this.cache.delete(key);
+      return null;
+    }
+    
+    return cachedItem.data;
   }
 
   clear() {
