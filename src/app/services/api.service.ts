@@ -11,6 +11,7 @@ import { CacheService } from './cache.service';
   providedIn: 'root',
 })
 export class ApiService {
+  private listingsCacheKey = 'listings';
   url: string = environment.apiUrl;
   constructor(private http: HttpClient, private cacheService: CacheService) {}
 
@@ -26,15 +27,14 @@ export class ApiService {
     return this.http.put(`${this.url}/users/${user.id}`, user);
   }
 
-  getAllListings(): Observable<any> {
-    const cachedListings = this.cacheService.get('listings');
+  getAllListings(): Observable<Listing[]> {
+    const cachedListings = this.cacheService.get(this.listingsCacheKey);
     if (cachedListings) {
-      return of(cachedListings)
+      return of(cachedListings);
     }
-
-    return this.http.get(`${this.url}/listings`).pipe(
+    return this.http.get<Listing[]>(`${this.url}/listings`).pipe(
       tap((data) => {
-        this.cacheService.set('listings', data);
+        this.cacheService.set(this.listingsCacheKey, data, 300000);
       })
     );
   }

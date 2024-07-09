@@ -8,6 +8,7 @@ import { ButtonComponent } from '../../shared/button/button.component';
 import { Image } from '../../models/image.model';
 import { ImageService } from '../../services/image.service';
 import { AmenitiesPipe } from '../../pipes/amenities.pipe';
+import { CacheService } from '../../services/cache.service';
 
 @Component({
   selector: 'app-listing-creation',
@@ -44,7 +45,8 @@ export class ListingCreationComponent {
   constructor(
     private apiService: ApiService,
     private router: Router,
-    private imageService: ImageService
+    private imageService: ImageService,
+    private cacheService: CacheService
   ) {
     this.columns = this.chunkArray(this.amenities, 3);
   }
@@ -59,6 +61,7 @@ export class ListingCreationComponent {
         this.apiService.createListing(this.listing).subscribe({
           next: (response) => {
             this.router.navigate(['/listings']);
+            this.cacheService.delete('listings');
           },
           error: (err) => {
             this.error = err;

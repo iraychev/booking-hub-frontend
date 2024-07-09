@@ -13,6 +13,7 @@ import { BookingService } from '../../services/booking.service';
 import { BookingCreationComponent } from '../booking-creation/booking-creation.component';
 import { ConfirmationDialogComponent } from '../../shared/confirmation-dialog/confirmation-dialog.component';
 import { User } from '../../models/user.model';
+import { CacheService } from '../../services/cache.service';
 
 @Component({
   selector: 'app-listing',
@@ -62,7 +63,8 @@ export class ListingComponent implements OnInit {
     private apiService: ApiService,
     private router: Router,
     public imageService: ImageService,
-    private bookingService: BookingService
+    private bookingService: BookingService,
+    private cacheService: CacheService
   ) {
     const navigation = this.router.getCurrentNavigation();
     this.listingId = navigation?.extras.state?.['listingId'];
@@ -150,6 +152,8 @@ export class ListingComponent implements OnInit {
         this.apiService.updateListingById(this.listing).subscribe({
           next: (response) => {
             this.router.navigate(['/listings']);
+            this.cacheService.delete('listings');
+
           }
         });
       })
