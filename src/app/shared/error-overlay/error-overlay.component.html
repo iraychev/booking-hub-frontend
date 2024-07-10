@@ -1,0 +1,7 @@
+<div class="error-overlay" *ngIf="show">
+    <div class="error-content">
+      <h2>Error</h2>
+      <p>{{ message }}</p>
+      <app-button [isRed]="true" text="Close" (click)="close()"></app-button>
+    </div>
+  </div>

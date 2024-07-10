@@ -193,7 +193,4 @@ export class ListingComponent implements OnInit {
     }
   }
 
-  onBookNow() {
-    throw new Error('Method not implemented.');
-  }
 }

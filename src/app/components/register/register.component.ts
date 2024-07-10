@@ -76,7 +76,7 @@ export class RegisterComponent implements OnInit {
 
   async register(): Promise<void> {
     if (this.registerForm.invalid) {
-      this.error = 'Form is invalid';
+      this.error = 'Fill out all the fields';
       console.log(this.registerForm.errors);
       return;
     }

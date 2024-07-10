@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { ApiService } from '../../services/api.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
-import { ButtonComponent } from '../../shared/button/button.component';
 import { FormsModule } from '@angular/forms';
+import { Subject, takeUntil } from 'rxjs';
+
+import { ApiService } from '../../services/api.service';
+import { AuthService } from '../../services/auth.service';
+import { ErrorService } from '../../services/error.service';
+import { ButtonComponent } from '../../shared/button/button.component';
 import { Listing } from '../../models/listing.model';
 import { User } from '../../models/user.model';
 
@@ -16,50 +18,61 @@ import { User } from '../../models/user.model';
   imports: [CommonModule, RouterLink, ButtonComponent, FormsModule],
   styleUrls: ['./listings.component.css'],
 })
-export class ListingsComponent implements OnInit {
+export class ListingsComponent implements OnInit, OnDestroy {
   listings: Listing[] = [];
   filteredListings: Listing[] = [];
   paginatedListings: Listing[] = [];
   searchTerm: string = '';
-  errorMessage: string = '';
   currentPage: number = 1;
   listingsPerPage: number = 4;
   totalPages: number = 0;
 
+  private destroy$ = new Subject<void>();
+
   constructor(
     private apiService: ApiService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private errorService: ErrorService
   ) {}
 
   ngOnInit(): void {
     this.getListings();
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   checkIfUserCantCreateListings(): boolean {
-    const user: User = JSON.parse(localStorage.getItem('user')!)
-    if(!user){
+    const user: User | null = this.authService.getCurrentUser();
+    if (!user) {
       return true;
     }
     return !(user.roles.includes('PROPERTY_OWNER') || user.roles.includes('ADMIN'));
   }
   
   getListings(): void {
-    this.apiService.getAllListings().subscribe({
-      next: (data) => {
-        this.listings = data;
-        this.filteredListings = [...this.listings];
-        this.updatePagination();
-      }
-    });
+    this.apiService.getAllListings()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data) => {
+          this.listings = data;
+          this.filteredListings = [...this.listings];
+          this.updatePagination();
+        },
+        error: (err) => {
+          this.errorService.handleError('Failed to fetch listings', err);
+        }
+      });
   }
 
-  performSearch() {
+  performSearch(): void {
     if (this.searchTerm.trim() === '') {
       this.filteredListings = [...this.listings];
     } else {
       const lowerCaseSearchTerm = this.searchTerm.trim().toLowerCase();
-
       this.filteredListings = this.listings.filter(
         (listing) =>
           listing.title.toLowerCase().includes(lowerCaseSearchTerm) ||
@@ -71,20 +84,19 @@ export class ListingsComponent implements OnInit {
 
   viewDetails(listingId: string): void {
     if (!this.authService.isAuthenticated()) {
-      this.errorMessage = 'You need to be logged in to view listings';
+      this.errorService.handleError('Authentication required', 'You need to be logged in to view listings');
     } else {
       this.router.navigate(['/listing'], { state: { listingId } });
     }
   }
 
-  updatePagination(): void {
-    this.totalPages = Math.ceil(
-      this.filteredListings.length / this.listingsPerPage
-    );
+  private updatePagination(): void {
+    this.totalPages = Math.ceil(this.filteredListings.length / this.listingsPerPage);
+    this.currentPage = 1;
     this.paginateListings();
   }
 
-  paginateListings(): void {
+  private paginateListings(): void {
     const startIndex = (this.currentPage - 1) * this.listingsPerPage;
     const endIndex = startIndex + this.listingsPerPage;
     this.paginatedListings = this.filteredListings.slice(startIndex, endIndex);

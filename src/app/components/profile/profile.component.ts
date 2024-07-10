@@ -1,16 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { User } from '../../models/user.model';
-import { ApiService } from '../../services/api.service';
 import { MatTabsModule } from '@angular/material/tabs';
-import { Listing } from '../../models/listing.model';
 import { RouterLink } from '@angular/router';
-import { ImageService } from '../../services/image.service';
-import { Image } from '../../models/image.model';
-import { ButtonComponent } from '../../shared/button/button.component';
-import { lastValueFrom } from 'rxjs';
+import { Subject, lastValueFrom, takeUntil } from 'rxjs';
+
+import { User } from '../../models/user.model';
+import { Listing } from '../../models/listing.model';
 import { Booking } from '../../models/booking.model';
+import { ApiService } from '../../services/api.service';
+import { ImageService } from '../../services/image.service';
+import { CacheService } from '../../services/cache.service';
+import { ErrorService } from '../../services/error.service';
+import { ButtonComponent } from '../../shared/button/button.component';
 import { ConfirmationDialogComponent } from '../../shared/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
@@ -27,7 +29,7 @@ import { ConfirmationDialogComponent } from '../../shared/confirmation-dialog/co
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
   user: User = JSON.parse(localStorage.getItem('user') || '{}');
   editMode: boolean = false;
   error: string = '';
@@ -38,16 +40,25 @@ export class ProfileComponent implements OnInit {
 
   showConfirmationDialog: boolean = false;
   confirmationMessage: string = '';
-  confirmCallback: any = () => {};
+  confirmCallback: () => Promise<void> = async () => {};
+
+  private destroy$ = new Subject<void>();
 
   constructor(
-    public apiService: ApiService,
-    private imageService: ImageService
+    private apiService: ApiService,
+    private imageService: ImageService,
+    private cacheService: CacheService,
+    private errorService: ErrorService
   ) {}
 
   ngOnInit(): void {
     this.fetchUserListings();
     this.fetchUserBookings();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   toggleEditMode(): void {
@@ -61,17 +72,17 @@ export class ProfileComponent implements OnInit {
   }
 
   async saveChanges(): Promise<void> {
-    if (this.selectedFile) {
-      await this.assignImage();
-    }
-    localStorage.setItem('user', JSON.stringify(this.user));
     try {
+      if (this.selectedFile) {
+        await this.assignImage();
+      }
+      localStorage.setItem('user', JSON.stringify(this.user));
       const updatedUser = await lastValueFrom(
         this.apiService.updateUserById(this.user)
       );
       this.editMode = false;
     } catch (err) {
-      this.error = 'Error updating profile';
+      this.errorService.handleError('Error updating profile', err);
     }
   }
 
@@ -81,65 +92,74 @@ export class ProfileComponent implements OnInit {
   }
 
   fetchUserListings(): void {
-    this.apiService.getAllListings().subscribe({
-      next: (listings: Listing[]) => {
-        this.personalListings = listings.filter(
-          (listing) => listing.user.id === this.user!.id
-        );
-        this.personalListings.sort((a, b) => {
-          if (!a.user || !b.user) return 0;
-          return a.user.id > b.user.id ? 1 : -1;
-        });
-      },
-      error: (err) => {
-        this.error = 'Error fetching listings';
-      },
-    });
+    const cachedListings = this.cacheService.get('userListings');
+    if (cachedListings) {
+      this.personalListings = cachedListings;
+      return;
+    }
+
+    this.apiService.getAllListings()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (listings: Listing[]) => {
+          this.personalListings = this.sortListings(
+            listings.filter((listing) => listing.user?.id === this.user?.id)
+          );
+          this.cacheService.set('userListings', this.personalListings);
+        },
+        error: (err) => {
+          this.errorService.handleError('Error fetching listings', err);
+        },
+      });
   }
 
   fetchUserBookings(): void {
-    this.apiService.getAllBookings().subscribe({
-      next: (bookings: Booking[]) => {
-        this.personalBookings = bookings.filter(
-          (booking) => booking.renter.id === this.user!.id
-        );
-        this.personalBookings.sort((a, b) => {
-          if (!a.renter || !b.renter) return 0;
-          return a.renter.id > b.renter.id ? 1 : -1;
-        });
-      },
-      error: (err) => {
-        this.error = 'Error fetching listings';
-      },
-    });
-  }
-  deleteListing(listingId: string): void {
-    this.confirmAction('Are you sure you want to delete this listing?', () => {
-      this.apiService.deleteListingById(listingId).subscribe({
-        next: (response) => {
-          this.personalListings = this.personalListings.filter(
-            (listing) => listing.id !== listingId
+    const cachedBookings = this.cacheService.get('userBookings');
+    if (cachedBookings) {
+      this.personalBookings = cachedBookings;
+      return;
+    }
+
+    this.apiService.getAllBookings()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (bookings: Booking[]) => {
+          this.personalBookings = this.sortBookings(
+            bookings.filter((booking) => booking.renter?.id === this.user?.id)
           );
+          this.cacheService.set('userBookings', this.personalBookings);
         },
         error: (err) => {
-          this.error = 'Error deleting listing: ' + err.message;
+          this.errorService.handleError('Error fetching bookings', err);
         },
       });
+  }
+
+  async deleteListing(listingId: string): Promise<void> {
+    this.confirmAction('Are you sure you want to delete this listing?', async () => {
+      try {
+        await lastValueFrom(this.apiService.deleteListingById(listingId));
+        this.personalListings = this.personalListings.filter(
+          (listing) => listing.id !== listingId
+        );
+        this.cacheService.delete('userListings');
+      } catch (err) {
+        this.errorService.handleError('Error deleting listing', err);
+      }
     });
   }
 
-  deleteBooking(bookingId: string): void {
-    this.confirmAction('Are you sure you want to delete this booking?', () => {
-      this.apiService.deleteBookingById(bookingId).subscribe({
-        next: (response) => {
-          this.personalBookings = this.personalBookings.filter(
-            (booking) => booking.id !== bookingId
-          );
-        },
-        error: (err) => {
-          this.error = 'Error deleting booking: ' + err.message;
-        },
-      });
+  async deleteBooking(bookingId: string): Promise<void> {
+    this.confirmAction('Are you sure you want to delete this booking?', async () => {
+      try {
+        await lastValueFrom(this.apiService.deleteBookingById(bookingId));
+        this.personalBookings = this.personalBookings.filter(
+          (booking) => booking.id !== bookingId
+        );
+        this.cacheService.delete('userBookings');
+      } catch (err) {
+        this.errorService.handleError('Error deleting booking', err);
+      }
     });
   }
 
@@ -147,22 +167,36 @@ export class ProfileComponent implements OnInit {
     this.selectedFile = event.target.files[0];
   }
 
-  confirmAction(message: string, callback: () => void): void {
+  confirmAction(message: string, callback: () => Promise<void>): void {
     this.confirmationMessage = message;
     this.confirmCallback = callback;
     this.showConfirmationDialog = true;
   }
 
-  onConfirmed(confirmed: boolean): void {
+  async onConfirmed(confirmed: boolean): Promise<void> {
     this.showConfirmationDialog = false;
     if (confirmed) {
-      this.confirmCallback();
+      await this.confirmCallback();
     }
   }
 
-  async assignImage() {
+  private async assignImage(): Promise<void> {
     this.user.profileImage = await this.imageService.mapFileToImage(
       this.selectedFile
     );
+  }
+
+  private sortListings(listings: Listing[]): Listing[] {
+    return listings.sort((a, b) => {
+      if (!a.user?.id || !b.user?.id) return 0;
+      return a.user.id.localeCompare(b.user.id);
+    });
+  }
+
+  private sortBookings(bookings: Booking[]): Booking[] {
+    return bookings.sort((a, b) => {
+      if (!a.renter?.id || !b.renter?.id) return 0;
+      return a.renter.id.localeCompare(b.renter.id);
+    });
   }
 }

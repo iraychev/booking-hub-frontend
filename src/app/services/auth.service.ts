@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { CookieService } from 'ngx-cookie-service';
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,7 @@ import { CookieService } from 'ngx-cookie-service';
 export class AuthService {
   private token = 'authToken';
   url: string = environment.apiUrl;
+  private readonly USER_KEY = 'user';
 
   constructor(
     private http: HttpClient,
@@ -25,7 +27,6 @@ export class AuthService {
         tap((response) => {
           this.cookieService.set(this.token, response.accessToken, {
             path: '/',
-            secure: true,
             sameSite: 'Lax',
           });
         })
@@ -36,6 +37,19 @@ export class AuthService {
     return this.cookieService.get(this.token);
   }
 
+  getCurrentUser(): User | null {
+    const userJson = localStorage.getItem(this.USER_KEY);
+    if (!userJson) {
+      return null;
+    }
+    try {
+      const user: User = JSON.parse(userJson);
+      return user;
+    } catch (error) {
+      console.error('Error parsing user data:', error);
+      return null;
+    }
+  }
   logout() {
     this.cookieService.delete(this.token, '/');
     this.router.navigate(['/login']);
