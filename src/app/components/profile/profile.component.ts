@@ -14,6 +14,8 @@ import { CacheService } from '../../services/cache.service';
 import { ErrorService } from '../../services/error.service';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { ConfirmationDialogComponent } from '../../shared/confirmation-dialog/confirmation-dialog.component';
+import { AuthService } from '../../services/auth.service';
+import { ProfanityFilterService } from '../../services/profanity-filter.service';
 
 @Component({
   selector: 'app-profile',
@@ -30,7 +32,7 @@ import { ConfirmationDialogComponent } from '../../shared/confirmation-dialog/co
   styleUrl: './profile.component.css',
 })
 export class ProfileComponent implements OnInit, OnDestroy {
-  user: User = JSON.parse(localStorage.getItem('user') || '{}');
+  user: User = this.authService.getCurrentUser()!;
   editMode: boolean = false;
   error: string = '';
   selectedTabIndex: number = 0;
@@ -48,7 +50,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private apiService: ApiService,
     private imageService: ImageService,
     private cacheService: CacheService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private authService: AuthService,
+    private profanityFilter: ProfanityFilterService,
+
   ) {}
 
   ngOnInit(): void {
@@ -70,8 +75,21 @@ export class ProfileComponent implements OnInit, OnDestroy {
     endDate.setDate(endDate.getDate() + booking.nightsToStay);
     return endDate;
   }
+  private hasProfanity(): boolean{
+    if (this.profanityFilter.hasProfanity(this.user.username) ||
+          this.profanityFilter.hasProfanity(this.user.firstName) ||
+          this.profanityFilter.hasProfanity(this.user.lastName) ||
+          this.profanityFilter.hasProfanity(this.user.email)) {
+        this.errorService.handleError('Profanity detected', 'Remove any inappropriate words.');
+        return true;
+      }
+      return false;
+  }
 
   async saveChanges(): Promise<void> {
+    if (this.hasProfanity()){
+      return;
+    }
     try {
       if (this.selectedFile) {
         await this.assignImage();
@@ -87,7 +105,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   cancelEdit(): void {
-    this.user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.user = this.authService.getCurrentUser()!;
     this.editMode = false;
   }
 

@@ -14,6 +14,9 @@ import { BookingCreationComponent } from '../booking-creation/booking-creation.c
 import { ConfirmationDialogComponent } from '../../shared/confirmation-dialog/confirmation-dialog.component';
 import { User } from '../../models/user.model';
 import { CacheService } from '../../services/cache.service';
+import { AuthService } from '../../services/auth.service';
+import { ProfanityFilterService } from '../../services/profanity-filter.service';
+import { ErrorService } from '../../services/error.service';
 
 @Component({
   selector: 'app-listing',
@@ -35,7 +38,7 @@ export class ListingComponent implements OnInit {
   currentImageIndex: number = 0;
   listing!: Listing;
   bookings: Booking[] = [];
-  userId: string = JSON.parse(localStorage.getItem('user') || '{}').id;
+  userId: string = this.authService.getCurrentUser()!.id;
   editMode: boolean = false;
   bookedDates: Date[] = [];
   amenities: string[] = [
@@ -64,7 +67,10 @@ export class ListingComponent implements OnInit {
     private router: Router,
     public imageService: ImageService,
     private bookingService: BookingService,
-    private cacheService: CacheService
+    private cacheService: CacheService,
+    private authService: AuthService,
+    private profanityFilter: ProfanityFilterService,
+    private errorService: ErrorService
   ) {
     const navigation = this.router.getCurrentNavigation();
     this.listingId = navigation?.extras.state?.['listingId'];
@@ -144,6 +150,11 @@ export class ListingComponent implements OnInit {
   }
 
   saveChanges() {
+    if (this.hasProfanity()) {
+      this.errorService.handleError('Listing edit failed', 'Profanity detected in the listing. Please remove any inappropriate language.');
+      return;
+    }
+
     this.imageService
       .mapFilesToImages(this.uploadedFiles)
       .then((images) => {
@@ -158,8 +169,17 @@ export class ListingComponent implements OnInit {
         });
       })
   }
+  private hasProfanity(): boolean {
+    const textToCheck = [
+      this.listing.title,
+      this.listing.description,
+      this.listing.propertyAddress,
+    ].join(' ');
+
+    return this.profanityFilter.hasProfanity(textToCheck);
+  }
   checkIfUserCantCreateBookings(): boolean {
-    const user: User = JSON.parse(localStorage.getItem('user')!)
+    const user: User = this.authService.getCurrentUser()!;
     console.log(user);
     return !(user.roles.includes('RENTER') || user.roles.includes('ADMIN'));
   }
@@ -192,5 +212,4 @@ export class ListingComponent implements OnInit {
       this.currentImageIndex--;
     }
   }
-
 }

@@ -8,6 +8,8 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { ImageService } from '../../services/image.service';
+import { ProfanityFilterService } from '../../services/profanity-filter.service';
+import { ErrorService } from '../../services/error.service';
 
 @Component({
   selector: 'app-register',
@@ -27,7 +29,9 @@ export class RegisterComponent implements OnInit {
     private fb: FormBuilder,
     private apiService: ApiService,
     private router: Router,
-    private imageService: ImageService
+    private imageService: ImageService,
+    private profanityFilter: ProfanityFilterService,
+    private errorService: ErrorService
   ) {}
 
   rolesMapping: { [key: string]: string } = {
@@ -74,6 +78,20 @@ export class RegisterComponent implements OnInit {
       : { mismatch: true };
   }
 
+  private hasProfanity(): boolean{
+    const username = this.registerForm.get('username')?.value;
+    const firstName = this.registerForm.get('firstName')?.value;
+    const lastName = this.registerForm.get('lastName')?.value;
+    const email = this.registerForm.get('email')?.value
+    if (this.profanityFilter.hasProfanity(username) ||
+        this.profanityFilter.hasProfanity(firstName) ||
+        this.profanityFilter.hasProfanity(lastName) ||
+        this.profanityFilter.hasProfanity(email)){
+          this.errorService.handleError('Profanity detected', 'Remove any inappropriate words')
+          return true;
+        }
+        return false;
+  }
   async register(): Promise<void> {
     if (this.registerForm.invalid) {
       this.error = 'Fill out all the fields';
@@ -81,6 +99,9 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
+    if(this.hasProfanity()){
+      return;
+    }
     const user: User = {
       id: '',
       firstName: this.registerForm.get('firstName')?.value,
@@ -95,12 +116,13 @@ export class RegisterComponent implements OnInit {
     if (this.selectedFile) {
       await this.assignImage(user);
     }
+
     this.apiService.register(user).subscribe({
       next: (response) => {
         this.router.navigate(['/login']);
       },
       error: (err) => {
-        this.error = 'Registration failed';
+      this.errorService.handleError('Registration failed', err)
       },
     });
   }

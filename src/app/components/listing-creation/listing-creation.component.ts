@@ -9,6 +9,8 @@ import { Image } from '../../models/image.model';
 import { ImageService } from '../../services/image.service';
 import { AmenitiesPipe } from '../../pipes/amenities.pipe';
 import { CacheService } from '../../services/cache.service';
+import { ProfanityFilterService } from '../../services/profanity-filter.service';
+import { ErrorService } from '../../services/error.service';
 
 @Component({
   selector: 'app-listing-creation',
@@ -29,16 +31,8 @@ export class ListingCreationComponent {
   selectedAmenities: any = {};
   columns: string[][];
   amenities: string[] = [
-    'WIFI',
-    'PARKING',
-    'POOL',
-    'GYM',
-    'AIR_CONDITIONING',
-    'HEATING',
-    'KITCHEN',
-    'TV',
-    'WASHER',
-    'DRYER',
+    'WIFI', 'PARKING', 'POOL', 'GYM', 'AIR_CONDITIONING',
+    'HEATING', 'KITCHEN', 'TV', 'WASHER', 'DRYER',
   ];
   uploadedFiles: File[] = [];
 
@@ -46,30 +40,35 @@ export class ListingCreationComponent {
     private apiService: ApiService,
     private router: Router,
     private imageService: ImageService,
-    private cacheService: CacheService
+    private cacheService: CacheService,
+    private profanityFilter: ProfanityFilterService,
+    private errorService: ErrorService
   ) {
     this.columns = this.chunkArray(this.amenities, 3);
   }
 
   createListing(): void {
-    this.imageService
-      .mapFilesToImages(this.uploadedFiles)
+    if (this.hasProfanity()) {
+      this.errorService.handleError('Listing creation failed', 'Profanity detected in the listing. Please remove any inappropriate language.');
+      return;
+    }
+
+    this.imageService.mapFilesToImages(this.uploadedFiles)
       .then((images) => {
         this.listing.images = images;
         this.listing.amenities = this.getSelectedAmenities();
-
         this.apiService.createListing(this.listing).subscribe({
           next: (response) => {
             this.router.navigate(['/listings']);
             this.cacheService.delete('listings');
           },
           error: (err) => {
-            this.error = err;
+            this.errorService.handleError('Listing creation failed', err);
           },
         });
       })
       .catch((err) => {
-        this.error = err;
+        this.errorService.handleError('Image processing failed', err);
       });
   }
 
@@ -86,11 +85,22 @@ export class ListingCreationComponent {
     }
     return chunkedArray;
   }
+
   onFileChange(event: any): void {
     if (event.target.files.length + this.listing.images.length <= 5) {
       this.uploadedFiles = Array.from(event.target.files);
     } else {
-      alert('You can upload a maximum of 5 images.');
+      this.errorService.handleError('File upload failed', 'You can upload a maximum of 5 images.');
     }
+  }
+
+  private hasProfanity(): boolean {
+    const textToCheck = [
+      this.listing.title,
+      this.listing.description,
+      this.listing.propertyAddress,
+    ].join(' ');
+
+    return this.profanityFilter.hasProfanity(textToCheck);
   }
 }

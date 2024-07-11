@@ -15,6 +15,6 @@ export class HeaderComponent{
   constructor(public authService: AuthService, private router: Router, public imageService: ImageService) {}
 
   getProfileImageData(): string {
-    return this.imageService.getImageDataFromUser(JSON.parse(localStorage.getItem('user') || '{}'));
+    return this.imageService.getImageDataFromUser(this.authService.getCurrentUser()!);
   }
 }

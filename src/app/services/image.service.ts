@@ -53,7 +53,7 @@ export class ImageService {
     });
   }
 
-  getImageDataFromUser(user: User): string {
+  getImageDataFromUser(user?: User): string {
     if (user && user.profileImage) {
       return (
         'data:' + user.profileImage.type + ';base64,' + user.profileImage.data

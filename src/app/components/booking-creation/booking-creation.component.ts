@@ -8,6 +8,7 @@ import { Listing } from '../../models/listing.model';
 import { User } from '../../models/user.model';
 import { ApiService } from '../../services/api.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-booking-creation',
@@ -27,7 +28,7 @@ export class BookingCreationComponent {
   @Input() listing!: Listing;
   @Output() close = new EventEmitter<void>();
 
-  constructor(private apiService: ApiService, private router: Router) {}
+  constructor(private apiService: ApiService, private router: Router, private authservice: AuthService) {}
 
   receiveSelectedDates(selectedDates: Date[]): void {
     this.selectedDates = selectedDates.sort((a, b) => a.getTime() - b.getTime());;
@@ -47,7 +48,7 @@ export class BookingCreationComponent {
     this.booking.listing = listing;
 
     const renter: User = new User();
-    renter.id = JSON.parse(localStorage.getItem('user') || '{}').id;
+    renter.id = JSON.parse(this.authservice.getCurrentUser()!.id);
     this.booking.renter = renter;
 
     this.booking.nightsToStay = this.selectedDates.length;
