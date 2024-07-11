@@ -46,9 +46,7 @@
 </div>
 
 <div class="pagination-controls">
-  <button (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
+  <app-button text="Previous" (click)="prevPage()" [disabled]="currentPage === 1"></app-button>
   <span>Page {{ currentPage }} of {{ totalPages }}</span>
-  <button (click)="nextPage()" [disabled]="currentPage === totalPages">
-    Next
-  </button>
+  <app-button text="Next" (click)="nextPage()" [disabled]="currentPage === totalPages"></app-button>
 </div>
