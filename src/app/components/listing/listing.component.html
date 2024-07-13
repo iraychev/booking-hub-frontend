@@ -1,18 +1,18 @@
 <div *ngIf="listing" class="listing">
   <div *ngIf="!editMode">
-    <div class="heading" >
+    <div class="heading">
       <h1>{{ listing.title }}</h1>
       <div class="button-container" *ngIf="listing.user.id === userId">
         <app-button
           [isGhost]="true"
           (click)="toggleEditMode()"
           [text]="editMode ? 'Cancel Edit' : 'Edit'"
-        />
+        ></app-button>
         <app-button
           (click)="deleteListing(listing.id)"
           text="Delete"
           [isRed]="true"
-        />
+        ></app-button>
       </div>
     </div>
     <div class="image-slider">
@@ -50,12 +50,12 @@
       <p>
         Hosted By {{ listing.user.firstName }} {{ listing.user.lastName }}
         <br />
-        Joined {{ listing.user.joinedDate | date : "longDate" }}
+        Joined {{ listing.user.joinedDate | date : 'longDate' }}
       </p>
     </div>
 
     <app-button
-    [isGhost]="true"
+      [isGhost]="true"
       (click)="toggleCalendar()"
       text="Check Availability"
     ></app-button>
@@ -70,7 +70,7 @@
       [disabled]="checkIfUserCantCreateBookings()"
     ></app-button>
     <app-booking-creation
-    [bookedDates]="bookedDates"
+      [bookedDates]="bookedDates"
       [isVisible]="showModal"
       [listing]="this.listing"
       (close)="closeBookingCreation()"
@@ -81,12 +81,12 @@
       <app-button
         (click)="toggleEditMode()"
         [text]="editMode ? 'Cancel Edit' : 'Edit'"
-      />
+      ></app-button>
       <app-button
         (click)="deleteListing(listing.id)"
         text="Delete"
         [isRed]="true"
-      />
+      ></app-button>
     </div>
     <div>
       <label for="title">Title:</label>
@@ -136,8 +136,23 @@
         multiple
         accept="image/*"
       />
-      <p *ngIf="uploadedFiles.length">Uploaded Images:</p>
-      <div *ngFor="let file of uploadedFiles">{{ file.name }}</div>
+      <div class="preview-images">
+        <p *ngIf="uploadedFiles.length">Uploaded Images:</p>
+        <div *ngFor="let file of uploadedFiles; let i = index">
+          <img [src]="previewImages[i]" alt="Image Preview" />
+          <app-button [isRed]="true" text="Remove" (click)="removeUploadedFile(i)"></app-button>
+        </div>
+      </div>
+      <div class="existing-images">
+        <p *ngIf="listing.images.length">Existing Images:</p>
+        <div *ngFor="let image of listing.images; let i = index">
+          <img
+            [src]="'data:' + image.type + ';base64,' + image.data"
+            alt="Listing Image"
+          />
+          <app-button [isRed]="true" text="Remove" (click)="removeExistingImage(i)"></app-button>
+        </div>
+      </div>
     </div>
     <div>
       <label for="amenities">Amenities:</label>
@@ -158,13 +173,12 @@
         (click)="toggleEditMode()"
         [text]="editMode ? 'Cancel Edit' : 'Edit'"
         [isGhost]="true"
-      />
+      ></app-button>
     </div>
   </div>
   <app-confirmation-dialog
     *ngIf="showConfirmationDialog"
     [message]="confirmationMessage"
     (confirmed)="onConfirmed($event)"
-  >
-  </app-confirmation-dialog>
+  ></app-confirmation-dialog>
 </div>

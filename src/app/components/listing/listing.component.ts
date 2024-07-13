@@ -54,6 +54,7 @@ export class ListingComponent implements OnInit {
     'DRYER',
   ];
   uploadedFiles: File[] = [];
+  previewImages: string[] = [];
   showCalendar: boolean = false;
   listingId!: string;
   showModal: boolean = false;
@@ -131,13 +132,32 @@ export class ListingComponent implements OnInit {
   }
   toggleEditMode(): void {
     this.editMode = !this.editMode;
+    this.previewImages = [];
   }
   onFileChange(event: any): void {
-    if (event.target.files.length + this.listing.images.length <= 5) {
-      this.uploadedFiles = Array.from(event.target.files);
+    const files: File[] = Array.from(event.target.files);
+    if (files.length + this.listing.images.length <= 5) {
+      this.uploadedFiles = files;
+      this.previewImages = [];
+      for (const file of files) {
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          this.previewImages.push(e.target.result);
+        };
+        reader.readAsDataURL(file);
+      }
     } else {
       alert('A listing can have a maximum of 5 images.');
     }
+  }
+  
+  removeUploadedFile(index: number): void {
+    this.uploadedFiles.splice(index, 1);
+    this.previewImages.splice(index, 1);
+  }
+
+  removeExistingImage(index: number): void {
+    this.listing.images.splice(index, 1);
   }
 
   toggleAmenity(amenity: string): void {
@@ -151,24 +171,25 @@ export class ListingComponent implements OnInit {
 
   saveChanges() {
     if (this.hasProfanity()) {
-      this.errorService.handleError('Listing edit failed', 'Profanity detected in the listing. Please remove any inappropriate language.');
+      this.errorService.handleError(
+        'Listing edit failed',
+        'Profanity detected in the listing. Please remove any inappropriate language.'
+      );
       return;
     }
 
-    this.imageService
-      .mapFilesToImages(this.uploadedFiles)
-      .then((images) => {
-        this.listing.images = images;
+    this.imageService.mapFilesToImages(this.uploadedFiles).then((images) => {
+      this.listing.images = this.listing.images.concat(images);
 
-        this.apiService.updateListingById(this.listing).subscribe({
-          next: (response) => {
-            this.router.navigate(['/listings']);
-            this.cacheService.delete('listings');
-
-          }
-        });
-      })
+      this.apiService.updateListingById(this.listing).subscribe({
+        next: (response) => {
+          this.router.navigate(['/listings']);
+          this.cacheService.delete('listings');
+        }
+      });
+    });
   }
+  
   private hasProfanity(): boolean {
     const textToCheck = [
       this.listing.title,

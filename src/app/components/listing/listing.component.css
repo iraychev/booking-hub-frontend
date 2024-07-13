@@ -25,12 +25,14 @@
   align-items: center;
   margin-bottom: 1em;
 }
+
 .button-container {
   display: flex;
   flex-wrap: wrap;
   gap: 0.6em;
   justify-content: flex-end;
 }
+
 .save-button-container {
   display: flex;
   gap: 0.6em;
@@ -111,9 +113,11 @@ input[type="number"] {
   align-items: center;
   margin-bottom: 1.3em;
 }
+
 .host p {
   margin: 0 0.3em;
 }
+
 #profile-img {
   margin: 1em 1em;
   width: 70px;
@@ -145,17 +149,40 @@ input[type="number"] {
   bottom: 1.5em;
 }
 
+.preview-images,
+.existing-images {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.preview-images img,
+.existing-images img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 0.25rem;
+}
+
+.preview-images app-button,
+.existing-images app-button {
+  padding: 2em 0.5em;
+}
+
 @media (max-width: 768px) {
   .heading {
     flex-direction: column;
   }
+
   .button-container {
     width: 100%;
     justify-content: space-between;
     padding-top: 0.5em;
   }
 
-  #book-button{
+  #book-button {
     scale: 1;
     margin-left: 0.5em;
     right: auto;
