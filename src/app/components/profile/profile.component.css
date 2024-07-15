@@ -31,18 +31,14 @@ input[type="password"] {
   display: none;
 }
 
-.profile-container.edit-mode input {
-  display: block;
-}
-
 .listing-booking-container {
   display: flex;
-  justify-content:stretch;
+  justify-content: space-between;
   align-items: center;
   padding: 0.7em;
   border: 0.1em solid #ccc;
   border-radius: 0.4em;
-  margin: 1em;
+  margin: 1em 0;
   background-color: #f5f5f5;
 }
 
@@ -58,8 +54,6 @@ input[type="password"] {
   border: 0.15em solid #007bff;
   margin: 1em 0;
 }
-
-
 
 .profile-view-wrapper {
   display: flex;
@@ -78,15 +72,16 @@ input[type="password"] {
 #edit-btn {
   margin-top: 0.5em;
 }
+
 #profile-img-upload {
   margin: 1em 0;
 }
+
 .editmode-buttons {
   display: flex;
+  gap: 0.5em;
 }
-.editmode-buttons app-button {
-  padding: 0.35em;
-}
+
 .dialog-active {
   pointer-events: none;
   opacity: 0.5;
@@ -96,6 +91,7 @@ input[type="password"] {
   pointer-events: auto;
   opacity: 1;
 }
+
 @media only screen and (max-width: 768px) {
   .profile-container {
     padding: 0.8em;
@@ -117,10 +113,6 @@ input[type="password"] {
     text-align: center;
   }
 
-  #edit-btn {
-    margin-top: 1em;
-  }
-
   .listing-booking-container {
     flex-direction: column;
     align-items: flex-start;
@@ -128,31 +120,18 @@ input[type="password"] {
 
   .editmode-buttons {
     flex-direction: column;
-    gap: 0.5em;
+    width: 100%;
   }
 }
 
-/* Media queries for very small phones */
 @media only screen and (max-width: 480px) {
   .profile-container {
     padding: 0.5em;
   }
 
-  .profile-view-wrapper {
-    gap: 0.5em;
-  }
-
   #profile-img {
     width: 150px;
     height: 150px;
-  }
-
-  .profile-view-info {
-    gap: 0.5em;
-  }
-
-  #edit-btn {
-    margin-top: 0.5em;
   }
 
   .listing-booking-container {
@@ -162,10 +141,5 @@ input[type="password"] {
 
   .listing-booking-title {
     margin-bottom: 0.5em;
-  }
-
-  .editmode-buttons {
-    flex-direction: column;
-    gap: 0.5em;
   }
 }

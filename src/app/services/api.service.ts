@@ -74,8 +74,8 @@ export class ApiService {
     return this.http.get(`${this.url}/bookings/${id}`);
   }
 
-  getAllBookings(): Observable<any> {
-    return this.http.get(`${this.url}/bookings`);
+  getAllBookings(): Observable<Booking[]> {
+    return this.http.get<Booking[]>(`${this.url}/bookings`);
   }
 
   getBookingsForListing(listingId: string): Observable<Booking[]> {

@@ -32,16 +32,16 @@ import { ProfanityFilterService } from '../../services/profanity-filter.service'
   styleUrl: './profile.component.css',
 })
 export class ProfileComponent implements OnInit, OnDestroy {
-  user: User = this.authService.getCurrentUser()!;
-  editMode: boolean = false;
-  error: string = '';
-  selectedTabIndex: number = 0;
+  user: User;
+  editMode = false;
+  error = '';
+  selectedTabIndex = 0;
   personalListings: Listing[] = [];
   personalBookings: Booking[] = [];
-  selectedFile!: File;
+  selectedFile: File | null = null;
 
-  showConfirmationDialog: boolean = false;
-  confirmationMessage: string = '';
+  showConfirmationDialog = false;
+  confirmationMessage = '';
   confirmCallback: () => Promise<void> = async () => {};
 
   private destroy$ = new Subject<void>();
@@ -52,9 +52,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private cacheService: CacheService,
     private errorService: ErrorService,
     private authService: AuthService,
-    private profanityFilter: ProfanityFilterService,
-
-  ) {}
+    private profanityFilter: ProfanityFilterService
+  ) {
+    this.user = this.authService.getCurrentUser()!;
+  }
 
   ngOnInit(): void {
     this.fetchUserListings();
@@ -75,29 +76,25 @@ export class ProfileComponent implements OnInit, OnDestroy {
     endDate.setDate(endDate.getDate() + booking.nightsToStay);
     return endDate;
   }
-  private hasProfanity(): boolean{
-    if (this.profanityFilter.hasProfanity(this.user.username) ||
-          this.profanityFilter.hasProfanity(this.user.firstName) ||
-          this.profanityFilter.hasProfanity(this.user.lastName) ||
-          this.profanityFilter.hasProfanity(this.user.email)) {
-        this.errorService.handleError('Profanity detected', 'Remove any inappropriate words.');
-        return true;
-      }
-      return false;
+
+  private hasProfanity(): boolean {
+    const fields = [this.user.username, this.user.firstName, this.user.lastName, this.user.email];
+    if (fields.some(field => this.profanityFilter.hasProfanity(field))) {
+      this.errorService.handleError('Profanity detected', 'Remove any inappropriate words.');
+      return true;
+    }
+    return false;
   }
 
   async saveChanges(): Promise<void> {
-    if (this.hasProfanity()){
-      return;
-    }
+    if (this.hasProfanity()) return;
+
     try {
       if (this.selectedFile) {
         await this.assignImage();
       }
       localStorage.setItem('user', JSON.stringify(this.user));
-      const updatedUser = await lastValueFrom(
-        this.apiService.updateUserById(this.user)
-      );
+      await lastValueFrom(this.apiService.updateUserById(this.user));
       this.editMode = false;
     } catch (err) {
       this.errorService.handleError('Error updating profile', err);
@@ -110,7 +107,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   fetchUserListings(): void {
-    const cachedListings = this.cacheService.get('userListings');
+    const cachedListings: Listing[] = this.cacheService.get('userListings');
     if (cachedListings) {
       this.personalListings = cachedListings;
       return;
@@ -119,20 +116,18 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.apiService.getAllListings()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (listings: Listing[]) => {
+        next: (listings) => {
           this.personalListings = this.sortListings(
             listings.filter((listing) => listing.user?.id === this.user?.id)
           );
           this.cacheService.set('userListings', this.personalListings);
         },
-        error: (err) => {
-          this.errorService.handleError('Error fetching listings', err);
-        },
+        // error: (err) => this.errorService.handleError('Error fetching listings', err),
       });
   }
 
   fetchUserBookings(): void {
-    const cachedBookings = this.cacheService.get('userBookings');
+    const cachedBookings: Booking[] = this.cacheService.get('userBookings');
     if (cachedBookings) {
       this.personalBookings = cachedBookings;
       return;
@@ -141,25 +136,21 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.apiService.getAllBookings()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (bookings: Booking[]) => {
+        next: (bookings) => {
           this.personalBookings = this.sortBookings(
             bookings.filter((booking) => booking.renter?.id === this.user?.id)
           );
           this.cacheService.set('userBookings', this.personalBookings);
         },
-        error: (err) => {
-          this.errorService.handleError('Error fetching bookings', err);
-        },
+        // error: (err) => this.errorService.handleError('Error fetching bookings', err),
       });
   }
 
-  async deleteListing(listingId: string): Promise<void> {
+  deleteListing(listingId: string): void {
     this.confirmAction('Are you sure you want to delete this listing?', async () => {
       try {
         await lastValueFrom(this.apiService.deleteListingById(listingId));
-        this.personalListings = this.personalListings.filter(
-          (listing) => listing.id !== listingId
-        );
+        this.personalListings = this.personalListings.filter(listing => listing.id !== listingId);
         this.cacheService.delete('userListings');
       } catch (err) {
         this.errorService.handleError('Error deleting listing', err);
@@ -167,13 +158,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
     });
   }
 
-  async deleteBooking(bookingId: string): Promise<void> {
+  deleteBooking(bookingId: string): void {
     this.confirmAction('Are you sure you want to delete this booking?', async () => {
       try {
         await lastValueFrom(this.apiService.deleteBookingById(bookingId));
-        this.personalBookings = this.personalBookings.filter(
-          (booking) => booking.id !== bookingId
-        );
+        this.personalBookings = this.personalBookings.filter(booking => booking.id !== bookingId);
         this.cacheService.delete('userBookings');
       } catch (err) {
         this.errorService.handleError('Error deleting booking', err);
@@ -181,8 +170,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
     });
   }
 
-  onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0];
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+    }
   }
 
   confirmAction(message: string, callback: () => Promise<void>): void {
@@ -199,22 +191,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   private async assignImage(): Promise<void> {
-    this.user.profileImage = await this.imageService.mapFileToImage(
-      this.selectedFile
-    );
+    if (this.selectedFile) {
+      this.user.profileImage = await this.imageService.mapFileToImage(this.selectedFile);
+    }
   }
 
   private sortListings(listings: Listing[]): Listing[] {
-    return listings.sort((a, b) => {
-      if (!a.user?.id || !b.user?.id) return 0;
-      return a.user.id.localeCompare(b.user.id);
-    });
+    return listings.sort((a, b) => (a.user?.id ?? '').localeCompare(b.user?.id ?? ''));
   }
 
   private sortBookings(bookings: Booking[]): Booking[] {
-    return bookings.sort((a, b) => {
-      if (!a.renter?.id || !b.renter?.id) return 0;
-      return a.renter.id.localeCompare(b.renter.id);
-    });
+    return bookings.sort((a, b) => (a.renter?.id ?? '').localeCompare(b.renter?.id ?? ''));
   }
 }
