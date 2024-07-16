@@ -1,15 +1,15 @@
 <header>
-  <div class="header-container">
-    <a routerLink="/" id="logo">Booking App </a>
+  <div class="header-container" [class.menu-open]="menuOpen">
+    <a routerLink="/" id="logo">Booking Hub</a>
+    <div class="menu-toggle" (click)="toggleMenu()">☰</div>
     <nav class="nav">
       <a routerLink="/listings" class="nav-link">Listings</a>
       <a routerLink="/about" class="nav-link">About</a>
       <a routerLink="/contact" class="nav-link">Contact</a>
     </nav>
     <div class="user-profile">
-      <ng-container class="user-profile" *ngIf="authService.isAuthenticated(); else loginTemplate">
+      <ng-container *ngIf="authService.isAuthenticated(); else loginTemplate">
         <img
-          class="image-container"
           [src]="getProfileImageData()"
           alt="Profile Image"
           id="profile-img"
@@ -17,7 +17,7 @@
           routerLink="/profile"
         />
         <a routerLink="/profile" class="profile-link">Profile</a>
-        <a (click)="this.authService.logout();" class="profile-link">Logout</a>
+        <a (click)="authService.logout();" class="profile-link">Logout</a>
       </ng-container>
       <ng-template #loginTemplate>
         <a routerLink="/register" class="profile-link">Register</a>

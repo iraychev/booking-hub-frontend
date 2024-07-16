@@ -12,5 +12,5 @@ import { LoadingComponent } from "./shared/loading/loading.component";
     imports: [RouterOutlet, HeaderComponent, FooterComponent, LoadingComponent]
 })
 export class AppComponent {
-  title = 'booking-frontend';
+  title = 'booking-hub-frontend';
 }
