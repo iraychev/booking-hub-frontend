@@ -11,10 +11,20 @@ import { ImageService } from '../../services/image.service';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
-export class HeaderComponent{
-  constructor(public authService: AuthService, private router: Router, public imageService: ImageService) {}
+export class HeaderComponent {
+  menuOpen = false;
+
+  constructor(
+    public authService: AuthService, 
+    private router: Router, 
+    public imageService: ImageService
+  ) {}
 
   getProfileImageData(): string {
     return this.imageService.getImageDataFromUser(this.authService.getCurrentUser()!);
+  }
+
+  toggleMenu() {
+    this.menuOpen = !this.menuOpen;
   }
 }

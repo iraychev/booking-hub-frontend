@@ -48,7 +48,7 @@ export class BookingCreationComponent {
     this.booking.listing = listing;
 
     const renter: User = new User();
-    renter.id = JSON.parse(this.authservice.getCurrentUser()!.id);
+    renter.id = this.authservice.getCurrentUser()!.id;
     this.booking.renter = renter;
 
     this.booking.nightsToStay = this.selectedDates.length;

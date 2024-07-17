@@ -1,22 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ApiService } from '../../services/api.service';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { ImageService } from '../../services/image.service';
 import { Listing } from '../../models/listing.model';
-import { AmenitiesPipe } from '../../pipes/amenities.pipe';
-import { ButtonComponent } from '../../shared/button/button.component';
 import { Booking } from '../../models/booking.model';
-import { CalendarComponent } from '../../shared/calendar/calendar.component';
 import { BookingService } from '../../services/booking.service';
-import { BookingCreationComponent } from '../booking-creation/booking-creation.component';
-import { ConfirmationDialogComponent } from '../../shared/confirmation-dialog/confirmation-dialog.component';
 import { User } from '../../models/user.model';
 import { CacheService } from '../../services/cache.service';
 import { AuthService } from '../../services/auth.service';
 import { ProfanityFilterService } from '../../services/profanity-filter.service';
 import { ErrorService } from '../../services/error.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AmenitiesPipe } from '../../pipes/amenities.pipe';
+import { ButtonComponent } from '../../shared/button/button.component';
+import { CalendarComponent } from '../../shared/calendar/calendar.component';
+import { BookingCreationComponent } from '../booking-creation/booking-creation.component';
+import { ConfirmationDialogComponent } from '../../shared/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-listing',
@@ -35,32 +35,24 @@ import { ErrorService } from '../../services/error.service';
   ],
 })
 export class ListingComponent implements OnInit {
-  currentImageIndex: number = 0;
+  currentImageIndex = 0;
   listing!: Listing;
   bookings: Booking[] = [];
-  userId: string = this.authService.getCurrentUser()!.id;
-  editMode: boolean = false;
+  userId: string;
+  editMode = false;
   bookedDates: Date[] = [];
-  amenities: string[] = [
-    'WIFI',
-    'PARKING',
-    'POOL',
-    'GYM',
-    'AIR_CONDITIONING',
-    'HEATING',
-    'KITCHEN',
-    'TV',
-    'WASHER',
-    'DRYER',
+  amenities = [
+    'WIFI', 'PARKING', 'POOL', 'GYM', 'AIR_CONDITIONING',
+    'HEATING', 'KITCHEN', 'TV', 'WASHER', 'DRYER',
   ];
   uploadedFiles: File[] = [];
-  showCalendar: boolean = false;
+  previewImages: string[] = [];
+  showCalendar = false;
   listingId!: string;
-  showModal: boolean = false;
-
-  showConfirmationDialog: boolean = false;
-  confirmationMessage: string = '';
-  confirmCallback: any = () => {};
+  showModal = false;
+  showConfirmationDialog = false;
+  confirmationMessage = '';
+  confirmCallback: () => void = () => {};
 
   constructor(
     private apiService: ApiService,
@@ -72,6 +64,7 @@ export class ListingComponent implements OnInit {
     private profanityFilter: ProfanityFilterService,
     private errorService: ErrorService
   ) {
+    this.userId = this.authService.getCurrentUser()!.id;
     const navigation = this.router.getCurrentNavigation();
     this.listingId = navigation?.extras.state?.['listingId'];
   }
@@ -81,94 +74,107 @@ export class ListingComponent implements OnInit {
     this.fetchBookings(this.listingId);
     this.fetchBookedDates(this.listingId);
   }
+
   async fetchBookedDates(id: string | null): Promise<void> {
-    if (!id) {
-      return;
-    }
+    if (!id) return;
     this.bookedDates = await this.bookingService.calculateBookedDates(id);
-    if (this.bookedDates.length === 0) {
-      return;
-    }
   }
+
   openBookingCreation() {
-    if (this.checkIfUserCantCreateBookings()){
-      return;
-    }
+    if (this.checkIfUserCantCreateBookings()) return;
     this.showModal = true;
   }
+
   closeBookingCreation() {
     this.showModal = false;
   }
-  toggleCalendar(): void {
 
+  toggleCalendar(): void {
     this.showCalendar = !this.showCalendar;
   }
+
   fetchBookings(id: string | null): void {
-    this.apiService.getBookingsForListing(id!).subscribe((data: Booking[]) => {
-      this.bookings = data;
-    });
+    if (!id) return;
+    this.apiService.getBookingsForListing(id).subscribe(
+      (data: Booking[]) => this.bookings = data
+    );
   }
 
   fetchListingDetails(id: string | null): void {
-    if (!id) {
-      return;
-    }
+    if (!id) return;
     this.apiService.getListingById(id).subscribe({
-      next: (data) => {
-        this.listing = data;
-      }
+      next: (data) => this.listing = data
     });
   }
 
   deleteListing(listingId: string): void {
     this.confirmAction('Are you sure you want to delete this listing?', () => {
       this.apiService.deleteListingById(listingId).subscribe({
-        next: () => {
-          this.router.navigate(['/listings']);
-        }
+        next: () => this.router.navigate(['/listings'])
       });
     });
   }
+
   toggleEditMode(): void {
     this.editMode = !this.editMode;
+    this.previewImages = [];
   }
+
   onFileChange(event: any): void {
-    if (event.target.files.length + this.listing.images.length <= 5) {
-      this.uploadedFiles = Array.from(event.target.files);
+    const files: File[] = Array.from(event.target.files);
+    if (files.length + this.listing.images.length <= 5) {
+      this.uploadedFiles = files;
+      this.previewImages = [];
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          this.previewImages.push(e.target.result);
+        };
+        reader.readAsDataURL(file);
+      });
     } else {
       alert('A listing can have a maximum of 5 images.');
     }
+  }
+  
+  removeUploadedFile(index: number): void {
+    this.uploadedFiles.splice(index, 1);
+    this.previewImages.splice(index, 1);
+  }
+
+  removeExistingImage(index: number): void {
+    this.listing.images.splice(index, 1);
   }
 
   toggleAmenity(amenity: string): void {
     const index = this.listing.amenities.indexOf(amenity);
     if (index > -1) {
       this.listing.amenities.splice(index, 1);
-      return;
+    } else {
+      this.listing.amenities.push(amenity);
     }
-    this.listing.amenities.push(amenity);
   }
 
   saveChanges() {
     if (this.hasProfanity()) {
-      this.errorService.handleError('Listing edit failed', 'Profanity detected in the listing. Please remove any inappropriate language.');
+      this.errorService.handleError(
+        'Listing edit failed',
+        'Profanity detected in the listing. Please remove any inappropriate language.'
+      );
       return;
     }
 
-    this.imageService
-      .mapFilesToImages(this.uploadedFiles)
-      .then((images) => {
-        this.listing.images = images;
-
-        this.apiService.updateListingById(this.listing).subscribe({
-          next: (response) => {
-            this.router.navigate(['/listings']);
-            this.cacheService.delete('listings');
-
-          }
-        });
-      })
+    this.imageService.mapFilesToImages(this.uploadedFiles).then((images) => {
+      this.listing.images = this.listing.images.concat(images);
+      this.apiService.updateListingById(this.listing).subscribe({
+        next: () => {
+          this.router.navigate(['/listings']);
+          this.cacheService.delete('listings');
+        }
+      });
+    });
   }
+  
   private hasProfanity(): boolean {
     const textToCheck = [
       this.listing.title,
@@ -178,9 +184,9 @@ export class ListingComponent implements OnInit {
 
     return this.profanityFilter.hasProfanity(textToCheck);
   }
+
   checkIfUserCantCreateBookings(): boolean {
     const user: User = this.authService.getCurrentUser()!;
-    console.log(user);
     return !(user.roles.includes('RENTER') || user.roles.includes('ADMIN'));
   }
   

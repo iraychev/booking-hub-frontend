@@ -10,4 +10,5 @@ export class User {
   profileImage: Image = new Image();
   roles: string[] = [];
   joinedDate?: Date;
+  [key: string]: any;
 }

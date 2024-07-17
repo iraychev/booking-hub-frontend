@@ -3,79 +3,22 @@
     <mat-tab label="Profile">
       <div *ngIf="!editMode" class="profile-view-wrapper">
         <div class="image-container">
-          <img
-            *ngIf="user.profileImage"
-            [src]="
-              'data:' +
-              this.user.profileImage.type +
-              ';base64,' +
-              this.user.profileImage.data
-            "
-            alt="Add a profile image and it will appear here"
-            id="profile-img"
-          />
+          <img *ngIf="user.profileImage" [src]="'data:' + user.profileImage.type + ';base64,' + user.profileImage.data"
+            alt="Profile image" id="profile-img" />
           <p *ngIf="!user.profileImage">No profile image available</p>
         </div>
         <div class="profile-view-info">
-          <div>
-            <label for="username">Username:</label>
-            <p name="username">{{ user.username }}</p>
+          <div *ngFor="let field of ['username', 'firstName', 'lastName', 'email']">
+            <label [for]="field">{{ field | titlecase }}:</label>
+            <p [attr.name]="field">{{ user[field] }}</p>
           </div>
-          <div>
-            <label for="firstName">First Name:</label>
-            <p name="firstName">{{ user.firstName }}</p>
-          </div>
-          <div>
-            <label for="lastName">Last Name:</label>
-            <p name="lastName">{{ user.lastName }}</p>
-          </div>
-          <div>
-            <label for="email">Email:</label>
-            <p name="email">{{ user.email }}</p>
-          </div>
-          <app-button (click)="toggleEditMode()" text="Edit" id="edit-btn" />
+          <app-button (click)="toggleEditMode()" text="Edit" id="edit-btn"></app-button>
         </div>
       </div>
-      <div *ngIf="editMode">
-        <div>
-          <label for="username">Username:</label>
-          <input
-            type="text"
-            id="username"
-            [(ngModel)]="user.username"
-            name="username"
-            required
-          />
-        </div>
-        <div>
-          <label for="firstName">First Name:</label>
-          <input
-            type="text"
-            id="firstName"
-            [(ngModel)]="user.firstName"
-            name="firstName"
-            required
-          />
-        </div>
-        <div>
-          <label for="lastName">Last Name:</label>
-          <input
-            type="text"
-            id="lastName"
-            [(ngModel)]="user.lastName"
-            name="lastName"
-            required
-          />
-        </div>
-        <div>
-          <label for="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            [(ngModel)]="user.email"
-            name="email"
-            required
-          />
+      <div *ngIf="editMode" class="edit-form">
+        <div *ngFor="let field of ['username', 'firstName', 'lastName', 'email']">
+          <label [for]="field">{{ field | titlecase }}:</label>
+          <input [type]="field === 'email' ? 'email' : 'text'" [id]="field" [(ngModel)]="user[field]" [name]="field" required />
         </div>
         <div id="profile-img-upload">
           <label for="newProfileImage">Profile Picture:</label>
@@ -83,59 +26,36 @@
         </div>
         <div class="editmode-buttons">
           <app-button text="Save" (click)="saveChanges()"></app-button>
-          <app-button
-            text="Cancel"
-            [isGhost]="true"
-            (click)="cancelEdit()"
-          ></app-button>
+          <app-button text="Cancel" [isGhost]="true" (click)="cancelEdit()"></app-button>
         </div>
       </div>
     </mat-tab>
     <mat-tab label="Your Listings">
-      <div *ngIf="personalListings.length === 0">No listings found.</div>
-      <div
-        *ngFor="let listing of personalListings"
-        class="listing-booking-container"
-      >
-        <div class="listing-booking-title">
-          <a [routerLink]="['/listing']" [state]="{ listingId: listing.id }">{{
-            listing.title
-          }}</a>
+      <ng-container *ngIf="personalListings.length; else noListings">
+        <div *ngFor="let listing of personalListings" class="listing-booking-container">
+          <div class="listing-booking-title">
+            <a [routerLink]="['/listing']" [state]="{ listingId: listing.id }">{{ listing.title }}</a>
+          </div>
+          <app-button text="Delete" (click)="deleteListing(listing.id)" [isRed]="true"></app-button>
         </div>
-        <app-button
-          text="Delete"
-          (click)="deleteListing(listing.id)"
-          [isRed]="true"
-        />
-      </div>
+      </ng-container>
+      <ng-template #noListings>No listings found.</ng-template>
     </mat-tab>
     <mat-tab label="Your Bookings">
-      <div *ngIf="personalBookings.length === 0">No bookings found.</div>
-      <div
-        *ngFor="let booking of personalBookings"
-        class="listing-booking-container"
-      >
-        <div class="listing-booking-title">
-          <a [routerLink]="['/booking']" [state]="{ bookingId: booking.id }"
-            >{{ booking.listing.title }} ({{
-              booking.startDate | date : "dd-MM-yyyy"
-            }}
-            - {{ getBookingEndDate(booking) | date : "dd-MM-yyyy" }})</a
-          >
+      <ng-container *ngIf="personalBookings.length; else noBookings">
+        <div *ngFor="let booking of personalBookings" class="listing-booking-container">
+          <div class="listing-booking-title">
+            <a [routerLink]="['/booking']" [state]="{ bookingId: booking.id }">
+              {{ booking.listing.title }} ({{ booking.startDate | date:'dd-MM-yyyy' }} - {{ getBookingEndDate(booking) | date:'dd-MM-yyyy' }})
+            </a>
+          </div>
+          <app-button text="Cancel" (click)="deleteBooking(booking.id)" [isRed]="true"></app-button>
         </div>
-        <app-button
-          text="Cancel"
-          (click)="deleteBooking(booking.id)"
-          [isRed]="true"
-        />
-      </div>
+      </ng-container>
+      <ng-template #noBookings>No bookings found.</ng-template>
     </mat-tab>
   </mat-tab-group>
   <div *ngIf="error" class="error">{{ error }}</div>
-  <app-confirmation-dialog
-    *ngIf="showConfirmationDialog"
-    [message]="confirmationMessage"
-    (confirmed)="onConfirmed($event)"
-  >
+  <app-confirmation-dialog *ngIf="showConfirmationDialog" [message]="confirmationMessage" (confirmed)="onConfirmed($event)">
   </app-confirmation-dialog>
 </div>
