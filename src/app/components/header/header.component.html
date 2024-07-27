@@ -1,28 +1,28 @@
 <header>
-  <div class="header-container" [class.menu-open]="menuOpen">
+  <div class="header-container">
     <a routerLink="/" id="logo">Booking Hub</a>
-    <div class="menu-toggle" (click)="toggleMenu()">☰</div>
     <nav class="nav">
       <a routerLink="/listings" class="nav-link">Listings</a>
       <a routerLink="/about" class="nav-link">About</a>
       <a routerLink="/contact" class="nav-link">Contact</a>
     </nav>
-    <div class="user-profile">
-      <ng-container *ngIf="authService.isAuthenticated(); else loginTemplate">
-        <img
-          [src]="getProfileImageData()"
-          alt="Profile Image"
-          id="profile-img"
-          class="profile-link"
-          routerLink="/profile"
-        />
-        <a routerLink="/profile" class="profile-link">Profile</a>
-        <a (click)="authService.logout();" class="profile-link">Logout</a>
-      </ng-container>
-      <ng-template #loginTemplate>
-        <a routerLink="/register" class="profile-link">Register</a>
-        <a routerLink="/login" class="profile-link">Login</a>
-      </ng-template>
+    <div class="user-profile" (click)="toggleDropdown()">
+      <img
+        [src]="getProfileImageData()"
+        alt="Profile Image"
+        id="profile-img"
+        class="profile-link"
+      />
+      <div class="dropdown-menu" *ngIf="isDropdownOpen">
+        <ng-container *ngIf="authService.isAuthenticated(); else loggedOutTemplate">
+          <a routerLink="/profile" class="dropdown-item">Profile</a>
+          <a (click)="logout()" class="dropdown-item">Logout</a>
+        </ng-container>
+        <ng-template #loggedOutTemplate>
+          <a routerLink="/login" class="dropdown-item">Login</a>
+          <a routerLink="/register" class="dropdown-item">Register</a>
+        </ng-template>
+      </div>
     </div>
   </div>
 </header>
