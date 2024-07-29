@@ -8,13 +8,12 @@
     />
   </div>
   <app-button
-  [routerLink]="checkIfUserCantCreateListings() ? null : '/listing-creation'"
+    [routerLink]="checkIfUserCantCreateListings() ? null : '/listing-creation'"
     text="Create a Listing"
     id="create-btn"
     [disabled]="checkIfUserCantCreateListings()"
-  />
+  ></app-button>
 </div>
-
 
 <div class="listings-container">
   <div
@@ -46,7 +45,7 @@
 </div>
 
 <div class="pagination-controls">
-  <app-button text="Previous" (click)="prevPage()" [disabled]="currentPage === 1"></app-button>
-  <span>Page {{ currentPage }} of {{ totalPages }}</span>
-  <app-button text="Next" (click)="nextPage()" [disabled]="currentPage === totalPages"></app-button>
+  <app-button text="Previous" (click)="prevPage()" [disabled]="currentPage === 0"></app-button>
+  <span>Page {{ currentPage + 1 }} of {{ totalPages }}</span>
+  <app-button text="Next" (click)="nextPage()" [disabled]="currentPage === totalPages - 1"></app-button>
 </div>

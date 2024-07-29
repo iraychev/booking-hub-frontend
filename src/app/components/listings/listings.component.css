@@ -73,10 +73,12 @@
 #address {
   font-style: italic;
 }
+
 #description {
   margin-top: 0.4em;
   color: rgb(109, 107, 107);
 }
+
 .pagination-controls {
   display: flex;
   justify-content: center;
@@ -103,6 +105,7 @@
 .pagination-controls span {
   margin: 0 1em;
 }
+
 @media only screen and (max-width: 768px) {
   .search-container {
     margin-left: 0.5em;

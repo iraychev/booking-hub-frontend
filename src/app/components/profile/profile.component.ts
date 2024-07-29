@@ -78,9 +78,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   private hasProfanity(): boolean {
-    const fields = [this.user.username, this.user.firstName, this.user.lastName, this.user.email];
-    if (fields.some(field => this.profanityFilter.hasProfanity(field))) {
-      this.errorService.handleError('Profanity detected', 'Remove any inappropriate words.');
+    const fields = [
+      this.user.username,
+      this.user.firstName,
+      this.user.lastName,
+      this.user.email,
+    ];
+    if (fields.some((field) => this.profanityFilter.hasProfanity(field))) {
+      this.errorService.handleError(
+        'Profanity detected',
+        'Remove any inappropriate words.'
+      );
       return true;
     }
     return false;
@@ -113,12 +121,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.apiService.getAllListings()
+    this.apiService
+      .getAllListingsByUserId(this.user.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (listings) => {
           this.personalListings = this.sortListings(
-            listings.filter((listing) => listing.user?.id === this.user?.id)
+            listings.filter(
+              (listing: Listing) => listing.user?.id === this.user?.id
+            )
           );
           this.cacheService.set('userListings', this.personalListings);
         },
@@ -133,7 +144,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.apiService.getAllBookings()
+    this.apiService
+      .getAllBookings()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (bookings) => {
@@ -147,27 +159,37 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   deleteListing(listingId: string): void {
-    this.confirmAction('Are you sure you want to delete this listing?', async () => {
-      try {
-        await lastValueFrom(this.apiService.deleteListingById(listingId));
-        this.personalListings = this.personalListings.filter(listing => listing.id !== listingId);
-        this.cacheService.delete('userListings');
-      } catch (err) {
-        this.errorService.handleError('Error deleting listing', err);
+    this.confirmAction(
+      'Are you sure you want to delete this listing?',
+      async () => {
+        try {
+          await lastValueFrom(this.apiService.deleteListingById(listingId));
+          this.personalListings = this.personalListings.filter(
+            (listing) => listing.id !== listingId
+          );
+          this.cacheService.delete('userListings');
+        } catch (err) {
+          this.errorService.handleError('Error deleting listing', err);
+        }
       }
-    });
+    );
   }
 
   deleteBooking(bookingId: string): void {
-    this.confirmAction('Are you sure you want to delete this booking?', async () => {
-      try {
-        await lastValueFrom(this.apiService.deleteBookingById(bookingId));
-        this.personalBookings = this.personalBookings.filter(booking => booking.id !== bookingId);
-        this.cacheService.delete('userBookings');
-      } catch (err) {
-        this.errorService.handleError('Error deleting booking', err);
+    this.confirmAction(
+      'Are you sure you want to delete this booking?',
+      async () => {
+        try {
+          await lastValueFrom(this.apiService.deleteBookingById(bookingId));
+          this.personalBookings = this.personalBookings.filter(
+            (booking) => booking.id !== bookingId
+          );
+          this.cacheService.delete('userBookings');
+        } catch (err) {
+          this.errorService.handleError('Error deleting booking', err);
+        }
       }
-    });
+    );
   }
 
   onFileSelected(event: Event): void {
@@ -192,15 +214,21 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   private async assignImage(): Promise<void> {
     if (this.selectedFile) {
-      this.user.profileImage = await this.imageService.mapFileToImage(this.selectedFile);
+      this.user.profileImage = await this.imageService.mapFileToImage(
+        this.selectedFile
+      );
     }
   }
 
   private sortListings(listings: Listing[]): Listing[] {
-    return listings.sort((a, b) => (a.user?.id ?? '').localeCompare(b.user?.id ?? ''));
+    return listings.sort((a, b) =>
+      (a.user?.id ?? '').localeCompare(b.user?.id ?? '')
+    );
   }
 
   private sortBookings(bookings: Booking[]): Booking[] {
-    return bookings.sort((a, b) => (a.renter?.id ?? '').localeCompare(b.renter?.id ?? ''));
+    return bookings.sort((a, b) =>
+      (a.renter?.id ?? '').localeCompare(b.renter?.id ?? '')
+    );
   }
 }

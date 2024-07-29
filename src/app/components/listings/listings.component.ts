@@ -3,12 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
-
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 import { ErrorService } from '../../services/error.service';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { Listing } from '../../models/listing.model';
+import { Page } from '../../models/page.model';
 import { User } from '../../models/user.model';
 
 @Component({
@@ -20,13 +20,11 @@ import { User } from '../../models/user.model';
 })
 export class ListingsComponent implements OnInit, OnDestroy {
   listings: Listing[] = [];
-  filteredListings: Listing[] = [];
   paginatedListings: Listing[] = [];
   searchTerm: string = '';
-  currentPage: number = 1;
+  currentPage: number = 0;
   listingsPerPage: number = 4;
   totalPages: number = 0;
-
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -52,15 +50,16 @@ export class ListingsComponent implements OnInit, OnDestroy {
     }
     return !(user.roles.includes('PROPERTY_OWNER') || user.roles.includes('ADMIN'));
   }
-  
+
   getListings(): void {
-    this.apiService.getAllListings()
+    this.apiService.getAllListings(this.currentPage, this.listingsPerPage, this.searchTerm)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (data) => {
-          this.listings = data;
-          this.filteredListings = [...this.listings];
-          this.updatePagination();
+        next: (data: Page<Listing>) => {
+          this.listings = data.content;
+          this.paginatedListings = data.content;
+          this.totalPages = data.totalPages;
+          this.currentPage = data.number;
         },
         error: (err) => {
           this.errorService.handleError('Failed to fetch listings', err);
@@ -69,17 +68,8 @@ export class ListingsComponent implements OnInit, OnDestroy {
   }
 
   performSearch(): void {
-    if (this.searchTerm.trim() === '') {
-      this.filteredListings = [...this.listings];
-    } else {
-      const lowerCaseSearchTerm = this.searchTerm.trim().toLowerCase();
-      this.filteredListings = this.listings.filter(
-        (listing) =>
-          listing.title.toLowerCase().includes(lowerCaseSearchTerm) ||
-          listing.propertyAddress.toLowerCase().includes(lowerCaseSearchTerm)
-      );
-    }
-    this.updatePagination();
+    this.currentPage = 0;
+    this.getListings();
   }
 
   viewDetails(listingId: string): void {
@@ -90,29 +80,17 @@ export class ListingsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private updatePagination(): void {
-    this.totalPages = Math.ceil(this.filteredListings.length / this.listingsPerPage);
-    this.currentPage = 1;
-    this.paginateListings();
-  }
-
-  private paginateListings(): void {
-    const startIndex = (this.currentPage - 1) * this.listingsPerPage;
-    const endIndex = startIndex + this.listingsPerPage;
-    this.paginatedListings = this.filteredListings.slice(startIndex, endIndex);
-  }
-
   nextPage(): void {
-    if (this.currentPage < this.totalPages) {
+    if (this.currentPage < this.totalPages - 1) {
       this.currentPage++;
-      this.paginateListings();
+      this.getListings();
     }
   }
 
   prevPage(): void {
-    if (this.currentPage > 1) {
+    if (this.currentPage > 0) {
       this.currentPage--;
-      this.paginateListings();
+      this.getListings();
     }
   }
 }

@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, of, tap, throwError } from 'rxjs';
 import { User } from '../models/user.model';
@@ -6,6 +6,7 @@ import { Listing } from '../models/listing.model';
 import { Booking } from '../models/booking.model';
 import { environment } from '../../environments/environment';
 import { CacheService } from './cache.service';
+import { Page } from '../models/page.model';
 
 @Injectable({
   providedIn: 'root',
@@ -27,16 +28,16 @@ export class ApiService {
     return this.http.put(`${this.url}/users/${user.id}`, user);
   }
 
-  getAllListings(): Observable<Listing[]> {
-    const cachedListings = this.cacheService.get(this.listingsCacheKey);
-    if (cachedListings) {
-      return of(cachedListings);
+  getAllListings(page: number, size: number, searchTerm?: string): Observable<Page<Listing>> {
+    let url = `${this.url}/listings?page=${page}&size=${size}`;
+    if (searchTerm) {
+      url += `&search=${encodeURIComponent(searchTerm)}`;
     }
-    return this.http.get<Listing[]>(`${this.url}/listings`).pipe(
-      tap((data) => {
-        this.cacheService.set(this.listingsCacheKey, data, 300000);
-      })
-    );
+    return this.http.get<Page<Listing>>(url);
+  }
+
+  getAllListingsByUserId(userId: string): Observable<any> {
+    return this.http.get(`${this.url}/listings/${userId}`);
   }
 
   getListingById(id: string): Observable<any> {
