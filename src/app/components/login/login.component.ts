@@ -29,11 +29,16 @@ export class LoginComponent {
   async login() {
     try {
       await lastValueFrom(this.authService.login(this.username, this.password));
-      const user = await lastValueFrom(this.apiService.getUserByUsername(this.username));
+      const user = await lastValueFrom(
+        this.apiService.getUserByUsername(this.username)
+      );
       localStorage.setItem('user', JSON.stringify(user));
       this.router.navigate(['/']);
     } catch (error) {
-      this.errorService.handleError('Login failed', 'Invalid username or password');
+      this.errorService.handleError(
+        'Login failed',
+        'Invalid username or password'
+      );
     }
   }
 }

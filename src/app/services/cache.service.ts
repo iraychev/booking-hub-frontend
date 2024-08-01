@@ -22,7 +22,7 @@ export class CacheService {
       this.cache.delete(key);
       return null;
     }
-    
+
     return cachedItem.data;
   }
 

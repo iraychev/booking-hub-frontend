@@ -30,7 +30,7 @@
   .welcome-message h1 {
     font-size: 2em;
   }
-  .navigation{
+  .navigation {
     display: block;
   }
   .navigation app-button {

@@ -1,7 +1,13 @@
-import { Injectable, Injector, createComponent, EnvironmentInjector, ApplicationRef } from '@angular/core';
+import {
+  Injectable,
+  Injector,
+  createComponent,
+  EnvironmentInjector,
+  ApplicationRef,
+} from '@angular/core';
 import { ErrorOverlayComponent } from '../shared/error-overlay/error-overlay.component';
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ErrorService {
   private errorComponentRef: any = null;
@@ -32,12 +38,14 @@ export class ErrorService {
 
     this.errorComponentRef = createComponent(ErrorOverlayComponent, {
       environmentInjector: this.environmentInjector,
-      elementInjector: this.injector
+      elementInjector: this.injector,
     });
 
     this.errorComponentRef.instance.show = true;
     this.errorComponentRef.instance.message = message;
-    this.errorComponentRef.instance.closed.subscribe(() => this.removeErrorOverlay());
+    this.errorComponentRef.instance.closed.subscribe(() =>
+      this.removeErrorOverlay()
+    );
 
     const domElem = this.errorComponentRef.location.nativeElement;
     document.body.appendChild(domElem);

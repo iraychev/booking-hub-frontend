@@ -42,8 +42,16 @@ export class ListingComponent implements OnInit {
   editMode = false;
   bookedDates: Date[] = [];
   amenities = [
-    'WIFI', 'PARKING', 'POOL', 'GYM', 'AIR_CONDITIONING',
-    'HEATING', 'KITCHEN', 'TV', 'WASHER', 'DRYER',
+    'WIFI',
+    'PARKING',
+    'POOL',
+    'GYM',
+    'AIR_CONDITIONING',
+    'HEATING',
+    'KITCHEN',
+    'TV',
+    'WASHER',
+    'DRYER',
   ];
   uploadedFiles: File[] = [];
   previewImages: string[] = [];
@@ -95,22 +103,22 @@ export class ListingComponent implements OnInit {
 
   fetchBookings(id: string | null): void {
     if (!id) return;
-    this.apiService.getBookingsForListing(id).subscribe(
-      (data: Booking[]) => this.bookings = data
-    );
+    this.apiService
+      .getBookingsForListing(id)
+      .subscribe((data: Booking[]) => (this.bookings = data));
   }
 
   fetchListingDetails(id: string | null): void {
     if (!id) return;
     this.apiService.getListingById(id).subscribe({
-      next: (data) => this.listing = data
+      next: (data) => (this.listing = data),
     });
   }
 
   deleteListing(listingId: string): void {
     this.confirmAction('Are you sure you want to delete this listing?', () => {
       this.apiService.deleteListingById(listingId).subscribe({
-        next: () => this.router.navigate(['/listings'])
+        next: () => this.router.navigate(['/listings']),
       });
     });
   }
@@ -125,7 +133,7 @@ export class ListingComponent implements OnInit {
     if (files.length + this.listing.images.length <= 5) {
       this.uploadedFiles = files;
       this.previewImages = [];
-      files.forEach(file => {
+      files.forEach((file) => {
         const reader = new FileReader();
         reader.onload = (e: any) => {
           this.previewImages.push(e.target.result);
@@ -136,7 +144,7 @@ export class ListingComponent implements OnInit {
       alert('A listing can have a maximum of 5 images.');
     }
   }
-  
+
   removeUploadedFile(index: number): void {
     this.uploadedFiles.splice(index, 1);
     this.previewImages.splice(index, 1);
@@ -170,11 +178,11 @@ export class ListingComponent implements OnInit {
         next: () => {
           this.router.navigate(['/listings']);
           this.cacheService.delete('listings');
-        }
+        },
       });
     });
   }
-  
+
   private hasProfanity(): boolean {
     const textToCheck = [
       this.listing.title,
@@ -189,7 +197,7 @@ export class ListingComponent implements OnInit {
     const user: User = this.authService.getCurrentUser()!;
     return !(user.roles.includes('RENTER') || user.roles.includes('ADMIN'));
   }
-  
+
   confirmAction(message: string, callback: () => void): void {
     this.confirmationMessage = message;
     this.confirmCallback = callback;

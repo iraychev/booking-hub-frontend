@@ -60,7 +60,7 @@ input[type="password"] {
   align-items: center;
   justify-content: space-evenly;
   gap: 2em;
-  padding: 1em;
+  padding: 0.5em;
 }
 
 .profile-view-info {
@@ -73,13 +73,10 @@ input[type="password"] {
   margin-top: 0.5em;
 }
 
-#profile-img-upload {
-  margin: 1em 0;
-}
-
 .editmode-buttons {
   display: flex;
   gap: 0.5em;
+  margin: 1em 0;
 }
 
 .dialog-active {

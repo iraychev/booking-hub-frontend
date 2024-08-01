@@ -14,7 +14,9 @@
         class="profile-link"
       />
       <div class="dropdown-menu" *ngIf="isDropdownOpen">
-        <ng-container *ngIf="authService.isAuthenticated(); else loggedOutTemplate">
+        <ng-container
+          *ngIf="authService.isAuthenticated(); else loggedOutTemplate"
+        >
           <a routerLink="/profile" class="dropdown-item">Profile</a>
           <a (click)="logout()" class="dropdown-item">Logout</a>
         </ng-container>

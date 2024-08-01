@@ -19,7 +19,11 @@ export class BookingComponent implements OnInit {
   bookedDates: Date[] = [];
   totalPrice: number = 0.0;
 
-  constructor(private router: Router, private apiService: ApiService, public imageService: ImageService) {
+  constructor(
+    private router: Router,
+    private apiService: ApiService,
+    public imageService: ImageService
+  ) {
     const navigation = this.router.getCurrentNavigation();
     this.bookingId = navigation?.extras.state?.['bookingId'];
   }

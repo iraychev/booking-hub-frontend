@@ -29,9 +29,9 @@ input[type="number"] {
   flex: 1;
 }
 .amenity-item {
-  display: flex; 
-  align-items: center; 
-  margin-bottom: 0.5em; 
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5em;
   margin-right: 0.5em;
 }
 

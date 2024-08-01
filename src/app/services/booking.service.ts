@@ -3,20 +3,20 @@ import { ApiService } from './api.service';
 import { Booking } from '../models/booking.model';
 import { lastValueFrom } from 'rxjs';
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BookingService {
-
-  constructor(public apiService: ApiService) { }
-
+  constructor(public apiService: ApiService) {}
 
   async calculateBookedDates(listingId: string): Promise<Date[]> {
-    const bookings: Booking[] = await lastValueFrom(this.apiService.getBookingsForListing(listingId));
-    if(!bookings || bookings.length===0){
+    const bookings: Booking[] = await lastValueFrom(
+      this.apiService.getBookingsForListing(listingId)
+    );
+    if (!bookings || bookings.length === 0) {
       return [];
     }
     const bookedDates: Date[] = [];
-    bookings.forEach(booking => {
+    bookings.forEach((booking) => {
       const startDate = new Date(booking.startDate);
       const nightsToStay = booking.nightsToStay;
       for (let i = 0; i < nightsToStay; i++) {

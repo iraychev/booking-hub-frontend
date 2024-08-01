@@ -5,7 +5,6 @@ import { Pipe, PipeTransform } from '@angular/core';
   standalone: true,
 })
 export class AmenitiesPipe implements PipeTransform {
-  
   private emojiMap: { [key: string]: string } = {
     WIFI: '📶',
     PARKING: '🚗',
@@ -16,16 +15,18 @@ export class AmenitiesPipe implements PipeTransform {
     KITCHEN: '🍽️',
     TV: '📺',
     WASHER: '🧼',
-    DRYER: '💨'
+    DRYER: '💨',
   };
 
   transform(amenity: string): string {
-    const formattedAmenity = this.capitalizeWords(amenity.replace('_', ' ').toLowerCase());
+    const formattedAmenity = this.capitalizeWords(
+      amenity.replace('_', ' ').toLowerCase()
+    );
     const emoji = this.emojiMap[amenity] || '';
     return `${emoji} ${formattedAmenity}`;
   }
 
   private capitalizeWords(str: string): string {
-    return str.replace(/\b\w/g, char => char.toUpperCase());
+    return str.replace(/\b\w/g, (char) => char.toUpperCase());
   }
 }

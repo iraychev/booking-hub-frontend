@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './about.component.html',
-  styleUrl: './about.component.css'
+  styleUrl: './about.component.css',
 })
 export class AboutComponent {
   projectName = 'Booking App';
@@ -17,9 +17,5 @@ export class AboutComponent {
     'Secure backend booking system',
     'Detailed property descriptions',
   ];
-  technologies = [
-    'Angular',
-    'Spring Boot',
-    'PostgreSQL'
-  ]
+  technologies = ['Angular', 'Spring Boot', 'PostgreSQL'];
 }

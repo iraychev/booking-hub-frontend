@@ -31,8 +31,16 @@ export class ListingCreationComponent {
   selectedAmenities: any = {};
   columns: string[][];
   amenities: string[] = [
-    'WIFI', 'PARKING', 'POOL', 'GYM', 'AIR_CONDITIONING',
-    'HEATING', 'KITCHEN', 'TV', 'WASHER', 'DRYER',
+    'WIFI',
+    'PARKING',
+    'POOL',
+    'GYM',
+    'AIR_CONDITIONING',
+    'HEATING',
+    'KITCHEN',
+    'TV',
+    'WASHER',
+    'DRYER',
   ];
   uploadedFiles: File[] = [];
 
@@ -49,11 +57,15 @@ export class ListingCreationComponent {
 
   createListing(): void {
     if (this.hasProfanity()) {
-      this.errorService.handleError('Listing creation failed', 'Profanity detected in the listing. Please remove any inappropriate language.');
+      this.errorService.handleError(
+        'Listing creation failed',
+        'Profanity detected in the listing. Please remove any inappropriate language.'
+      );
       return;
     }
 
-    this.imageService.mapFilesToImages(this.uploadedFiles)
+    this.imageService
+      .mapFilesToImages(this.uploadedFiles)
       .then((images) => {
         this.listing.images = images;
         this.listing.amenities = this.getSelectedAmenities();
@@ -90,7 +102,10 @@ export class ListingCreationComponent {
     if (event.target.files.length + this.listing.images.length <= 5) {
       this.uploadedFiles = Array.from(event.target.files);
     } else {
-      this.errorService.handleError('File upload failed', 'You can upload a maximum of 5 images.');
+      this.errorService.handleError(
+        'File upload failed',
+        'You can upload a maximum of 5 images.'
+      );
     }
   }
 

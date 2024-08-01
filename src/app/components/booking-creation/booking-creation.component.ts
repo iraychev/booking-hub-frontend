@@ -17,7 +17,6 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './booking-creation.component.css',
   imports: [FormsModule, CalendarComponent, CommonModule, ButtonComponent],
 })
-
 export class BookingCreationComponent {
   booking: Booking = new Booking();
   error: string = '';
@@ -28,10 +27,16 @@ export class BookingCreationComponent {
   @Input() listing!: Listing;
   @Output() close = new EventEmitter<void>();
 
-  constructor(private apiService: ApiService, private router: Router, private authservice: AuthService) {}
+  constructor(
+    private apiService: ApiService,
+    private router: Router,
+    private authservice: AuthService
+  ) {}
 
   receiveSelectedDates(selectedDates: Date[]): void {
-    this.selectedDates = selectedDates.sort((a, b) => a.getTime() - b.getTime());;
+    this.selectedDates = selectedDates.sort(
+      (a, b) => a.getTime() - b.getTime()
+    );
   }
 
   closeModal() {

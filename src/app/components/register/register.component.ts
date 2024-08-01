@@ -78,19 +78,24 @@ export class RegisterComponent implements OnInit {
       : { mismatch: true };
   }
 
-  private hasProfanity(): boolean{
+  private hasProfanity(): boolean {
     const username = this.registerForm.get('username')?.value;
     const firstName = this.registerForm.get('firstName')?.value;
     const lastName = this.registerForm.get('lastName')?.value;
-    const email = this.registerForm.get('email')?.value
-    if (this.profanityFilter.hasProfanity(username) ||
-        this.profanityFilter.hasProfanity(firstName) ||
-        this.profanityFilter.hasProfanity(lastName) ||
-        this.profanityFilter.hasProfanity(email)){
-          this.errorService.handleError('Profanity detected', 'Remove any inappropriate words')
-          return true;
-        }
-        return false;
+    const email = this.registerForm.get('email')?.value;
+    if (
+      this.profanityFilter.hasProfanity(username) ||
+      this.profanityFilter.hasProfanity(firstName) ||
+      this.profanityFilter.hasProfanity(lastName) ||
+      this.profanityFilter.hasProfanity(email)
+    ) {
+      this.errorService.handleError(
+        'Profanity detected',
+        'Remove any inappropriate words'
+      );
+      return true;
+    }
+    return false;
   }
   async register(): Promise<void> {
     if (this.registerForm.invalid) {
@@ -99,7 +104,7 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    if(this.hasProfanity()){
+    if (this.hasProfanity()) {
       return;
     }
     const user: User = {
@@ -122,7 +127,7 @@ export class RegisterComponent implements OnInit {
         this.router.navigate(['/login']);
       },
       error: (err) => {
-      this.errorService.handleError('Registration failed', err)
+        this.errorService.handleError('Registration failed', err);
       },
     });
   }
@@ -132,7 +137,7 @@ export class RegisterComponent implements OnInit {
       this.selectedFile
     );
   }
-  
+
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
   }
@@ -142,7 +147,7 @@ export class RegisterComponent implements OnInit {
     if (event.target.checked) {
       this.selectedRoles = [...new Set([...this.selectedRoles, role])];
     } else {
-      this.selectedRoles = this.selectedRoles.filter(r => r !== role);
+      this.selectedRoles = this.selectedRoles.filter((r) => r !== role);
     }
   }
 }

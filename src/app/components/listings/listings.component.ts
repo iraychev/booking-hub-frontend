@@ -48,11 +48,14 @@ export class ListingsComponent implements OnInit, OnDestroy {
     if (!user) {
       return true;
     }
-    return !(user.roles.includes('PROPERTY_OWNER') || user.roles.includes('ADMIN'));
+    return !(
+      user.roles.includes('PROPERTY_OWNER') || user.roles.includes('ADMIN')
+    );
   }
 
   getListings(): void {
-    this.apiService.getAllListings(this.currentPage, this.listingsPerPage, this.searchTerm)
+    this.apiService
+      .getListings(this.currentPage, this.listingsPerPage, this.searchTerm)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data: Page<Listing>) => {
@@ -63,7 +66,7 @@ export class ListingsComponent implements OnInit, OnDestroy {
         },
         error: (err) => {
           this.errorService.handleError('Failed to fetch listings', err);
-        }
+        },
       });
   }
 
@@ -74,7 +77,10 @@ export class ListingsComponent implements OnInit, OnDestroy {
 
   viewDetails(listingId: string): void {
     if (!this.authService.isAuthenticated()) {
-      this.errorService.handleError('Authentication required', 'You need to be logged in to view listings');
+      this.errorService.handleError(
+        'Authentication required',
+        'You need to be logged in to view listings'
+      );
     } else {
       this.router.navigate(['/listing'], { state: { listingId } });
     }

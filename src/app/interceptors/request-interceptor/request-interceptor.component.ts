@@ -14,7 +14,11 @@ import { LoadingService } from '../../services.loading-service.service';
 
 @Injectable()
 export class RequestInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService, private router: Router, private loadingService: LoadingService) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private loadingService: LoadingService
+  ) {}
 
   intercept(
     request: HttpRequest<unknown>,

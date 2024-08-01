@@ -45,7 +45,15 @@
 </div>
 
 <div class="pagination-controls">
-  <app-button text="Previous" (click)="prevPage()" [disabled]="currentPage === 0"></app-button>
+  <app-button
+    text="Previous"
+    (click)="prevPage()"
+    [disabled]="currentPage === 0"
+  ></app-button>
   <span>Page {{ currentPage + 1 }} of {{ totalPages }}</span>
-  <app-button text="Next" (click)="nextPage()" [disabled]="currentPage === totalPages - 1"></app-button>
+  <app-button
+    text="Next"
+    (click)="nextPage()"
+    [disabled]="currentPage === totalPages - 1"
+  ></app-button>
 </div>

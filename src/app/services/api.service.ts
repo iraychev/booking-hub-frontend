@@ -28,7 +28,11 @@ export class ApiService {
     return this.http.put(`${this.url}/users/${user.id}`, user);
   }
 
-  getAllListings(page: number, size: number, searchTerm?: string): Observable<Page<Listing>> {
+  getListings(
+    page: number,
+    size: number,
+    searchTerm?: string
+  ): Observable<Page<Listing>> {
     let url = `${this.url}/listings?page=${page}&size=${size}`;
     if (searchTerm) {
       url += `&search=${encodeURIComponent(searchTerm)}`;
@@ -37,11 +41,11 @@ export class ApiService {
   }
 
   getAllListingsByUserId(userId: string): Observable<any> {
-    return this.http.get(`${this.url}/listings/${userId}`);
+    return this.http.get(`${this.url}/listings/by-user/${userId}`);
   }
 
   getListingById(id: string): Observable<any> {
-    return this.http.get(`${this.url}/listings/${id}`);
+    return this.http.get(`${this.url}/listings/by-listing/${id}`);
   }
 
   createListing(listing: Listing) {
@@ -61,14 +65,14 @@ export class ApiService {
       amenities: listing.amenities,
     };
     return this.http.put(
-      `${this.url}/listings/${listing.id}`,
+      `${this.url}/listings/by-listing/${listing.id}`,
       listingToUpdate,
       { headers }
     );
   }
 
   deleteListingById(listingId: string): Observable<any> {
-    return this.http.delete(`${this.url}/listings/${listingId}`);
+    return this.http.delete(`${this.url}/listings/by-listing/${listingId}`);
   }
 
   getBookingById(id: string): Observable<any> {
