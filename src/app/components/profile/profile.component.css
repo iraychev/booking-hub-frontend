@@ -68,7 +68,9 @@ input[type="password"] {
   flex-direction: column;
   gap: 0.5em;
 }
-
+.future-bookings-title{
+  margin-top: 1em;
+}
 #edit-btn {
   margin-top: 0.5em;
 }

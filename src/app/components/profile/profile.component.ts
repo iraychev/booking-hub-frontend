@@ -38,6 +38,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   selectedTabIndex = 0;
   personalListings: Listing[] = [];
   personalBookings: Booking[] = [];
+  futureBookings: Booking[] = [];
+  pastBookings: Booking[] = [];
   selectedFile: File | null = null;
 
   showConfirmationDialog = false;
@@ -133,7 +135,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
           );
           this.cacheService.set('userListings', this.personalListings);
         },
-        // error: (err) => this.errorService.handleError('Error fetching listings', err),
+        error: (err) =>
+          this.errorService.handleError('Error fetching listings', err),
       });
   }
 
@@ -141,6 +144,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     const cachedBookings: Booking[] = this.cacheService.get('userBookings');
     if (cachedBookings) {
       this.personalBookings = cachedBookings;
+      this.splitBookings();
       return;
     }
 
@@ -153,9 +157,21 @@ export class ProfileComponent implements OnInit, OnDestroy {
             bookings.filter((booking) => booking.renter?.id === this.user?.id)
           );
           this.cacheService.set('userBookings', this.personalBookings);
+          this.splitBookings();
         },
-        // error: (err) => this.errorService.handleError('Error fetching bookings', err),
+        error: (err) =>
+          this.errorService.handleError('Error fetching bookings', err),
       });
+  }
+
+  splitBookings(): void {
+    const now = new Date();
+    this.futureBookings = this.personalBookings.filter(
+      (booking) => new Date(booking.startDate) > now
+    );
+    this.pastBookings = this.personalBookings.filter(
+      (booking) => new Date(booking.startDate) <= now
+    );
   }
 
   deleteListing(listingId: string): void {
@@ -184,6 +200,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.personalBookings = this.personalBookings.filter(
             (booking) => booking.id !== bookingId
           );
+          this.splitBookings();
           this.cacheService.delete('userBookings');
         } catch (err) {
           this.errorService.handleError('Error deleting booking', err);
