@@ -178,6 +178,7 @@ export class ListingComponent implements OnInit {
         next: () => {
           this.router.navigate(['/listings']);
           this.cacheService.delete('listings');
+          this.cacheService.delete('userListings');
         },
       });
     });

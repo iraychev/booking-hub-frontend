@@ -9,6 +9,7 @@ import { User } from '../../models/user.model';
 import { ApiService } from '../../services/api.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { CacheService } from '../../services/cache.service';
 
 @Component({
   selector: 'app-booking-creation',
@@ -30,7 +31,8 @@ export class BookingCreationComponent {
   constructor(
     private apiService: ApiService,
     private router: Router,
-    private authservice: AuthService
+    private authservice: AuthService,
+    private cacheService: CacheService
   ) {}
 
   receiveSelectedDates(selectedDates: Date[]): void {
@@ -62,6 +64,7 @@ export class BookingCreationComponent {
 
     this.apiService.createBooking(this.booking).subscribe({
       next: (response) => {
+        this.cacheService.delete('userBooking');
         this.router.navigate(['/booking'], {
           state: { bookingId: response.id },
         });
