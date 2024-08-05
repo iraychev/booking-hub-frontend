@@ -1,11 +1,14 @@
 <div class="search-create-btn-container">
   <div class="search-container">
+    <span class="search-icon"></span>
     <input
       type="text"
       placeholder="Search listings..."
       [(ngModel)]="searchTerm"
-      (input)="performSearch()"
+      (change)="performSearch()"
+      (keyup.enter) = "performSearch()"
     />
+    <button *ngIf="searchTerm" (click)="clearSearch()" class="clear-button">×</button>
   </div>
   <app-button
     [routerLink]="checkIfUserCantCreateListings() ? null : '/listing-creation'"

@@ -75,6 +75,11 @@ export class ListingsComponent implements OnInit, OnDestroy {
     this.getListings();
   }
 
+  clearSearch() {
+    this.searchTerm = '';
+    this.performSearch();
+  }
+  
   viewDetails(listingId: string): void {
     if (!this.authService.isAuthenticated()) {
       this.errorService.handleError(
