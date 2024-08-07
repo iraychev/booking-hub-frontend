@@ -68,7 +68,7 @@ input[type="password"] {
   flex-direction: column;
   gap: 0.5em;
 }
-.future-bookings-title{
+.future-bookings-title {
   margin-top: 1em;
 }
 #edit-btn {
@@ -90,7 +90,22 @@ input[type="password"] {
   pointer-events: auto;
   opacity: 1;
 }
+.preview-image,
+.existing-image {
+  margin-top: 0.5rem;
+}
 
+.preview-image img,
+.existing-image img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 0.25rem;
+}
+
+.preview-image app-button {
+  margin-top: 0.5rem;
+}
 @media only screen and (max-width: 768px) {
   .profile-container {
     padding: 0.8em;

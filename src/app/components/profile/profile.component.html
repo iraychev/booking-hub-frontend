@@ -44,8 +44,34 @@
           />
         </div>
         <div id="profile-img-upload">
-          <label for="newProfileImage">Profile Picture: <br /></label>
-          <input type="file" (change)="onFileSelected($event)" />
+          <label for="newProfileImage">Profile Picture:</label>
+          <input
+            type="file"
+            (change)="onFileSelected($event)"
+            accept="image/*"
+          />
+          <div class="preview-image" *ngIf="previewImage">
+            <img [src]="previewImage" alt="Profile Picture Preview" />
+            <app-button
+              [isRed]="true"
+              text="Remove"
+              (click)="removeSelectedFile()"
+            ></app-button>
+          </div>
+          <div
+            class="existing-image"
+            *ngIf="user.profileImage && !previewImage"
+          >
+            <img
+              [src]="
+                'data:' +
+                user.profileImage.type +
+                ';base64,' +
+                user.profileImage.data
+              "
+              alt="Current Profile Picture"
+            />
+          </div>
         </div>
         <div class="editmode-buttons">
           <app-button text="Save" (click)="saveChanges()"></app-button>
@@ -80,30 +106,56 @@
       <ng-template #noListings>No listings found.</ng-template>
     </mat-tab>
     <mat-tab label="Your Bookings">
-      <ng-container *ngIf="futureBookings.length || pastBookings.length; else noBookings">
+      <ng-container
+        *ngIf="futureBookings.length || pastBookings.length; else noBookings"
+      >
         <div>
           <h3 class="future-bookings-title">Bookings</h3>
-          <div *ngFor="let booking of futureBookings" class="listing-booking-container">
+          <div
+            *ngFor="let booking of futureBookings"
+            class="listing-booking-container"
+          >
             <div class="listing-booking-title">
-              <a [routerLink]="['/booking']" [state]="{ bookingId: booking.id }">
-                {{ booking.listing.title }} ({{ booking.startDate | date: "dd-MM-yyyy" }}
-                - {{ getBookingEndDate(booking) | date: "dd-MM-yyyy" }})
+              <a
+                [routerLink]="['/booking']"
+                [state]="{ bookingId: booking.id }"
+              >
+                {{ booking.listing.title }} ({{
+                  booking.startDate | date : "dd-MM-yyyy"
+                }}
+                - {{ getBookingEndDate(booking) | date : "dd-MM-yyyy" }})
               </a>
             </div>
-            <app-button text="Cancel" (click)="deleteBooking(booking.id)" [isRed]="true"></app-button>
+            <app-button
+              text="Cancel"
+              (click)="deleteBooking(booking.id)"
+              [isRed]="true"
+            ></app-button>
           </div>
         </div>
-        
+
         <div>
           <h3>Past Bookings</h3>
-          <div *ngFor="let booking of pastBookings" class="listing-booking-container">
+          <div
+            *ngFor="let booking of pastBookings"
+            class="listing-booking-container"
+          >
             <div class="listing-booking-title">
-              <a [routerLink]="['/booking']" [state]="{ bookingId: booking.id }">
-                {{ booking.listing.title }} ({{ booking.startDate | date: "dd-MM-yyyy" }}
-                - {{ getBookingEndDate(booking) | date: "dd-MM-yyyy" }})
+              <a
+                [routerLink]="['/booking']"
+                [state]="{ bookingId: booking.id }"
+              >
+                {{ booking.listing.title }} ({{
+                  booking.startDate | date : "dd-MM-yyyy"
+                }}
+                - {{ getBookingEndDate(booking) | date : "dd-MM-yyyy" }})
               </a>
             </div>
-            <app-button text="Delete" (click)="deleteBooking(booking.id)" [isRed]="true"></app-button>
+            <app-button
+              text="Delete"
+              (click)="deleteBooking(booking.id)"
+              [isRed]="true"
+            ></app-button>
           </div>
         </div>
       </ng-container>

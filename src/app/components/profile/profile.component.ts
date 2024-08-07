@@ -41,7 +41,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   futureBookings: Booking[] = [];
   pastBookings: Booking[] = [];
   selectedFile: File | null = null;
-
+  previewImage: string | null = null;
   showConfirmationDialog = false;
   confirmationMessage = '';
   confirmCallback: () => Promise<void> = async () => {};
@@ -106,6 +106,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       localStorage.setItem('user', JSON.stringify(this.user));
       await lastValueFrom(this.apiService.updateUserById(this.user));
       this.editMode = false;
+      this.previewImage = null;
     } catch (err) {
       this.errorService.handleError('Error updating profile', err);
     }
@@ -114,6 +115,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   cancelEdit(): void {
     this.user = this.authService.getCurrentUser()!;
     this.editMode = false;
+    this.selectedFile = null;
+    this.previewImage = null;
   }
 
   fetchUserListings(): void {
@@ -213,7 +216,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.selectedFile = input.files[0];
+      this.previewImage = null;
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.previewImage = e.target.result;
+      };
+      reader.readAsDataURL(this.selectedFile);
     }
+  }
+  removeSelectedFile(): void {
+    this.selectedFile = null;
+    this.previewImage = null;
   }
 
   confirmAction(message: string, callback: () => Promise<void>): void {
