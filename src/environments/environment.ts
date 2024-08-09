@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: 'booking-hub.up.railway.app/booking-api'
+    apiUrl: 'https://booking-hub.up.railway.app/booking-api'
 };
