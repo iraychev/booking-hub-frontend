@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://booking-latest.onrender.com/booking-api'
+    apiUrl: 'booking-hub.up.railway.app/booking-api'
 };
